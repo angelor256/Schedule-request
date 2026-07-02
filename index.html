@@ -3,128 +3,100 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panda Dynasty — Roster Center</title>
+    <title>Panda Dynasty — Roster Board</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
 
     <style>
         :root {
-            --bg-glow: linear-gradient(135deg, #050814 0%, #0c102b 50%, #060919 100%);
-            --panel-bg: rgba(13, 19, 43, 0.75);
-            --border-neon: rgba(0, 242, 254, 0.15);
-            --border-neon-hover: rgba(0, 242, 254, 0.4);
+            --bg-base: #eecfbf0; /* Arena / Crema cálido */
+            --bg-container: #e3dfd5;
+            --olive-deep: #4a532b; /* Verde oliva de la referencia */
+            --text-dark: #1e2315;
+            --text-muted: #6b715c;
+            --border-fine: rgba(74, 83, 43, 0.15);
             
-            /* Paleta Viva */
-            --neon-cyan: #00f2fe;
-            --neon-pink: #ff007f;
-            --neon-green: #39ff14;
-            --neon-yellow: #ffde00;
+            /* Estados en tonos orgánicos sofisticados */
+            --st-active-bg: #f4f2ed;
+            --st-off-color: #a96151; /* Terracota apagado */
+            --st-vacation-color: #c49a45; /* Ocre suave */
+            --st-open-color: #6e8467; /* Verde salvia */
             
-            --text-light: #f1f5f9;
-            --text-dark: #050814;
-            --font-main: 'Outfit', sans-serif;
-            --font-display: 'Space Grotesk', sans-serif;
+            --font-serif: 'Cormorant Garamond', serif;
+            --font-sans: 'Inter', sans-serif;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
         
         body {
-            background: var(--bg-glow);
-            color: var(--text-light);
-            font-family: var(--font-main);
+            background-color: #eae6dc;
+            color: var(--text-dark);
+            font-family: var(--font-sans);
             min-height: 100vh;
-            padding: 40px 20px;
+            padding: 60px 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            overflow-x: hidden;
-        }
-
-        /* Elementos decorativos vivos en el fondo */
-        body::before {
-            content: ''; position: absolute; width: 350px; height: 350px;
-            background: radial-gradient(circle, rgba(255, 0, 127, 0.2) 0%, transparent 70%);
-            top: 10%; right: 5%; z-index: -1; pointer-events: none;
-        }
-        body::after {
-            content: ''; position: absolute; width: 400px; height: 400px;
-            background: radial-gradient(circle, rgba(0, 242, 254, 0.15) 0%, transparent 70%);
-            bottom: 10%; left: 5%; z-index: -1; pointer-events: none;
+            letter-spacing: -0.01em;
         }
 
         .main-container {
             width: 100%;
-            max-width: 1200px;
-            background: var(--panel-bg);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            border-radius: 30px;
-            padding: 45px;
-            border: 1px solid var(--border-neon);
-            box-shadow: 0 20px 60px rgba(0, 242, 254, 0.08), inset 0 1px 2px rgba(255,255,255,0.1);
-            margin-bottom: 35px;
-            transition: border-color 0.3s ease;
-        }
-        .main-container:hover {
-            border-color: rgba(0, 242, 254, 0.25);
+            max-width: 1100px;
+            background: var(--bg-container);
+            border-radius: 4px; /* Bordes rectos y limpios, más editoriales */
+            padding: 50px;
+            border: 1px solid var(--border-fine);
+            box-shadow: 0 30px 70px rgba(74, 83, 43, 0.06);
+            margin-bottom: 40px;
         }
 
         .header-area {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            border-bottom: 2px dashed rgba(255, 255, 255, 0.08);
-            padding-bottom: 30px;
-            margin-bottom: 40px;
+            align-items: baseline;
+            border-bottom: 1px solid var(--border-fine);
+            padding-bottom: 20px;
+            margin-bottom: 45px;
         }
 
         .brand-title {
-            font-family: var(--font-display);
-            font-size: 32px;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-            background: linear-gradient(to right, #ffffff, var(--neon-cyan));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 20px rgba(0, 242, 254, 0.2);
+            font-family: var(--font-serif);
+            font-size: 38px;
+            font-weight: 400;
+            color: var(--olive-deep);
+            font-style: italic;
         }
 
-        /* Botones Eléctricos */
+        /* Botones de Estilo Atemporal */
         .btn-action {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: var(--text-light);
-            padding: 14px 28px;
-            border-radius: 14px;
-            font-size: 13px;
-            font-weight: 600;
+            background: transparent;
+            border: 1px solid var(--olive-deep);
+            color: var(--olive-deep);
+            padding: 10px 24px;
+            border-radius: 0px; /* Rectangular de alta gama */
+            font-size: 12px;
+            font-weight: 500;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
             cursor: pointer;
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.3s ease;
         }
         .btn-action:hover {
-            background: var(--neon-pink);
+            background: var(--olive-deep);
             color: #ffffff;
-            border-color: var(--neon-pink);
-            box-shadow: 0 0 20px rgba(255, 0, 127, 0.4);
-            transform: translateY(-2px);
         }
         .btn-primary {
-            background: var(--neon-cyan);
-            color: var(--text-dark);
-            border: none;
-            font-weight: 700;
-            box-shadow: 0 0 15px rgba(0, 242, 254, 0.3);
+            background: var(--olive-deep);
+            color: #ffffff;
         }
         .btn-primary:hover {
-            background: #ffffff;
-            color: var(--text-dark);
-            box-shadow: 0 0 25px rgba(255, 255, 255, 0.5);
+            background: transparent;
+            color: var(--olive-deep);
         }
 
         .view-layer { display: none; }
@@ -132,202 +104,187 @@
 
         label {
             display: block;
-            font-size: 12px;
+            font-size: 11px;
             text-transform: uppercase;
-            letter-spacing: 2px;
-            color: var(--neon-cyan);
-            margin-bottom: 12px;
-            font-weight: 600;
+            letter-spacing: 2.5px;
+            color: var(--text-muted);
+            margin-bottom: 14px;
+            font-weight: 500;
         }
 
         select, textarea, input {
             width: 100%;
-            background: rgba(5, 8, 20, 0.8);
-            border: 1px solid var(--border-neon);
-            padding: 16px 20px;
-            border-radius: 14px;
-            color: #ffffff;
-            font-size: 15px;
+            background: #f4f2ed;
+            border: 1px solid var(--border-fine);
+            padding: 14px 18px;
+            border-radius: 0px;
+            color: var(--text-dark);
+            font-size: 14px;
+            font-family: var(--font-sans);
             outline: none;
-            transition: all 0.25s ease;
-            margin-bottom: 30px;
-        }
-        select:focus, input:focus { 
-            border-color: var(--neon-cyan);
-            box-shadow: 0 0 15px rgba(0, 242, 254, 0.2);
-        }
-
-        /* Cuadrícula de Nombres Estilo Botones de Energía */
-        .mesh-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
-            gap: 12px;
-            max-height: 280px;
-            overflow-y: auto;
-            padding: 4px;
+            transition: all 0.3s ease;
             margin-bottom: 35px;
         }
+        select:focus, input:focus { 
+            border-color: var(--olive-deep);
+            background: #ffffff;
+        }
+
+        /* Grid de Selección Estilo Galería */
+        .mesh-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+            gap: 1px;
+            background: var(--border-fine);
+            max-height: 290px;
+            overflow-y: auto;
+            margin-bottom: 40px;
+            border: 1px solid var(--border-fine);
+        }
         .mesh-item {
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            padding: 16px;
-            border-radius: 12px;
-            font-size: 14px;
-            font-weight: 600;
-            color: #94a3b8;
+            background: #f4f2ed;
+            padding: 18px;
+            font-size: 13px;
+            font-weight: 400;
+            color: var(--text-dark);
             cursor: pointer;
-            text-align: center;
+            text-align: left;
             transition: all 0.2s ease;
         }
         .mesh-item:hover {
-            border-color: var(--neon-cyan);
-            color: #fff;
-            background: rgba(0, 242, 254, 0.05);
+            background: #ebe7de;
         }
         .mesh-item.selected {
-            background: var(--neon-cyan);
-            border-color: var(--neon-cyan);
-            color: var(--text-dark);
-            font-weight: 700;
-            box-shadow: 0 0 20px rgba(0, 242, 254, 0.3);
+            background: var(--olive-deep);
+            color: #ffffff;
         }
 
-        /* Matriz de Horarios */
+        /* Tabla de Horarios Minimalista */
         .table-container {
             width: 100%;
             overflow-x: auto;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 20px;
-            background: rgba(5, 8, 20, 0.5);
-            margin-bottom: 35px;
+            margin-bottom: 40px;
         }
         .matrix-table {
             width: 100%;
             border-collapse: collapse;
-            min-width: 950px;
+            min-width: 900px;
         }
         .matrix-table th {
-            padding: 20px 16px;
-            font-size: 12px;
+            padding: 16px 12px;
+            font-size: 11px;
             text-transform: uppercase;
-            letter-spacing: 1.5px;
-            color: #94a3b8;
-            border-bottom: 1px solid rgba(255,255,255,0.08);
+            letter-spacing: 2px;
+            color: var(--text-muted);
+            border-bottom: 1px solid var(--olive-deep);
             text-align: left;
+            font-weight: 500;
         }
         .matrix-table td {
-            padding: 14px;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding: 10px 6px;
+            border-bottom: 1px solid var(--border-fine);
         }
 
-        /* Selectores de Celda con Colores "Vivos" */
+        /* Selectores dentro de la Matriz */
         .cell-select {
             width: 100%;
-            padding: 12px;
-            font-size: 13px;
-            font-weight: 700;
-            border-radius: 10px;
+            padding: 10px;
+            font-size: 12px;
+            font-weight: 500;
+            border-radius: 0px;
             margin-bottom: 0;
-            background: rgba(5,8,20,0.9);
-            border: 1px solid rgba(255,255,255,0.1);
+            background: #f4f2ed;
+            border: 1px solid transparent;
             cursor: pointer;
             transition: all 0.25s ease;
         }
         .cell-select.st-active { 
-            border-color: var(--neon-cyan); 
-            color: var(--neon-cyan); 
-            box-shadow: 0 0 10px rgba(0, 242, 254, 0.1);
+            color: var(--text-dark);
+            border-color: var(--border-fine);
         }
         .cell-select.st-off { 
-            border-color: var(--neon-pink); 
-            color: var(--neon-pink); 
-            box-shadow: 0 0 10px rgba(255, 0, 127, 0.1);
+            color: var(--st-off-color); 
+            background: rgba(169, 97, 81, 0.06);
+            border-color: rgba(169, 97, 81, 0.2);
         }
         .cell-select.st-vacation { 
-            border-color: var(--neon-yellow); 
-            color: var(--neon-yellow); 
-            box-shadow: 0 0 10px rgba(255, 222, 0, 0.15);
+            color: var(--st-vacation-color); 
+            background: rgba(196, 154, 69, 0.06);
+            border-color: rgba(196, 154, 69, 0.2);
         }
         .cell-select.st-open { 
-            border-color: var(--neon-green); 
-            color: var(--neon-green); 
-            box-shadow: 0 0 10px rgba(57, 255, 20, 0.15);
+            color: var(--st-open-color); 
+            background: rgba(110, 132, 103, 0.06);
+            border-color: rgba(110, 132, 103, 0.2);
         }
 
-        /* Panel de Control de Personal (Consola Abajo) */
+        /* Consola de Gestión inferior */
         .management-card {
             width: 100%;
-            max-width: 1200px;
-            background: rgba(10, 16, 41, 0.9);
-            border: 1px solid rgba(255, 0, 127, 0.15);
-            border-radius: 24px;
-            padding: 30px;
-            box-shadow: 0 10px 40px rgba(255, 0, 127, 0.05);
+            max-width: 1100px;
+            background: var(--bg-container);
+            border: 1px solid var(--border-fine);
+            border-radius: 4px;
+            padding: 35px 50px;
         }
         .mgmt-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-            margin-top: 25px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
         }
         .sub-panel {
-            background: rgba(5, 8, 20, 0.6);
-            padding: 22px;
-            border-radius: 16px;
-            border: 1px solid rgba(255,255,255,0.05);
+            background: #f4f2ed;
+            padding: 24px;
+            border: 1px solid var(--border-fine);
         }
         .mgmt-title {
-            font-size: 15px;
-            font-weight: 700;
-            margin-bottom: 18px;
-            color: #ffffff;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            font-family: var(--font-serif);
+            font-size: 18px;
+            font-weight: 400;
+            margin-bottom: 20px;
+            color: var(--olive-deep);
         }
 
-        /* Scrollbars Estilo Neon Stream */
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        /* Estilización de Scroll */
+        ::-webkit-scrollbar { width: 4px; height: 4px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: rgba(0, 242, 254, 0.2); border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--neon-cyan); }
+        ::-webkit-scrollbar-thumb { background: var(--text-muted); }
     </style>
 </head>
 <body>
 
 <div class="main-container">
     <div class="header-area">
-        <div class="brand-title">Panda Roster Matrix</div>
-        <button class="btn-action" onclick="triggerExcelExport()">Export Roster</button>
+        <div class="brand-title">Panda Roster Studio</div>
+        <button class="btn-action" onclick="triggerExcelExport()">Export Sheet</button>
     </div>
 
-    <!-- PANTALLA 1: HOME & FILTROS -->
+    <!-- ESCENA 1: SELECCIÓN -->
     <div id="step-1" class="view-layer active">
         <label>Operational Division</label>
         <select id="department" onchange="loadStaffMesh()">
-            <option value="">Choose Division...</option>
+            <option value="">Select Department...</option>
             <option value="Customer Service">Customer Service</option>
             <option value="Deposits">Deposits</option>
             <option value="Payouts">Payouts</option>
         </select>
 
         <div id="mesh-wrapper" style="display:none;">
-            <label>Select Team Member</label>
+            <label>Team Members</label>
             <div class="mesh-grid" id="staff-mesh"></div>
         </div>
 
-        <div style="text-align: right; margin-top: 25px;">
-            <button class="btn-action btn-primary" onclick="goToMatrix()">Open Matrix Board</button>
+        <div style="text-align: right; margin-top: 10px;">
+            <button class="btn-action btn-primary" onclick="goToMatrix()">Configure Schedule</button>
         </div>
     </div>
 
-    <!-- PANTALLA 2: MATRIZ DE ASIGNACIÓN -->
+    <!-- ESCENA 2: PLACA DE HORARIOS -->
     <div id="step-2" class="view-layer">
-        <div style="margin-bottom: 25px; display: flex; align-items: center; gap: 10px;">
-            <span style="font-size: 12px; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px;">Asigning:</span>
-            <span id="active-agent-title" style="font-size: 20px; font-weight: 700; color: var(--neon-cyan); font-family: var(--font-display);">---</span>
+        <div style="margin-bottom: 30px;">
+            <span style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px;">Editing Profile</span>
+            <div id="active-agent-title" style="font-size: 28px; font-family: var(--font-serif); color: var(--olive-deep); margin-top: 4px;">---</div>
         </div>
 
         <div class="table-container">
@@ -357,60 +314,60 @@
             </table>
         </div>
 
-        <label>Operational Notes / Special Justifications</label>
-        <textarea id="matrix-notes" rows="2" placeholder="Write any internal observation here..."></textarea>
+        <label>Observations & Notes</label>
+        <textarea id="matrix-notes" rows="2" placeholder="Add optional details..."></textarea>
 
-        <div style="display:flex; justify-content: space-between; align-items: center;">
+        <div style="display:flex; justify-content: space-between;">
             <button class="btn-action" onclick="backToStep1()">Back</button>
-            <button class="btn-action btn-primary" onclick="commitSchedule()">Save to Memory</button>
+            <button class="btn-action btn-primary" onclick="commitSchedule()">Save Assignment</button>
         </div>
     </div>
 
-    <!-- PANTALLA 3: COMPLETADO -->
-    <div id="step-3" class="view-layer" style="text-align:center; padding: 50px 0;">
-        <h3 style="font-family: var(--font-display); font-size: 26px; margin-bottom: 15px; color: var(--neon-green);">✨ Schedule Logs Secured</h3>
-        <p style="color: #94a3b8; font-size: 15px; margin-bottom: 30px;">Local database has been refreshed with the new entries.</p>
-        <button class="btn-action btn-primary" onclick="resetFlow()">Next Profile</button>
+    <!-- ESCENA 3: ÉXITO -->
+    <div id="step-3" class="view-layer" style="text-align:center; padding: 40px 0;">
+        <h3 style="font-family: var(--font-serif); font-size: 30px; margin-bottom: 10px; font-weight: 400;">Changes Recorded</h3>
+        <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 30px;">The data has been gracefully stored in the system memory.</p>
+        <button class="btn-action btn-primary" onclick="resetFlow()">Next Record</button>
     </div>
 </div>
 
-<!-- PANEL PREMIUM DE CONTROL DE PERSONAL (CRUD) -->
+<!-- MÓDULO DE GESTIÓN ADMINISTRATIVA -->
 <div class="management-card">
     <div style="display:flex; justify-content:space-between; align-items:center;">
-        <div style="font-family: var(--font-display); font-size: 16px; font-weight:700; color: var(--neon-pink);">⚙️ Team Management Console</div>
-        <button class="btn-action" style="padding: 8px 16px; font-size:11px;" onclick="toggleMgmtPanel()">Unlock Tools</button>
+        <div style="font-family: var(--font-serif); font-size: 20px; color: var(--olive-deep);">Staff Management Console</div>
+        <button class="btn-action" style="padding: 6px 16px; font-size: 11px;" onclick="toggleMgmtPanel()">Unlock Console</button>
     </div>
 
     <div id="mgmt-panel-content" class="mgmt-grid" style="display:none;">
         <!-- AGREGAR -->
         <div class="sub-panel">
-            <div class="mgmt-title" style="color: var(--neon-cyan);">➕ Add Collaborator</div>
+            <div class="mgmt-title">Add Profile</div>
             <input type="text" id="add-name" placeholder="Full Name">
             <select id="add-dept">
                 <option value="Customer Service">Customer Service</option>
                 <option value="Deposits">Deposits</option>
                 <option value="Payouts">Payouts</option>
             </select>
-            <button class="btn-action btn-primary" style="width:100%;" onclick="executeAddMember()">Save Profile</button>
+            <button class="btn-action btn-primary" style="width:100%;" onclick="executeAddMember()">Register Member</button>
         </div>
 
-        <!-- REASIGNAR -->
+        <!-- TRANSLADAR -->
         <div class="sub-panel">
-            <div class="mgmt-title" style="color: var(--neon-yellow);">🔄 Change Division</div>
+            <div class="mgmt-title">Transfer Hub</div>
             <select id="transfer-agent-select"><option value="">Select Member...</option></select>
             <select id="transfer-new-dept">
                 <option value="Customer Service">Customer Service</option>
                 <option value="Deposits">Deposits</option>
                 <option value="Payouts">Payouts</option>
             </select>
-            <button class="btn-action" style="width:100%;" onclick="executeTransfer()">Transfer Hub</button>
+            <button class="btn-action" style="width:100%;" onclick="executeTransfer()">Apply Transfer</button>
         </div>
 
-        <!-- BORRAR -->
+        <!-- REMOVER -->
         <div class="sub-panel">
-            <div class="mgmt-title" style="color: var(--neon-pink);">❌ Delete Profile</div>
+            <div class="mgmt-title" style="color: var(--st-off-color);">Remove Entry</div>
             <select id="delete-agent-select"><option value="">Select Member...</option></select>
-            <button class="btn-action" style="width:100%; background: rgba(255, 0, 127, 0.1); border-color: var(--neon-pink); color: var(--neon-pink);" onclick="executeDeleteMember()">Purge Data</button>
+            <button class="btn-action" style="width:100%; background: transparent; border-color: var(--st-off-color); color: var(--st-off-color);" onclick="executeDeleteMember()">Delete Permanently</button>
         </div>
     </div>
 </div>
@@ -450,7 +407,7 @@
 
     function toggleMgmtPanel() {
         if (!mgmtUnlocked) {
-            const pass = prompt("Access Key Required:");
+            const pass = prompt("Enter Supervisor Password:");
             if (pass !== "Sups2019") { alert("Access Denied."); return; }
             mgmtUnlocked = true;
         }
@@ -483,7 +440,7 @@
     }
 
     function goToMatrix() {
-        if (!currentAgent) { alert("Please click on a staff name layout."); return; }
+        if (!currentAgent) { alert("Select a team member first."); return; }
         document.getElementById('step-1').classList.remove('active');
         document.getElementById('step-2').classList.add('active');
         document.getElementById('active-agent-title').textContent = currentAgent;
@@ -524,11 +481,11 @@
                 `;
             }
 
-            html += `<option value="OPEN">✨ OPEN</option>`;
-            html += `<option value="Vacaciones">🌴 Vacaciones</option>`;
+            html += `<option value="OPEN">OPEN</option>`;
+            html += `<option value="Vacaciones">Vacaciones</option>`;
 
             if (!(isWeekend && blockWeekendOff)) {
-                html += `<option value="Day Off">🛑 Day Off</option>`;
+                html += `<option value="Day Off">Day Off</option>`;
             }
 
             select.innerHTML = html;
@@ -604,51 +561,51 @@
     function executeAddMember() {
         const name = document.getElementById('add-name').value.trim();
         const dept = document.getElementById('add-dept').value;
-        if(!name) return alert("Write a proper name.");
+        if(!name) return alert("Please specify a name.");
         
         const db = getStaffData();
-        if(db[dept].includes(name)) return alert("Entry already active.");
+        if(db[dept].includes(name)) return alert("Member already exists.");
 
         db[dept].push(name); db[dept].sort();
         saveStaffData(db);
         document.getElementById('add-name').value = "";
-        alert("Saved successfully.");
+        alert("Member added.");
     }
 
     function executeTransfer() {
         const targetRaw = document.getElementById('transfer-agent-select').value;
         const newDept = document.getElementById('transfer-new-dept').value;
-        if(!targetRaw) return alert("Select target.");
+        if(!targetRaw) return alert("Select a member first.");
 
         const target = JSON.parse(targetRaw);
-        if(target.dept === newDept) return alert("Target already in division.");
+        if(target.dept === newDept) return alert("Member is already in that department.");
 
         const db = getStaffData();
         db[target.dept] = db[target.dept].filter(n => n !== target.name);
         db[newDept].push(target.name); db[newDept].sort();
         saveStaffData(db);
-        alert("Division updated.");
+        alert("Department updated successfully.");
     }
 
     function executeDeleteMember() {
         const targetRaw = document.getElementById('delete-agent-select').value;
-        if(!targetRaw) return alert("Select target.");
+        if(!targetRaw) return alert("Select a member first.");
         
         const target = JSON.parse(targetRaw);
-        if(!confirm(`Delete permanently: ${target.name}?`)) return;
+        if(!confirm(`Are you sure you want to remove ${target.name}?`)) return;
 
         const db = getStaffData();
         db[target.dept] = db[target.dept].filter(n => n !== target.name);
         saveStaffData(db);
-        alert("Purged complete.");
+        alert("Member removed.");
     }
 
     async function triggerExcelExport() {
-        const auth = prompt("Admin Key:");
+        const auth = prompt("Admin Key Verification:");
         if (auth !== "Sups2019") return alert("Unauthorized.");
 
         const master = JSON.parse(localStorage.getItem('panda_master_roster')) || [];
-        if(!master.length) return alert("No inputs found to save.");
+        if(!master.length) return alert("No active logs to export.");
 
         const wb = new ExcelJS.Workbook();
         ["Customer Service", "Deposits", "Payouts"].forEach(dKey => {
@@ -668,27 +625,26 @@
                 { header: 'Notes', key: 'notes', width: 30 }
             ];
 
-            const hr = ws.getRow(1); hr.height = 25;
+            const hr = ws.getRow(1); hr.height = 28;
             hr.font = { bold: true, color: { argb: 'FFFFFF' }, name: 'Segoe UI' };
-            hr.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '0C102B' } };
+            hr.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '4A532B' } };
             hr.alignment = { vertical: 'middle', horizontal: 'center' };
 
             list.forEach(entry => {
                 const dataRow = { name: entry.name, notes: entry.notes, ...entry.selections };
-                const row = ws.addRow(dataRow); row.height = 22;
+                const row = ws.addRow(dataRow); row.height = 24;
                 row.getCell('name').font = { bold: true, name: 'Segoe UI' };
                 row.getCell('name').alignment = { vertical: 'middle' };
 
                 ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].forEach(day => {
                     const cell = row.getCell(day);
                     cell.alignment = { horizontal: 'center', vertical: 'middle' };
-                    cell.font = { name: 'Segoe UI', bold: true, size: 10 };
+                    cell.font = { name: 'Segoe UI', bold: false, size: 10 };
 
-                    let bg = "FFFFFF"; let fg = "000000";
-                    if(dataRow[day] === "Day Off") { bg = "FF007F"; fg = "FFFFFF"; }
-                    else if(dataRow[day] === "Vacaciones") { bg = "FFDE00"; fg = "000000"; }
-                    else if(dataRow[day] === "OPEN") { bg = "39FF14"; fg = "000000"; }
-                    else { bg = "00F2FE"; fg = "000000"; }
+                    let bg = "F4F2ED"; let fg = "1E2315";
+                    if(dataRow[day] === "Day Off") { bg = "F3ECEB"; fg = "A96151"; }
+                    else if(dataRow[day] === "Vacaciones") { bg = "F5EFE3"; fg = "C49A45"; }
+                    else if(dataRow[day] === "OPEN") { bg = "EBF0EA"; fg = "6E8467"; }
 
                     cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF' + bg } };
                     cell.font.color = { argb: 'FF' + fg };
@@ -700,7 +656,7 @@
         const b = new Blob([buf], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
         const a = document.createElement("a");
         a.href = URL.createObjectURL(b);
-        a.download = `Panda_Roster_Vibrant.xlsx`;
+        a.download = `Panda_Editorial_Roster.xlsx`;
         a.click();
     }
 </script>

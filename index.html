@@ -3,417 +3,269 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panda Dynasty — Roster Portal</title>
+    <title>Panda Dynasty — Hub de Horarios</title>
     
-    <!-- Rock Salt for heavy brush impact + Plus Jakarta Sans for high-end UI layout -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Rock+Salt&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
     
-    <!-- ExcelJS Engineering -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
 
     <style>
         :root {
-            --bg-base: #0b0f19;
-            --panel-glass: rgba(20, 26, 44, 0.7);
-            --electric-blue: #007aff;
-            --neon-cyan: #0ef;
-            --text-vibrant: #f8fafc;
-            --muted-luxury: #94a3b8;
-            --border-glass: rgba(255, 255, 255, 0.08);
+            --bg-main: #090d16;
+            --card-bg: rgba(19, 26, 42, 0.65);
+            --border-subtle: rgba(255, 255, 255, 0.06);
+            --text-main: #f3f4f6;
+            --text-muted: #64748b;
+            --accent-mint: #00f2fe;
+            --accent-purple: #7c3aed;
+            --accent-danger: #ef4444;
+            --accent-vacation: #f59e0b;
             --sans: 'Plus Jakarta Sans', sans-serif;
-            --brush: 'Rock Salt', cursive;
+            --display: 'Space Grotesk', sans-serif;
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            background-color: var(--bg-base);
-            color: var(--text-vibrant);
+            background-color: var(--bg-main);
+            color: var(--text-main);
             font-family: var(--sans);
             min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
             padding: 40px 20px;
-            overflow-x: hidden;
-            position: relative;
-        }
-
-        /* CHUZO AURORA BACKLIGHT BACKGROUND EFFECT */
-        body::before {
-            content: '';
-            position: absolute;
-            width: 500px;
-            height: 500px;
-            background: radial-gradient(circle, rgba(0, 122, 255, 0.18) 0%, transparent 70%);
-            top: -10%;
-            left: -10%;
-            z-index: 0;
-        }
-        body::after {
-            content: '';
-            position: absolute;
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, rgba(139, 92, 246, 0.12) 0%, transparent 70%);
-            bottom: -20%;
-            right: -10%;
-            z-index: 0;
-        }
-
-        .canvas-container {
-            width: 100%;
-            max-width: 1240px;
-            background: var(--panel-glass);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            border-radius: 36px;
-            padding: 50px;
-            position: relative;
-            z-index: 10;
-            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-            border: 1px solid var(--border-glass);
-        }
-
-        /* ADMIN EXPORT TRAY */
-        .admin-tray {
-            position: absolute;
-            top: 35px;
-            right: 50px;
-            z-index: 15;
-        }
-
-        .btn-admin {
-            background: rgba(255, 255, 255, 0.05);
-            color: var(--muted-luxury);
-            border: 1px solid var(--border-glass);
-            padding: 10px 22px;
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            border-radius: 30px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .btn-admin:hover {
-            background: #ffffff;
-            color: var(--bg-base);
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
-            transform: translateY(-1px);
-        }
-
-        /* BRUSH HERO TITLE */
-        .home-view {
-            text-align: center;
-            padding: 70px 0;
-        }
-
-        .brush-title {
-            font-family: var(--brush);
-            font-size: 62px;
-            color: #ffffff;
-            line-height: 1.3;
-            margin-bottom: 15px;
-            letter-spacing: -2px;
-            text-transform: uppercase;
-            display: inline-block;
-            text-shadow: 4px 4px 0px var(--electric-blue);
-        }
-
-        .home-view h2 {
-            font-size: 12px;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 8px;
-            color: var(--electric-blue);
-            margin-bottom: 45px;
-        }
-
-        /* VIEWS LAYER CONTROL */
-        .stage-view {
-            display: none;
-        }
-
-        .stage-view.active {
-            display: block;
-            animation: springReveal 0.6s cubic-bezier(0.25, 1, 0.5, 1);
-        }
-
-        @keyframes springReveal {
-            from { opacity: 0; transform: scale(0.97) translateY(20px); }
-            to { opacity: 1; transform: scale(1) translateY(0); }
-        }
-
-        .section-header {
-            font-size: 15px;
-            font-weight: 800;
-            color: #ffffff;
-            margin-bottom: 25px;
             display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 12px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
         }
 
-        .color-dot {
-            width: 8px;
-            height: 8px;
-            background: var(--electric-blue);
-            border-radius: 50%;
-            box-shadow: 0 0 12px var(--electric-blue);
-        }
-
-        /* INPUTS & SELECTS DE LUJO */
-        select, textarea {
+        .main-container {
             width: 100%;
-            background: rgba(11, 15, 25, 0.5);
-            border: 1px solid var(--border-glass);
-            padding: 18px 24px;
-            border-radius: 18px;
-            color: #ffffff;
-            font-size: 15px;
-            font-weight: 600;
-            outline: none;
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            margin-bottom: 35px;
-            appearance: none;
-        }
-
-        select:focus, textarea:focus {
-            border-color: var(--electric-blue);
-            box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.25);
-            background: rgba(11, 15, 25, 0.8);
-        }
-
-        /* CORPORATE GRID MESH */
-        .fluid-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
-            gap: 12px;
-            max-height: 260px;
-            overflow-y: auto;
-            padding: 4px;
-            margin-bottom: 40px;
-        }
-
-        .fluid-btn {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--border-glass);
-            padding: 16px;
-            border-radius: 14px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--muted-luxury);
-            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-            text-align: center;
-        }
-
-        .fluid-btn:hover {
-            border-color: rgba(255, 255, 255, 0.3);
-            background: rgba(255, 255, 255, 0.08);
-            color: #ffffff;
-            transform: translateY(-2px);
-        }
-
-        .fluid-btn.selected {
-            background: var(--electric-blue);
-            color: #ffffff;
-            border-color: var(--electric-blue);
-            box-shadow: 0 12px 30px rgba(0, 122, 255, 0.4);
-        }
-
-        /* HORIZONTAL SCHEDULING BOARD GRID */
-        .horizontal-board-wrapper {
-            width: 100%;
-            overflow-x: auto;
-            margin-bottom: 40px;
+            max-width: 1200px;
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border-radius: 24px;
-            border: 1px solid var(--border-glass);
-            background: rgba(11, 15, 25, 0.4);
-            box-shadow: inset 0 2px 8px rgba(0,0,0,0.4);
+            padding: 40px;
+            border: 1px solid var(--border-subtle);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+            margin-bottom: 30px;
         }
 
-        .roster-table {
-            width: 100%;
-            border-collapse: collapse;
-            text-align: left;
-            min-width: 1000px;
-        }
-
-        .roster-table th {
-            background: rgba(255, 255, 255, 0.02);
-            color: var(--muted-luxury);
-            font-size: 11px;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            padding: 18px 20px;
-            border-bottom: 1px solid var(--border-glass);
-        }
-
-        .roster-table td {
-            padding: 16px;
-            border-bottom: 1px solid var(--border-glass);
-            vertical-align: middle;
-        }
-
-        .table-agent-name {
-            font-weight: 700;
-            font-size: 16px;
-            color: #ffffff;
-            padding-left: 24px !important;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
-        }
-
-        /* MATRIX INTERACTIVE CELL INTERFACE */
-        .board-select {
-            width: 100%;
-            margin-bottom: 0;
-            padding: 12px 10px;
-            font-size: 13px;
-            font-weight: 700;
-            border-radius: 14px;
-            background: rgba(11, 15, 25, 0.6);
-            border: 1px solid var(--border-glass);
-            color: #ffffff;
-            cursor: pointer;
-            transition: all 0.25s ease;
-            text-align: center;
-        }
-
-        /* Dynamic cell status injection */
-        .board-select.status-active {
-            border-color: var(--electric-blue);
-            background: rgba(0, 122, 255, 0.15);
-            color: #38bdf8;
-            box-shadow: 0 0 15px rgba(0, 122, 255, 0.1);
-        }
-
-        .board-select.status-off {
-            border-color: rgba(239, 68, 68, 0.2);
-            background: rgba(239, 68, 68, 0.05);
-            color: #f87171;
-        }
-
-        /* PREMIUM EXECUTION TRIGGERS */
-        .action-tray {
+        .header-area {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-top: 40px;
+            border-bottom: 1px solid var(--border-subtle);
+            padding-bottom: 25px;
+            margin-bottom: 35px;
         }
 
-        .btn-creative {
-            padding: 18px 48px;
+        .brand-title {
+            font-family: var(--display);
+            font-size: 26px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            background: linear-gradient(to right, #ffffff, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .btn-action {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-main);
+            padding: 12px 24px;
+            border-radius: 12px;
             font-size: 13px;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            border-radius: 40px;
+            font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
-            border: none;
+            transition: all 0.2s ease;
+        }
+        .btn-action:hover {
+            background: var(--text-main);
+            color: var(--bg-main);
+            transform: translateY(-1px);
+        }
+        .btn-primary {
+            background: var(--text-main);
+            color: var(--bg-main);
+        }
+        .btn-primary:hover {
+            background: rgba(255, 255, 255, 0.85);
         }
 
-        .btn-creative-primary {
-            background: var(--electric-blue);
+        .view-layer { display: none; }
+        .view-layer.active { display: block; }
+
+        label {
+            display: block;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        select, textarea, input {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.25);
+            border: 1px solid var(--border-subtle);
+            padding: 14px 18px;
+            border-radius: 12px;
             color: #ffffff;
-            box-shadow: 0 12px 30px rgba(0, 122, 255, 0.3);
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s ease;
+            margin-bottom: 25px;
         }
+        select:focus, input:focus { border-color: var(--text-muted); }
 
-        .btn-creative-primary:hover {
-            background: #0066d6;
-            transform: translateY(-2px);
-            box-shadow: 0 15px 40px rgba(0, 122, 255, 0.5);
+        .mesh-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+            gap: 10px;
+            max-height: 250px;
+            overflow-y: auto;
+            padding-right: 5px;
+            margin-bottom: 30px;
         }
-
-        .btn-creative-secondary {
-            background: rgba(255, 255, 255, 0.05);
-            color: var(--muted-luxury);
-            border: 1px solid var(--border-glass);
-        }
-
-        .btn-creative-secondary:hover {
-            background: rgba(255, 255, 255, 0.1);
-            color: #ffffff;
-        }
-
-        .celebration-view {
+        .mesh-item {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-subtle);
+            padding: 14px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 500;
+            color: #94a3b8;
+            cursor: pointer;
             text-align: center;
-            padding: 60px 0;
+            transition: all 0.2s ease;
+        }
+        .mesh-item:hover {
+            border-color: rgba(255,255,255,0.15);
+            color: #fff;
+        }
+        .mesh-item.selected {
+            background: rgba(255,255,255,0.08);
+            border-color: #fff;
+            color: #fff;
         }
 
-        /* HIGH-END MODERN SCROLLBARS */
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.25); }
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+            border: 1px solid var(--border-subtle);
+            border-radius: 16px;
+            background: rgba(0,0,0,0.15);
+            margin-bottom: 30px;
+        }
+        .matrix-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 950px;
+        }
+        .matrix-table th {
+            padding: 16px;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            border-bottom: 1px solid var(--border-subtle);
+            text-align: left;
+        }
+        .matrix-table td {
+            padding: 12px;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .cell-select {
+            width: 100%;
+            padding: 10px;
+            font-size: 12px;
+            font-weight: 600;
+            border-radius: 8px;
+            margin-bottom: 0;
+            background: rgba(0,0,0,0.2);
+            border: 1px solid var(--border-subtle);
+            cursor: pointer;
+        }
+        .cell-select.st-active { border-color: var(--text-muted); color: #fff; }
+        .cell-select.st-off { border-color: rgba(239,68,68,0.2); color: #ef4444; }
+        .cell-select.st-vacation { border-color: rgba(245,158,11,0.3); color: #f59e0b; }
+        .cell-select.st-open { border-color: rgba(0,242,254,0.3); color: #00f2fe; }
+
+        /* MÓDULO DE GESTIÓN CRUCIAL */
+        .management-card {
+            width: 100%;
+            max-width: 1200px;
+            background: rgba(10, 14, 23, 0.4);
+            border: 1px dashed var(--border-subtle);
+            border-radius: 20px;
+            padding: 30px;
+        }
+        .mgmt-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+        .sub-panel {
+            background: rgba(0,0,0,0.15);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid var(--border-subtle);
+        }
+        .mgmt-title {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #cbd5e1;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
     </style>
 </head>
 <body>
 
-<div class="canvas-container">
-
-    <!-- MASTER ADMINISTRATIVE OVERLAY -->
-    <div class="admin-tray">
-        <button class="btn-admin" onclick="triggerAdminExport()">Export Master Roster</button>
+<div class="main-container">
+    <div class="header-area">
+        <div class="brand-title">Panda Roster Module</div>
+        <button class="btn-action" onclick="triggerExcelExport()">Export Master</button>
     </div>
 
-    <!-- PORTAL INTRO -->
-    <div id="step-0" class="stage-view active">
-        <div class="home-view">
-            <div class="brush-title">Schedule Request</div>
-            <h2>Panda Dynasty Portal</h2>
-            <button class="btn-creative btn-creative-primary" onclick="changeStage(1)">Get Started</button>
-        </div>
-    </div>
-
-    <!-- OPERATIONAL STRUCTURING -->
-    <div id="step-1" class="stage-view">
-        <div class="section-header">
-            <div class="color-dot"></div>
-            <span>Select Operational Division</span>
-        </div>
-        <select id="department" onchange="buildFluidMesh()">
-            <option value="">Choose department...</option>
+    <!-- PASO 1: SELECCIÓN -->
+    <div id="step-1" class="view-layer active">
+        <label>Operational Hub</label>
+        <select id="department" onchange="loadStaffMesh()">
+            <option value="">Select a Hub...</option>
             <option value="Customer Service">Customer Service</option>
             <option value="Deposits">Deposits</option>
             <option value="Payouts">Payouts</option>
         </select>
 
-        <div class="section-header" id="mesh-header" style="display:none;">
-            <div class="color-dot"></div>
-            <span>Select Corporate Identity</span>
+        <div id="mesh-wrapper" style="display:none;">
+            <label>Team Member Identity</label>
+            <div class="mesh-grid" id="staff-mesh"></div>
         </div>
-        <div class="fluid-grid" id="fluid-name-mesh" style="display:none;"></div>
 
-        <div class="action-tray" style="justify-content: flex-end;">
-            <button class="btn-creative btn-creative-primary" onclick="changeStage(2)">Next Step</button>
+        <div style="text-align: right; margin-top: 20px;">
+            <button class="btn-action btn-primary" onclick="goToMatrix()">Configure Schedule</button>
         </div>
     </div>
 
-    <!-- SYSTEM TIMELINE ENGAGEMENT MATRIX -->
-    <div id="step-2" class="stage-view">
-        <div class="section-header">
-            <div class="color-dot"></div>
-            <span>Weekly Schedule Matrix</span>
+    <!-- PASO 2: MATRIZ HORIZONTAL -->
+    <div id="step-2" class="view-layer">
+        <div style="margin-bottom: 20px;">
+            <span style="font-size: 12px; color: var(--text-muted); text-transform: uppercase;">Active Profile:</span>
+            <span id="active-agent-title" style="font-size: 18px; font-weight: 700; margin-left: 8px; font-family: var(--display);">---</span>
         </div>
-        
-        <div class="horizontal-board-wrapper">
-            <table class="roster-table">
+
+        <div class="table-container">
+            <table class="matrix-table">
                 <thead>
                     <tr>
-                        <th style="width: 220px; padding-left: 24px;">Team Member</th>
                         <th>Monday</th>
                         <th>Tuesday</th>
                         <th>Wednesday</th>
@@ -425,46 +277,83 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td id="table-display-name" class="table-agent-name">---</td>
-                        <td><select class="board-select shift-selector" data-day="Monday" onchange="styleCellColor(this)"></select></td>
-                        <td><select class="board-select shift-selector" data-day="Tuesday" onchange="styleCellColor(this)"></select></td>
-                        <td><select class="board-select shift-selector" data-day="Wednesday" onchange="styleCellColor(this)"></select></td>
-                        <td><select class="board-select shift-selector" data-day="Thursday" onchange="styleCellColor(this)"></select></td>
-                        <td><select class="board-select shift-selector" data-day="Friday" onchange="styleCellColor(this)"></select></td>
-                        <td><select class="board-select shift-selector" data-day="Saturday" onchange="styleCellColor(this)"></select></td>
-                        <td><select class="board-select shift-selector" data-day="Sunday" onchange="styleCellColor(this)"></select></td>
+                        <td><select class="cell-select day-input" data-day="Monday" onchange="refreshCellClass(this)"></select></td>
+                        <td><select class="cell-select day-input" data-day="Tuesday" onchange="refreshCellClass(this)"></select></td>
+                        <td><select class="cell-select day-input" data-day="Wednesday" onchange="refreshCellClass(this)"></select></td>
+                        <td><select class="cell-select day-input" data-day="Thursday" onchange="refreshCellClass(this)"></select></td>
+                        <td><select class="cell-select day-input" data-day="Friday" onchange="refreshCellClass(this)"></select></td>
+                        <td><select class="cell-select day-input" data-day="Saturday" onchange="refreshCellClass(this)"></select></td>
+                        <td><select class="cell-select day-input" data-day="Sunday" onchange="refreshCellClass(this)"></select></td>
                     </tr>
                 </tbody>
             </table>
         </div>
 
-        <div class="section-header">
-            <div class="color-dot"></div>
-            <span>Strategic Support Notes</span>
-        </div>
-        <textarea id="general-notes" rows="3" placeholder="Log any special justifications, coverage requests or scheduling dependencies..."></textarea>
+        <label>Shift Comments / Adjustments</label>
+        <textarea id="matrix-notes" rows="2" placeholder="Add specific notes if necessary..."></textarea>
 
-        <div class="action-tray">
-            <button class="btn-creative btn-creative-secondary" onclick="changeStage(1)">Back</button>
-            <button class="btn-creative btn-creative-primary" onclick="saveAgentRequestLocal()">Save Selection</button>
+        <div style="display:flex; justify-content: space-between;">
+            <button class="btn-action" onclick="backToStep1()">Back</button>
+            <button class="btn-action btn-primary" onclick="commitSchedule()">Commit Data</button>
         </div>
     </div>
 
-    <!-- LOG ARCHIVAL RECOGNITION -->
-    <div id="step-3" class="stage-view">
-        <div class="celebration-view">
-            <h2 style="color: #38bdf8; font-size: 30px; margin-bottom: 15px; font-weight: 800; letter-spacing: -0.5px;">Schedule Saved Horizontally</h2>
-            <p style="color: var(--muted-luxury); font-size: 15px; max-width: 540px; margin: 0 auto 40px auto; font-weight: 500; line-height: 1.7;">
-                Your selections have been committed to local memory. The terminal board is cleared and prepared for the next agent record.
-            </p>
-            <button class="btn-creative btn-creative-primary" onclick="resetPortal()">Log Another Request</button>
-        </div>
+    <!-- PASO 3: ARCHIVADO -->
+    <div id="step-3" class="view-layer" style="text-align:center; padding: 40px 0;">
+        <h3 style="font-family: var(--display); font-size: 22px; margin-bottom: 10px;">Data Saved</h3>
+        <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 25px;">The selection was successfully stored locally.</p>
+        <button class="btn-action btn-primary" onclick="resetFlow()">Next Record</button>
+    </div>
+</div>
+
+<!-- MÓDULO DE GESTIÓN AVANZADA DE PERSONAL -->
+<div class="management-card">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+        <div style="font-family: var(--display); font-size: 16px; font-weight:700;">Staff Management Console</div>
+        <button class="btn-action" style="padding: 6px 14px; font-size:11px;" onclick="toggleMgmtPanel()">Unlock Console</button>
     </div>
 
+    <div id="mgmt-panel-content" class="mgmt-grid" style="display:none;">
+        <!-- AGREGAR -->
+        <div class="sub-panel">
+            <div class="mgmt-title">➕ Add New Staff</div>
+            <input type="text" id="add-name" placeholder="Full Name">
+            <select id="add-dept">
+                <option value="Customer Service">Customer Service</option>
+                <option value="Deposits">Deposits</option>
+                <option value="Payouts">Payouts</option>
+            </select>
+            <button class="btn-action btn-primary" style="width:100%;" onclick="executeAddMember()">Register Member</button>
+        </div>
+
+        <!-- CAMBIAR DE DEPARTAMENTO -->
+        <div class="sub-panel">
+            <div class="mgmt-title">🔄 Transfer Department</div>
+            <select id="transfer-agent-select">
+                <option value="">Select Target...</option>
+            </select>
+            <select id="transfer-new-dept">
+                <option value="Customer Service">Customer Service</option>
+                <option value="Deposits">Deposits</option>
+                <option value="Payouts">Payouts</option>
+            </select>
+            <button class="btn-action" style="width:100%;" onclick="executeTransfer()">Transfer Location</button>
+        </div>
+
+        <!-- BORRAR -->
+        <div class="sub-panel">
+            <div class="mgmt-title" style="color: var(--accent-danger);">❌ Remove Staff Member</div>
+            <select id="delete-agent-select">
+                <option value="">Select Target...</option>
+            </select>
+            <button class="btn-action" style="width:100%; background: rgba(239,68,68,0.1); border-color: var(--accent-danger); color: var(--accent-danger);" onclick="executeDeleteMember()">Terminate Entry</button>
+        </div>
+    </div>
 </div>
 
 <script>
-    const teamData = {
+    // Inicialización de datos base si no existen en localStorage
+    const defaultTeam = {
         "Customer Service": [
             "Cristopher Sandoval", "Kendra Temple", "María José Fallas", "Natalia Sibaja", "Pablo Retana", 
             "Victor Ramírez", "Luis Carvajal", "Kendall Montoya", "Josué Vargas", "Kevin Salazar", 
@@ -481,238 +370,316 @@
         "Payouts": ["Carlos Amador", "Fer Blanco", "Graciela Bravo ", "Ignacio Blanco", "Kevin Zamora", "Samuel Carballo", "Sheydron Clark", "Sebastian Rivera", "Silvana Suarez"]
     };
 
-    const weekDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-    let selectedAgentGlobal = "";
+    if (!localStorage.getItem('panda_staff_db')) {
+        localStorage.setItem('panda_staff_db', JSON.stringify(defaultTeam));
+    }
 
-    function buildFluidMesh() {
+    let currentAgent = "";
+    let mgmtUnlocked = false;
+
+    function getStaffData() {
+        return JSON.parse(localStorage.getItem('panda_staff_db'));
+    }
+
+    function saveStaffData(data) {
+        localStorage.setItem('panda_staff_db', JSON.stringify(data));
+        loadStaffMesh();
+        populateMgmtDropdowns();
+    }
+
+    function toggleMgmtPanel() {
+        if (!mgmtUnlocked) {
+            const pass = prompt("Enter Supervisor Access Password:");
+            if (pass !== "Sups2019") {
+                alert("Unauthorized Entry.");
+                return;
+            }
+            mgmtUnlocked = true;
+        }
+        const panel = document.getElementById('mgmt-panel-content');
+        panel.style.display = panel.style.display === 'none' ? 'grid' : 'none';
+        populateMgmtDropdowns();
+    }
+
+    function loadStaffMesh() {
         const dept = document.getElementById('department').value;
-        const mesh = document.getElementById('fluid-name-mesh');
-        const header = document.getElementById('mesh-header');
+        const wrapper = document.getElementById('mesh-wrapper');
+        const mesh = document.getElementById('staff-mesh');
         
         mesh.innerHTML = '';
-        selectedAgentGlobal = "";
+        currentAgent = "";
 
         if (!dept) {
-            mesh.style.display = 'none';
-            header.style.display = 'none';
+            wrapper.style.display = 'none';
             return;
         }
 
-        header.style.display = 'flex';
-        mesh.style.display = 'grid';
+        wrapper.style.display = 'block';
+        const db = getStaffData();
 
-        teamData[dept].forEach(name => {
-            const btn = document.createElement('div');
-            btn.className = 'fluid-btn';
-            btn.textContent = name;
-            btn.onclick = () => {
-                document.querySelectorAll('.fluid-btn').forEach(b => b.classList.remove('selected'));
-                btn.classList.add('selected');
-                selectedAgentGlobal = name;
+        db[dept].forEach(name => {
+            const item = document.createElement('div');
+            item.className = 'mesh-item';
+            item.textContent = name;
+            item.onclick = () => {
+                document.querySelectorAll('.mesh-item').forEach(i => i.classList.remove('selected'));
+                item.classList.add('selected');
+                currentAgent = name;
             };
-            mesh.appendChild(btn);
+            mesh.appendChild(item);
         });
     }
 
-    function changeStage(stageNum) {
-        if (stageNum === 2) {
-            if (!selectedAgentGlobal) {
-                alert('Please establish your corporate identity profile before proceeding.');
-                return;
-            }
-            setupHorizontalMatrixBoard();
+    function goToMatrix() {
+        if (!currentAgent) {
+            alert("Please identify a staff profile first.");
+            return;
         }
-        document.querySelectorAll('.stage-view').forEach(v => v.style.display = 'none');
-        document.getElementById(`step-${stageNum}`).style.display = 'block';
-        document.getElementById(`step-${stageNum}`).classList.add('active');
+        document.getElementById('step-1').classList.remove('active');
+        document.getElementById('step-2').classList.add('active');
+        
+        document.getElementById('active-agent-title').textContent = currentAgent;
+        buildMatrixOptions();
     }
 
-    function setupHorizontalMatrixBoard() {
-        document.getElementById('table-display-name').textContent = selectedAgentGlobal;
-
-        // Special restriction groups
-        const middleOnlyAgents = ["Luis Fernando Ruiz", "Marlon Wright", "Anilu Guzman Villalobos"];
+    function buildMatrixOptions() {
+        const structuralRuleList = ["Luis Fernando Ruiz", "Marlon Wright", "Anilu Guzman Villalobos"];
         const standardAgentsNoWeekendOff = ["Keisha Cross Brown"];
 
-        const isMiddleOnly = middleOnlyAgents.includes(selectedAgentGlobal);
-        const isNoWeekendOff = isMiddleOnly || standardAgentsNoWeekendOff.includes(selectedAgentGlobal);
+        const hasRestrictedHours = structuralRuleList.includes(currentAgent);
+        const denyWeekendOff = hasRestrictedHours || standardAgentsNoWeekendOff.includes(currentAgent);
 
-        const selectors = document.querySelectorAll('.shift-selector');
-        
-        selectors.forEach(select => {
+        const selects = document.querySelectorAll('.day-input');
+
+        selects.forEach(select => {
             const day = select.getAttribute('data-day');
             const isWeekend = (day === 'Saturday' || day === 'Sunday');
-            
-            let optionsHtml = '';
-            
-            if (isMiddleOnly) {
-                // Strict special rule set
-                optionsHtml += `
-                    <option value="09:00 - 17:00">09:00 AM - 05:00 PM</option>
-                    <option value="10:00 - 18:00">10:00 AM - 06:00 PM</option>
-                    <option value="11:00 - 19:00">11:00 AM - 07:00 PM</option>
-                    <option value="13:00 - 21:00">01:00 PM - 09:00 PM</option>
+            let html = '';
+
+            if (hasRestrictedHours) {
+                html += `
+                    <option value="09:00 - 17:00">09:00 - 17:00</option>
+                    <option value="10:00 - 18:00">10:00 - 18:00</option>
+                    <option value="11:00 - 19:00">11:00 - 19:00</option>
+                    <option value="13:00 - 21:00">13:00 - 21:00</option>
                 `;
             } else {
-                // Extended full matrix choices for the rest of the staff
-                optionsHtml += `
-                    <option value="06:00 - 14:00">06:00 AM - 02:00 PM</option>
-                    <option value="07:00 - 15:00">07:00 AM - 03:00 PM</option>
-                    <option value="08:00 - 16:00">08:00 AM - 04:00 PM</option>
-                    <option value="09:00 - 17:00">09:00 AM - 05:00 PM</option>
-                    <option value="10:00 - 18:00">10:00 AM - 06:00 PM</option>
-                    <option value="11:00 - 19:00">11:00 AM - 07:00 PM</option>
-                    <option value="12:00 - 20:00">12:00 PM - 08:00 PM</option>
-                    <option value="13:00 - 21:00">01:00 PM - 09:00 PM</option>
-                    <option value="14:00 - 22:00">02:00 PM - 10:00 PM</option>
-                    <option value="15:00 - 23:00">03:00 PM - 11:00 PM</option>
+                html += `
+                    <option value="06:00 - 14:00">06:00 - 14:00</option>
+                    <option value="07:00 - 15:00">07:00 - 15:00</option>
+                    <option value="08:00 - 16:00">08:00 - 16:00</option>
+                    <option value="09:00 - 17:00">09:00 - 17:00</option>
+                    <option value="10:00 - 18:00">10:00 - 18:00</option>
+                    <option value="11:00 - 19:00">11:00 - 19:00</option>
+                    <option value="12:00 - 20:00">12:00 - 20:00</option>
+                    <option value="13:00 - 21:00">13:00 - 21:00</option>
+                    <option value="14:00 - 22:00">14:00 - 22:00</option>
+                    <option value="15:00 - 23:00">15:00 - 23:00</option>
                 `;
             }
 
-            if (!(isWeekend && isNoWeekendOff)) {
-                optionsHtml += `<option value="Day Off">🛑 Day Off</option>`;
+            // Opciones de estados universales agregados
+            html += `<option value="OPEN">✨ OPEN</option>`;
+            html += `<option value="Vacaciones">🌴 Vacaciones</option>`;
+
+            if (!(isWeekend && denyWeekendOff)) {
+                html += `<option value="Day Off">🛑 Day Off</option>`;
             }
 
-            select.innerHTML = optionsHtml;
-            styleCellColor(select);
+            select.innerHTML = html;
+            refreshCellClass(select);
         });
     }
 
-    function styleCellColor(elem) {
-        if (elem.value === "Day Off") {
-            elem.classList.remove('status-active');
-            elem.classList.add('status-off');
-        } else {
-            elem.classList.remove('status-off');
-            elem.classList.add('status-active');
-        }
+    function refreshCellClass(elem) {
+        elem.classList.remove('st-active', 'st-off', 'st-vacation', 'st-open');
+        if (elem.value === "Day Off") elem.classList.add('st-off');
+        else if (elem.value === "Vacaciones") elem.classList.add('st-vacation');
+        else if (elem.value === "OPEN") elem.classList.add('st-open');
+        else elem.classList.add('st-active');
     }
 
-    function saveAgentRequestLocal() {
+    function backToStep1() {
+        document.getElementById('step-2').classList.remove('active');
+        document.getElementById('step-1').classList.add('active');
+    }
+
+    function commitSchedule() {
         const dept = document.getElementById('department').value;
-        const name = selectedAgentGlobal;
-        const generalNotes = document.getElementById('general-notes').value || "None";
+        const notes = document.getElementById('matrix-notes').value || "None";
+        const targetDays = {};
 
-        const dailySelections = {};
-        const selectors = document.querySelectorAll('.shift-selector');
-        selectors.forEach(select => {
-            const day = select.getAttribute('data-day');
-            dailySelections[day] = select.value;
+        document.querySelectorAll('.day-input').forEach(sel => {
+            targetDays[sel.getAttribute('data-day')] = sel.value;
         });
 
-        let masterList = JSON.parse(localStorage.getItem('panda_master_roster')) || [];
-        masterList = masterList.filter(entry => entry.name !== name);
+        let masterRoster = JSON.parse(localStorage.getItem('panda_master_roster')) || [];
+        masterRoster = masterRoster.filter(r => r.name !== currentAgent);
 
-        masterList.push({
-            name: name,
+        masterRoster.push({
+            name: currentAgent,
             dept: dept,
-            selections: dailySelections,
-            notes: generalNotes,
+            selections: targetDays,
+            notes: notes,
             timestamp: new Date().toISOString()
         });
 
-        localStorage.setItem('panda_master_roster', JSON.stringify(masterList));
-        changeStage(3);
-    }
-
-    function resetPortal() {
-        document.getElementById('department').value = "";
-        buildFluidMesh();
-        document.getElementById('general-notes').value = "";
-        changeStage(0);
-    }
-
-    async function triggerAdminExport() {
-        const passwordInput = prompt("Enter Supervisor Authentication Password:");
-        if (passwordInput !== "Sups2019") {
-            alert("Access Denied. Incorrect Administrative Password.");
-            return;
-        }
-
-        const masterList = JSON.parse(localStorage.getItem('panda_master_roster')) || [];
-        if (masterList.length === 0) {
-            alert("No schedule requests found in memory to export yet.");
-            return;
-        }
-
-        const workbook = new ExcelJS.Workbook();
-        const departmentsToProcess = ["Customer Service", "Deposits", "Payouts"];
+        localStorage.setItem('panda_master_roster', JSON.stringify(masterRoster));
         
-        departmentsToProcess.forEach(currentDept => {
-            const deptEntries = masterList.filter(entry => entry.dept === currentDept);
-            if (deptEntries.length === 0) return;
+        document.getElementById('step-2').classList.remove('active');
+        document.getElementById('step-3').classList.add('active');
+    }
 
-            const worksheet = workbook.addWorksheet(currentDept);
+    function resetFlow() {
+        document.getElementById('matrix-notes').value = "";
+        document.getElementById('step-3').classList.remove('active');
+        document.getElementById('step-1').classList.add('active');
+        loadStaffMesh();
+    }
 
-            worksheet.columns = [
+    /* LÓGICA INTERNA DE GESTIÓN (CRUD) */
+    function populateMgmtDropdowns() {
+        const db = getStaffData();
+        const transferSelect = document.getElementById('transfer-agent-select');
+        const deleteSelect = document.getElementById('delete-agent-select');
+
+        transferSelect.innerHTML = '<option value="">Select Target...</option>';
+        deleteSelect.innerHTML = '<option value="">Select Target...</option>';
+
+        Object.keys(db).forEach(dept => {
+            db[dept].forEach(name => {
+                const opt1 = document.createElement('option');
+                opt1.value = JSON.stringify({name, dept});
+                opt1.textContent = `${name} (${dept})`;
+                transferSelect.appendChild(opt1);
+
+                const opt2 = document.createElement('option');
+                opt2.value = JSON.stringify({name, dept});
+                opt2.textContent = `${name} (${dept})`;
+                deleteSelect.appendChild(opt2);
+            });
+        });
+    }
+
+    function executeAddMember() {
+        const name = document.getElementById('add-name').value.trim();
+        const dept = document.getElementById('add-dept').value;
+
+        if(!name) { alert("Please provide a valid structural name."); return; }
+        
+        const db = getStaffData();
+        if(db[dept].includes(name)) { alert("This corporate entry already exists."); return; }
+
+        db[dept].push(name);
+        db[dept].sort();
+        saveStaffData(db);
+        
+        document.getElementById('add-name').value = "";
+        alert(`${name} registered successfully into ${dept}.`);
+    }
+
+    function executeTransfer() {
+        const targetRaw = document.getElementById('transfer-agent-select').value;
+        const newDept = document.getElementById('transfer-new-dept').value;
+
+        if(!targetRaw) { alert("Identify target entry first."); return; }
+        const target = JSON.parse(targetRaw);
+
+        if(target.dept === newDept) { alert("Agent already belongs to this department."); return; }
+
+        const db = getStaffData();
+        db[target.dept] = db[target.dept].filter(n => n !== target.name);
+        db[newDept].push(target.name);
+        db[newDept].sort();
+
+        saveStaffData(db);
+        alert(`Transferred ${target.name} to ${newDept}.`);
+    }
+
+    function executeDeleteMember() {
+        const targetRaw = document.getElementById('delete-agent-select').value;
+        if(!targetRaw) { alert("Identify execution target first."); return; }
+        
+        const target = JSON.parse(targetRaw);
+        if(!confirm(`Confirm terminal removal of ${target.name}?`)) return;
+
+        const db = getStaffData();
+        db[target.dept] = db[target.dept].filter(n => n !== target.name);
+
+        saveStaffData(db);
+        alert(`Removed ${target.name} from records.`);
+    }
+
+    /* PROCESAMIENTO EXCELJS */
+    async function triggerExcelExport() {
+        const auth = prompt("Enter Administrative Verification Code:");
+        if (auth !== "Sups2019") { alert("Access Denied."); return; }
+
+        const master = JSON.parse(localStorage.getItem('panda_master_roster')) || [];
+        if(!master.length) { alert("No stored logs found."); return; }
+
+        const wb = new ExcelJS.Workbook();
+        const departments = ["Customer Service", "Deposits", "Payouts"];
+
+        departments.forEach(dKey => {
+            const list = master.filter(m => m.dept === dKey);
+            if(!list.length) return;
+
+            const ws = wb.addWorksheet(dKey);
+            ws.columns = [
                 { header: 'Agent Name', key: 'name', width: 28 },
-                { header: 'Monday', key: 'Monday', width: 22 },
-                { header: 'Tuesday', key: 'Tuesday', width: 22 },
-                { header: 'Wednesday', key: 'Wednesday', width: 22 },
-                { header: 'Thursday', key: 'Thursday', width: 22 },
-                { header: 'Friday', key: 'Friday', width: 22 },
-                { header: 'Saturday', key: 'Saturday', width: 22 },
-                { header: 'Sunday', key: 'Sunday', width: 22 },
-                { header: 'Strategic Notes', key: 'general', width: 40 }
+                { header: 'Monday', key: 'Monday', width: 18 },
+                { header: 'Tuesday', key: 'Tuesday', width: 18 },
+                { header: 'Wednesday', key: 'Wednesday', width: 18 },
+                { header: 'Thursday', key: 'Thursday', width: 18 },
+                { header: 'Friday', key: 'Friday', width: 18 },
+                { header: 'Saturday', key: 'Saturday', width: 18 },
+                { header: 'Sunday', key: 'Sunday', width: 18 },
+                { header: 'Operational Comments', key: 'notes', width: 35 }
             ];
 
-            const headerRow = worksheet.getRow(1);
-            headerRow.height = 28;
-            headerRow.font = { name: 'Segoe UI', bold: true, color: { argb: 'FFFFFF' }, size: 11 };
-            headerRow.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '007AFF' } };
+            const headerRow = ws.getRow(1);
+            headerRow.height = 26;
+            headerRow.font = { name: 'Segoe UI', bold: true, color: { argb: 'FFFFFF' } };
+            headerRow.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '1E293B' } };
             headerRow.alignment = { vertical: 'middle', horizontal: 'center' };
 
-            deptEntries.forEach(agentEntry => {
-                const rowData = {
-                    name: agentEntry.name,
-                    general: agentEntry.notes,
-                    Monday: agentEntry.selections['Monday'] || 'OFF',
-                    Tuesday: agentEntry.selections['Tuesday'] || 'OFF',
-                    Wednesday: agentEntry.selections['Wednesday'] || 'OFF',
-                    Thursday: agentEntry.selections['Thursday'] || 'OFF',
-                    Friday: agentEntry.selections['Friday'] || 'OFF',
-                    Saturday: agentEntry.selections['Saturday'] || 'OFF',
-                    Sunday: agentEntry.selections['Sunday'] || 'OFF'
+            list.forEach(entry => {
+                const dataRow = {
+                    name: entry.name,
+                    notes: entry.notes,
+                    ...entry.selections
                 };
 
-                const row = worksheet.addRow(rowData);
-                row.height = 26;
+                const row = ws.addRow(dataRow);
+                row.height = 24;
 
-                row.getCell('name').font = { bold: true, name: 'Segoe UI', color: { argb: '1E293B' } };
+                row.getCell('name').font = { bold: true, name: 'Segoe UI' };
                 row.getCell('name').alignment = { vertical: 'middle' };
-                row.getCell('general').alignment = { vertical: 'middle' };
+                row.getCell('notes').alignment = { vertical: 'middle' };
 
-                weekDays.forEach(day => {
+                ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].forEach(day => {
                     const cell = row.getCell(day);
                     cell.alignment = { horizontal: 'center', vertical: 'middle' };
+                    cell.font = { name: 'Segoe UI', bold: true, size: 10 };
 
-                    let bgColor = "C6EFCE"; 
-                    let fgColor = "006100";
-                    
-                    if (rowData[day] === "Day Off") {
-                        bgColor = "E2E8F0"; 
-                        fgColor = "475569";
-                    }
+                    let bg = "F1F5F9"; let fg = "334155";
+                    if(dataRow[day] === "Day Off") { bg = "FEE2E2"; fg = "991B1B"; }
+                    else if(dataRow[day] === "Vacaciones") { bg = "FEF3C7"; fg = "92400E"; }
+                    else if(dataRow[day] === "OPEN") { bg = "E0F2FE"; fg = "075985"; }
 
-                    cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF' + bgColor } };
-                    cell.font = { color: { argb: 'FF' + fgColor }, bold: true, name: 'Segoe UI', size: 10 };
-                });
-
-                row.eachCell({ includeEmpty: true }, (cell) => {
-                    cell.border = {
-                        bottom: { style: 'thin', color: { argb: 'FFE2E8F0' } },
-                        right: { style: 'thin', color: { argb: 'FFE2E8F0' } }
-                    };
+                    cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF' + bg } };
+                    cell.font.color = { argb: 'FF' + fg };
                 });
             });
         });
 
-        const buffer = await workbook.xlsx.writeBuffer();
-        const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
-        const link = document.createElement("a");
-        link.href = URL.createObjectURL(blob);
-        link.download = `Master_Horizontal_Roster.xlsx`;
-        link.click();
+        const buf = await wb.xlsx.writeBuffer();
+        const b = new Blob([buf], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(b);
+        a.download = `Panda_Master_Roster.xlsx`;
+        a.click();
     }
 </script>
 </body>

@@ -1,27 +1,28 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panda Dynasty — Roster Canvas</title>
+    <title>Panda Dynasty — Roster Portal</title>
     
-    <!-- Tipografías: Una con trazo de pincel/caligráfica y otra ultra limpia -->
+    <!-- Heavy brush/graffiti type for title matching image_96f778.png plus clean body font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rock+Salt&family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     
-    <!-- ExcelJS para exportar el Roster de forma nativa -->
+    <!-- ExcelJS Library for background compilation -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
 
     <style>
         :root {
-            --vibrant-orange: #ff6b4a;  /* Mandarina/Terracota vivo */
-            --warm-yellow: #feca57;     /* Amarillo sol */
-            --creative-sage: #5f27cd;   /* Toque de violeta/salvia eléctrico para contraste */
-            --soft-cream: #fff9f5;      /* Fondo base cálido y vivo */
-            --charcoal: #222f3e;         /* Tinta oscura para legibilidad */
+            --pitch-black: #0d0e12;     /* Deep contrast canvas */
+            --card-gray: #181a21;       /* Contrasting card background */
+            --border-gray: #262936;     /* Structural divider lines */
+            --electric-blue: #00a8ff;   /* Sharp neon action color from image */
+            --pure-white: #ffffff;      /* Main reading color */
+            --muted-text: #7f8c8d;      /* Low priority helper text */
             --sans: 'Plus Jakarta Sans', sans-serif;
-            --brush: 'Alex Brush', cursive;
+            --brush: 'Rock Salt', cursive;
         }
 
         * {
@@ -31,182 +32,172 @@
         }
 
         body {
-            background-color: var(--soft-cream);
-            color: var(--charcoal);
+            background-color: var(--pitch-black);
+            color: var(--pure-white);
             font-family: var(--sans);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 30px 20px;
+            padding: 40px 20px;
             overflow-x: hidden;
-            /* Manchas de acuarela abstractas de fondo */
-            background-image: 
-                radial-gradient(circle at 90% 10%, rgba(254, 202, 87, 0.3) 0%, transparent 50%),
-                radial-gradient(circle at 10% 80%, rgba(255, 107, 74, 0.2) 0%, transparent 60%);
+            background-image: radial-gradient(circle at 50% -20%, rgba(0, 168, 255, 0.15) 0%, transparent 70%);
         }
 
         .canvas-container {
             width: 100%;
             max-width: 1050px;
-            background: #ffffff;
-            border-radius: 40px;
-            box-shadow: 0 30px 70px rgba(255, 107, 74, 0.15);
+            background: var(--card-gray);
+            border-radius: 24px;
             padding: 50px;
             position: relative;
-            border: 2px solid rgba(255, 107, 74, 0.08);
-            overflow: hidden;
+            border: 1px solid var(--border-gray);
+            box-shadow: 0 40px 90px rgba(0, 0, 0, 0.6);
         }
 
-        /* PANTALLA DE INICIO (HOME PAGE ARTÍSTICA) */
+        /* HOME SCREEN (Inspired directly by image_96f778.png) */
         .home-view {
             text-align: center;
-            padding: 60px 0;
+            padding: 80px 0;
         }
 
         .brush-title {
             font-family: var(--brush);
-            font-size: 96px;
-            color: var(--vibrant-orange);
-            line-height: 0.8;
-            margin-bottom: 5px;
+            font-size: 52px;
+            color: var(--pure-white);
+            line-height: 1.4;
+            margin-bottom: 20px;
+            letter-spacing: -2px;
+            text-transform: uppercase;
             display: inline-block;
-            transform: rotate(-3deg);
-            text-shadow: 2px 2px 0px rgba(254, 202, 87, 0.4);
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
         }
 
         .home-view h2 {
-            font-size: 24px;
+            font-size: 14px;
             font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 6px;
-            color: var(--charcoal);
-            margin-bottom: 40px;
+            letter-spacing: 5px;
+            color: var(--muted-text);
+            margin-bottom: 50px;
         }
 
-        /* INTERFAZ DE FLUJO INTERACTIVO */
+        /* VIEW CONSTRAINTS & TRANSITIONS */
         .stage-view {
             display: none;
         }
 
         .stage-view.active {
             display: block;
-            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            animation: fadeIn 0.4s ease-out;
         }
 
-        @keyframes popIn {
-            from { opacity: 0; transform: scale(0.95) translateY(20px); }
-            to { opacity: 1; transform: scale(1) translateY(0); }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .section-header {
-            font-size: 28px;
+            font-size: 20px;
             font-weight: 800;
-            color: var(--vibrant-orange);
+            color: var(--pure-white);
             margin-bottom: 25px;
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .color-dot {
-            width: 16px;
-            height: 16px;
-            background: var(--warm-yellow);
+            width: 10px;
+            height: 10px;
+            background: var(--electric-blue);
             border-radius: 50%;
-            display: inline-block;
         }
 
-        /* Selectores Vivos */
-        select, input[type="text"], textarea {
+        /* Inputs and Select Boxes */
+        select, textarea {
             width: 100%;
-            background: #fff0eb;
-            border: 2px solid transparent;
-            padding: 20px;
-            border-radius: 20px;
-            color: var(--charcoal);
-            font-size: 16px;
+            background: var(--pitch-black);
+            border: 1px solid var(--border-gray);
+            padding: 18px;
+            border-radius: 12px;
+            color: var(--pure-white);
+            font-size: 15px;
             font-weight: 600;
             outline: none;
-            transition: all 0.3s ease;
-            margin-bottom: 30px;
+            transition: all 0.25s ease;
+            margin-bottom: 35px;
+            appearance: none;
         }
 
-        select:focus, input[type="text"]:focus, textarea:focus {
-            background: #ffffff;
-            border-color: var(--vibrant-orange);
-            box-shadow: 0 10px 25px rgba(255, 107, 74, 0.1);
+        select:focus, textarea:focus {
+            border-color: var(--electric-blue);
+            box-shadow: 0 0 15px rgba(0, 168, 255, 0.2);
         }
 
-        /* Mosaico de Selección Líquido */
+        /* Interactive Grid Layout */
         .fluid-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            gap: 15px;
-            max-height: 280px;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 12px;
+            max-height: 300px;
             overflow-y: auto;
-            padding: 10px;
+            padding-right: 8px;
             margin-bottom: 40px;
         }
 
         .fluid-btn {
-            background: #ffffff;
-            border: 2px solid #fff0eb;
-            padding: 16px 20px;
-            border-radius: 25px;
+            background: var(--pitch-black);
+            border: 1px solid var(--border-gray);
+            padding: 16px;
+            border-radius: 12px;
             cursor: pointer;
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 600;
-            color: var(--charcoal);
-            transition: all 0.25s ease;
+            color: var(--muted-text);
+            transition: all 0.2s ease;
             text-align: center;
         }
 
         .fluid-btn:hover {
-            border-color: var(--warm-yellow);
-            transform: translateY(-3px) scale(1.02);
-            background: #fffdf9;
+            border-color: rgba(255,255,255,0.3);
+            color: var(--pure-white);
         }
 
         .fluid-btn.selected {
-            background: var(--vibrant-orange);
-            color: #ffffff;
-            border-color: var(--vibrant-orange);
-            box-shadow: 0 10px 20px rgba(255, 107, 74, 0.3);
+            background: rgba(0, 168, 255, 0.1);
+            color: var(--electric-blue);
+            border-color: var(--electric-blue);
         }
 
-        /* El nuevo Roster en Cascada de Color */
+        /* Row Cascade Structuring */
         .cascade-flow {
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 12px;
             margin-bottom: 40px;
         }
 
         .cascade-card {
-            background: #fffdfb;
-            border: 2px solid #fff0eb;
-            border-radius: 24px;
-            padding: 25px;
+            background: var(--pitch-black);
+            border: 1px solid var(--border-gray);
+            border-radius: 14px;
+            padding: 20px 25px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             gap: 20px;
-            flex-wrap: wrap;
-            transition: all 0.3s ease;
-        }
-
-        .cascade-card:hover {
-            border-color: var(--warm-yellow);
-            background: #ffffff;
-            box-shadow: 0 15px 30px rgba(254, 202, 87, 0.1);
         }
 
         .day-label {
-            font-size: 20px;
+            font-size: 16px;
             font-weight: 800;
-            color: var(--charcoal);
+            color: var(--pure-white);
             min-width: 120px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .card-inputs {
@@ -214,178 +205,137 @@
             gap: 15px;
             flex: 1;
             align-items: center;
-            flex-wrap: wrap;
         }
 
         .card-inputs select {
             margin-bottom: 0;
             flex: 1;
-            min-width: 180px;
-            background: #ffffff;
-            border: 2px solid #fff0eb;
+            background: var(--card-gray);
+            border: 1px solid var(--border-gray);
         }
 
-        .card-inputs input {
-            margin-bottom: 0;
-            flex: 2;
-            min-width: 240px;
-            background: #ffffff;
-            border: 2px solid #fff0eb;
-        }
-
-        /* Botones Creativos Magnéticos */
+        /* Premium Interface Action Trays */
         .action-tray {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-top: 30px;
+            margin-top: 35px;
         }
 
         .btn-creative {
-            padding: 18px 45px;
-            font-size: 15px;
+            padding: 16px 40px;
+            font-size: 13px;
             font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 2px;
             border-radius: 30px;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: all 0.2s ease;
             border: none;
         }
 
         .btn-creative-primary {
-            background: linear-gradient(135deg, var(--vibrant-orange), #ff8469);
-            color: #ffffff;
-            box-shadow: 0 10px 25px rgba(255, 107, 74, 0.3);
+            background: var(--electric-blue);
+            color: var(--pure-white);
         }
 
         .btn-creative-primary:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 15px 35px rgba(255, 107, 74, 0.5);
+            background: #21b8ff;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 168, 255, 0.35);
         }
 
         .btn-creative-secondary {
-            background: #fff0eb;
-            color: var(--vibrant-orange);
+            background: transparent;
+            color: var(--muted-text);
+            border: 1px solid var(--border-gray);
         }
 
         .btn-creative-secondary:hover {
-            background: #ffe3da;
-            transform: translateY(-2px);
+            color: var(--pure-white);
+            border-color: rgba(255, 255, 255, 0.2);
         }
 
-        /* Vista Final Éxito */
         .celebration-view {
             text-align: center;
-            padding: 40px 0;
+            padding: 60px 0;
         }
 
-        .spark-icon {
-            font-size: 50px;
-            margin-bottom: 20px;
-            animation: bounce 2s infinite;
-        }
-
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
-        /* Scrollbar Personalizado Colorido */
+        /* Custom Scrollbar */
         ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #fff0eb; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb { background: var(--vibrant-orange); border-radius: 10px; }
+        ::-webkit-scrollbar-track { background: var(--pitch-black); }
+        ::-webkit-scrollbar-thumb { background: var(--border-gray); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--muted-text); }
     </style>
 </head>
 <body>
 
 <div class="canvas-container">
 
-    <!-- PANTALLA 1: HOME PAGE (Letras estilo Pincel Viva) -->
-    <div id="step-0" class="stage-view active" style="display: block;">
+    <!-- SCREEN 0: HOME PAGE -->
+    <div id="step-0" class="stage-view active">
         <div class="home-view">
             <div class="brush-title">Schedule Request</div>
             <h2>Panda Dynasty Portal</h2>
-            <button class="btn-creative btn-creative-primary" onclick="changeStage(1)">Comenzar Solicitud</button>
+            <button class="btn-creative btn-creative-primary" onclick="changeStage(1)">Get Started</button>
         </div>
     </div>
 
-    <!-- PANTALLA 2: Identidad Colectiva -->
+    <!-- SCREEN 1: DIVISION & IDENTITY -->
     <div id="step-1" class="stage-view">
         <div class="section-header">
             <div class="color-dot"></div>
-            <span>¿Cuál es tu División?</span>
+            <span>Select Operational Division</span>
         </div>
         <select id="department" onchange="buildFluidMesh()">
-            <option value="">Selecciona tu área operativa...</option>
+            <option value="">Choose department...</option>
             <option value="Customer Service">Customer Service</option>
             <option value="Deposits">Deposits</option>
             <option value="Payouts">Payouts</option>
         </select>
 
         <div class="section-header" id="mesh-header" style="display:none;">
-            <div class="color-dot" style="background-color: var(--vibrant-orange);"></div>
-            <span>Selecciona tu Nombre</span>
+            <div class="color-dot"></div>
+            <span>Select Corporate Identity</span>
         </div>
-        <div class="fluid-grid" id="fluid-name-mesh" style="display:none;">
-            <!-- Inyectado dinámicamente -->
-        </div>
+        <div class="fluid-grid" id="fluid-name-mesh" style="display:none;"></div>
 
         <div class="action-tray" style="justify-content: flex-end;">
-            <button class="btn-creative btn-creative-primary" onclick="changeStage(2)">Siguiente</button>
+            <button class="btn-creative btn-creative-primary" onclick="changeStage(2)">Next Step</button>
         </div>
     </div>
 
-    <!-- PANTALLA 3: Distribución Creativa de Turnos -->
+    <!-- SCREEN 2: ROSTER ENGINE -->
     <div id="step-2" class="stage-view">
         <div class="section-header">
             <div class="color-dot"></div>
-            <span>Configura tu Planificación Semanal</span>
+            <span>Configure Weekly Plan</span>
         </div>
         
-        <div class="cascade-flow">
-            <script>
-                const weekDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-                weekDays.forEach(day => {
-                    document.write(`
-                        <div class="cascade-card">
-                            <div class="day-label">${day}</div>
-                            <div class="card-inputs">
-                                <select class="shift-selector" data-day="${day}">
-                                    <option value="AM Shift">☀️ Mañana (AM Shift)</option>
-                                    <option value="PM Shift">⛅ Tarde (PM Shift)</option>
-                                    <option value="Graveyard Shift">🌙 Noche (Graveyard)</option>
-                                    <option value="Day Off">🛑 Día Libre (Day Off)</option>
-                                </select>
-                                <input type="text" class="shift-comment" data-day="${day}" placeholder="Especificar horas o comentarios opcionales...">
-                            </div>
-                        </div>
-                    `);
-                });
-            </script>
+        <div class="cascade-flow" id="roster-cascade-container">
+            <!-- Populated dynamically via JavaScript to process individual visibility rules -->
         </div>
 
         <div class="section-header">
-            <div class="color-dot" style="background-color: var(--vibrant-orange);"></div>
-            <span>Notas Adicionales Importantes</span>
+            <div class="color-dot"></div>
+            <span>Global Strategic Notes</span>
         </div>
-        <textarea id="general-notes" rows="3" placeholder="Añade justificaciones, recordatorios académicos o médicos globales..."></textarea>
+        <textarea id="general-notes" rows="3" placeholder="Provide any high-level justifications, medical configurations, or scheduling contexts..."></textarea>
 
         <div class="action-tray">
-            <button class="btn-creative btn-creative-secondary" onclick="changeStage(1)">Atrás</button>
-            <button class="btn-creative btn-creative-primary" onclick="generateVibrantExcel()">Compilar Contenedor</button>
+            <button class="btn-creative btn-creative-secondary" onclick="changeStage(1)">Back</button>
+            <button class="btn-creative btn-creative-primary" onclick="generateVibrantExcel()">Compile & Export</button>
         </div>
     </div>
 
-    <!-- PANTALLA 4: Final de Alta Energía -->
+    <!-- SCREEN 3: SUCCESS PACKAGING -->
     <div id="step-3" class="stage-view">
         <div class="celebration-view">
-            <div class="spark-icon">🎨</div>
-            <h2 style="color: var(--vibrant-orange); margin-bottom: 15px;">¡Diseño Compilado!</h2>
-            <p style="color: var(--charcoal); font-size: 16px; max-width: 550px; margin: 0 auto 35px auto; font-weight: 600;">
-                Tu documento de turnos se ha procesado limpiamente en un contenedor Excel con colores armónicos y optimizados. Ya está listo en tus descargas.
+            <h2 style="color: var(--electric-blue); font-size: 28px; margin-bottom: 15px; font-family: var(--sans);">Roster Compiled Successfully</h2>
+            <p style="color: var(--muted-text); font-size: 15px; max-width: 500px; margin: 0 auto 40px auto; font-weight: 600; line-height: 1.6;">
+                Your scheduling selection has been cleanly mapped to the matrix grid structure and saved to your device downpath.
             </p>
-            <button class="btn-creative btn-creative-secondary" onclick="resetPortal()">Crear Otra Planilla</button>
+            <button class="btn-creative btn-creative-secondary" onclick="resetPortal()">Generate New Entry</button>
         </div>
     </div>
 
@@ -409,6 +359,7 @@
         "Payouts": ["Carlos Amador", "Fer Blanco", "Graciela Bravo ", "Ignacio Blanco", "Kevin Zamora", "Samuel Carballo", "Sheydron Clark", "Sebastian Rivera", "Silvana Suarez"]
     };
 
+    const weekDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
     let selectedAgentGlobal = "";
 
     function buildFluidMesh() {
@@ -442,20 +393,74 @@
     }
 
     function changeStage(stageNum) {
-        if (stageNum === 2 && !selectedAgentGlobal) {
-            alert('Por favor selecciona tu nombre antes de pasar al lienzo de turnos.');
-            return;
+        if (stageNum === 2) {
+            if (!selectedAgentGlobal) {
+                alert('Please select your corporate identity before proceeding to execution.');
+                return;
+            }
+            renderRosterCanvas();
         }
         document.querySelectorAll('.stage-view').forEach(v => v.style.display = 'none');
         document.getElementById(`step-${stageNum}`).style.display = 'block';
         document.getElementById(`step-${stageNum}`).classList.add('active');
     }
 
+    function renderRosterCanvas() {
+        const container = document.getElementById('roster-cascade-container');
+        container.innerHTML = '';
+
+        // Verification targets
+        const middleOnlyAgents = ["Luis Fernando Ruiz", "Marlon Wright", "Anilu Guzman Villalobos"];
+        const standardAgentsNoWeekendOff = ["Keisha Cross Brown"];
+
+        const isMiddleOnly = middleOnlyAgents.includes(selectedAgentGlobal);
+        const isNoWeekendOff = isMiddleOnly || standardAgentsNoWeekendOff.includes(selectedAgentGlobal);
+
+        weekDays.forEach(day => {
+            const isWeekend = (day === 'Saturday' || day === 'Sunday');
+            let selectOptionsHtml = '';
+
+            if (isMiddleOnly) {
+                // Restricted to Middle Shifts exclusively
+                selectOptionsHtml += `
+                    <option value="09:00 - 17:00">09:00 AM - 05:00 PM</option>
+                    <option value="10:00 - 18:00">10:00 AM - 06:00 PM</option>
+                    <option value="11:00 - 19:00">11:00 AM - 07:00 PM</option>
+                    <option value="13:00 - 21:00">01:00 PM - 09:00 PM</option>
+                `;
+            } else {
+                // Standard default allocation framework
+                selectOptionsHtml += `
+                    <option value="06:00 - 14:00">AM Shift (06:00 - 14:00)</option>
+                    <option value="07:00 - 15:00">AM Shift (07:00 - 15:00)</option>
+                    <option value="14:00 - 22:00">PM Shift (14:00 - 22:00)</option>
+                    <option value="15:00 - 23:00">PM Shift (15:00 - 23:00)</option>
+                `;
+            }
+
+            // Append Day Off choice only if rules allow for weekend parameters
+            if (!(isWeekend && isNoWeekendOff)) {
+                selectOptionsHtml += `<option value="Day Off">🛑 Day Off</option>`;
+            }
+
+            const rawCard = document.createElement('div');
+            rawCard.className = 'cascade-card';
+            rawCard.innerHTML = `
+                <div class="day-label">${day}</div>
+                <div class="card-inputs">
+                    <select class="shift-selector" data-day="${day}">
+                        ${selectOptionsHtml}
+                    </select>
+                </div>
+            `;
+            container.appendChild(rawCard);
+        });
+    }
+
     function resetPortal() {
         document.getElementById('department').value = "";
         buildFluidMesh();
         document.getElementById('general-notes').value = "";
-        document.querySelectorAll('.shift-comment').forEach(c => c.value = "");
         changeStage(0);
     }
 
@@ -464,45 +469,38 @@
         const name = selectedAgentGlobal;
         const generalNotes = document.getElementById('general-notes').value || "None";
 
-        // Paleta limpia y profesional para celdas de Excel
         const excelPalette = {
-            "AM Shift": { bg: "C6EFCE", fg: "006100" },
-            "PM Shift": { bg: "FFEB9C", fg: "9C6500" },
-            "Graveyard Shift": { bg: "FFC7CE", fg: "9C0006" },
-            "Day Off": { bg: "E2E8F0", fg: "475569" }
+            "Day Off": { bg: "E2E8F0", fg: "475569" },
+            "Default": { bg: "C6EFCE", fg: "006100" }
         };
 
         const workbook = new ExcelJS.Workbook();
-        const worksheet = workbook.addWorksheet('Roster Design');
+        const worksheet = workbook.addWorksheet('Roster Configuration');
 
         worksheet.columns = [
             { header: 'Agent Name', key: 'name', width: 28 },
             { header: 'Department', key: 'dept', width: 20 },
             { header: 'Day', key: 'day', width: 15 },
-            { header: 'Shift Selection', key: 'pref', width: 22 },
-            { header: 'Specific Day Comments', key: 'notes', width: 35 },
+            { header: 'Shift Selection', key: 'pref', width: 25 },
             { header: 'Global Strategy Notes', key: 'general', width: 40 }
         ];
 
-        // Encabezado en Mandarina Oscuro para hacer juego con la marca
         const headerRow = worksheet.getRow(1);
         headerRow.height = 28;
         headerRow.font = { name: 'Segoe UI', bold: true, color: { argb: 'FFFFFF' }, size: 11 };
-        headerRow.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'D35400' } };
+        headerRow.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '1C3D5A' } };
         headerRow.alignment = { vertical: 'middle', horizontal: 'center' };
 
         const selectors = document.querySelectorAll('.shift-selector');
         selectors.forEach((select, index) => {
             const day = select.getAttribute('data-day');
             const pref = select.value;
-            const comment = document.querySelector(`.shift-comment[data-day="${day}"]`).value || "As Scheduled";
 
             const row = worksheet.addRow({
                 name: (index === 0) ? name : '',
                 dept: (index === 0) ? dept : '',
                 day: day,
                 pref: pref,
-                notes: comment,
                 general: (index === 0) ? generalNotes : ''
             });
 
@@ -512,13 +510,11 @@
             row.getCell('day').alignment = { horizontal: 'center', vertical: 'middle' };
             row.getCell('pref').alignment = { horizontal: 'center', vertical: 'middle' };
 
-            if (excelPalette[pref]) {
-                const cfg = excelPalette[pref];
-                row.getCell('pref').fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF' + cfg.bg } };
-                row.getCell('pref').font = { color: { argb: 'FF' + cfg.fg }, bold: true, name: 'Segoe UI', size: 10 };
-            }
+            const colorConfig = excelPalette[pref] || excelPalette["Default"];
+            row.getCell('pref').fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF' + colorConfig.bg } };
+            row.getCell('pref').font = { color: { argb: 'FF' + colorConfig.fg }, bold: true, name: 'Segoe UI', size: 10 };
 
-            ['name', 'dept', 'day', 'pref', 'notes', 'general'].forEach(col => {
+            ['name', 'dept', 'day', 'pref', 'general'].forEach(col => {
                 row.getCell(col).border = {
                     bottom: { style: 'thin', color: { argb: 'FFE5E9F0' } },
                     right: { style: 'thin', color: { argb: 'FFE5E9F0' } }
@@ -530,7 +526,7 @@
         const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
         const link = document.createElement("a");
         link.href = URL.createObjectURL(blob);
-        link.download = `Canvas_Roster_${name.replace(/\s+/g, '_')}.xlsx`;
+        link.download = `Roster_Request_${name.replace(/\s+/g, '_')}.xlsx`;
         link.click();
 
         changeStage(3);

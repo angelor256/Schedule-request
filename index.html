@@ -10,7 +10,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Rock+Salt&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     
-    <!-- ExcelJS for Admin Excel Export -->
+    <!-- ExcelJS for Admin Multi-Sheet Horizontal Export -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
 
     <style>
@@ -97,7 +97,6 @@
             letter-spacing: -2px;
             text-transform: uppercase;
             display: inline-block;
-            /* Subtly dynamic text contrast styling */
             text-shadow: 3px 3px 0px rgba(0, 122, 255, 0.1);
         }
 
@@ -290,16 +289,6 @@
             padding: 50px 0;
         }
 
-        .counter-badge {
-            background: #e0f2fe;
-            color: var(--electric-blue);
-            padding: 4px 10px;
-            border-radius: 12px;
-            font-size: 11px;
-            font-weight: 800;
-            margin-left: auto;
-        }
-
         /* Custom Modern Scrollbar */
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
@@ -316,7 +305,7 @@
         <button class="btn-admin" onclick="triggerAdminExport()">Export Master Roster</button>
     </div>
 
-    <!-- SCREEN 0: VIBRANT CLEAN HOME PAGE -->
+    <!-- SCREEN 0: HOME PAGE -->
     <div id="step-0" class="stage-view active">
         <div class="home-view">
             <div class="brush-title">Schedule Request</div>
@@ -507,13 +496,9 @@
             dailySelections[day] = select.value;
         });
 
-        // Pull previous data matrix out of storage
         let masterList = JSON.parse(localStorage.getItem('panda_master_roster')) || [];
-        
-        // Remove previous entry for same agent if it exists to allow updates
         masterList = masterList.filter(entry => entry.name !== name);
 
-        // Push new package entry
         masterList.push({
             name: name,
             dept: dept,
@@ -547,48 +532,79 @@
         }
 
         const workbook = new ExcelJS.Workbook();
-        const worksheet = workbook.addWorksheet('Master Schedule Requests');
+        
+        // Group data records dynamically by department
+        const departmentsToProcess = ["Customer Service", "Deposits", "Payouts"];
+        
+        departmentsToProcess.forEach(currentDept => {
+            // Filter entries for this specific tab
+            const deptEntries = masterList.filter(entry => entry.dept === currentDept);
+            if (deptEntries.length === 0) return; // Skip generating empty sheets
 
-        worksheet.columns = [
-            { header: 'Agent Name', key: 'name', width: 28 },
-            { header: 'Department', key: 'dept', width: 20 },
-            { header: 'Day', key: 'day', width: 15 },
-            { header: 'Shift Selection', key: 'pref', width: 25 },
-            { header: 'Strategic Notes', key: 'general', width: 40 }
-        ];
+            const worksheet = workbook.addWorksheet(currentDept);
 
-        const headerRow = worksheet.getRow(1);
-        headerRow.height = 28;
-        headerRow.font = { name: 'Segoe UI', bold: true, color: { argb: 'FFFFFF' }, size: 11 };
-        headerRow.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '007AFF' } };
-        headerRow.alignment = { vertical: 'middle', horizontal: 'center' };
+            // Set up horizontal column schema
+            worksheet.columns = [
+                { header: 'Agent Name', key: 'name', width: 28 },
+                { header: 'Monday', key: 'Monday', width: 22 },
+                { header: 'Tuesday', key: 'Tuesday', width: 22 },
+                { header: 'Wednesday', key: 'Wednesday', width: 22 },
+                { header: 'Thursday', key: 'Thursday', width: 22 },
+                { header: 'Friday', key: 'Friday', width: 22 },
+                { header: 'Saturday', key: 'Saturday', width: 22 },
+                { header: 'Sunday', key: 'Sunday', width: 22 },
+                { header: 'Strategic Notes', key: 'general', width: 40 }
+            ];
 
-        masterList.forEach(agentEntry => {
-            weekDays.forEach((day, index) => {
-                const row = worksheet.addRow({
-                    name: (index === 0) ? agentEntry.name : '',
-                    dept: (index === 0) ? agentEntry.dept : '',
-                    day: day,
-                    pref: agentEntry.selections[day] || 'Not Selected',
-                    general: (index === 0) ? agentEntry.notes : ''
+            // Format main structural row headers
+            const headerRow = worksheet.getRow(1);
+            headerRow.height = 28;
+            headerRow.font = { name: 'Segoe UI', bold: true, color: { argb: 'FFFFFF' }, size: 11 };
+            headerRow.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '007AFF' } };
+            headerRow.alignment = { vertical: 'middle', horizontal: 'center' };
+
+            // Render one unified horizontal row per agent
+            deptEntries.forEach(agentEntry => {
+                const rowData = {
+                    name: agentEntry.name,
+                    general: agentEntry.notes,
+                    Monday: agentEntry.selections['Monday'] || 'OFF',
+                    Tuesday: agentEntry.selections['Tuesday'] || 'OFF',
+                    Wednesday: agentEntry.selections['Wednesday'] || 'OFF',
+                    Thursday: agentEntry.selections['Thursday'] || 'OFF',
+                    Friday: agentEntry.selections['Friday'] || 'OFF',
+                    Saturday: agentEntry.selections['Saturday'] || 'OFF',
+                    Sunday: agentEntry.selections['Sunday'] || 'OFF'
+                };
+
+                const row = worksheet.addRow(rowData);
+                row.height = 26;
+
+                // Format Name field cell
+                row.getCell('name').font = { bold: true, name: 'Segoe UI', color: { argb: '1E293B' } };
+                row.getCell('name').alignment = { vertical: 'middle' };
+                row.getCell('general').alignment = { vertical: 'middle' };
+
+                // Apply style matrix to day columns horizontally
+                weekDays.forEach(day => {
+                    const cell = row.getCell(day);
+                    cell.alignment = { horizontal: 'center', vertical: 'middle' };
+
+                    let bgColor = "C6EFCE"; // Standard green layout
+                    let fgColor = "006100";
+                    
+                    if (rowData[day] === "Day Off") {
+                        bgColor = "E2E8F0"; // Grey out indicators
+                        fgColor = "475569";
+                    }
+
+                    cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF' + bgColor } };
+                    cell.font = { color: { argb: 'FF' + fgColor }, bold: true, name: 'Segoe UI', size: 10 };
                 });
 
-                row.height = 24;
-                row.getCell('name').font = { bold: true, name: 'Segoe UI' };
-                row.getCell('day').alignment = { horizontal: 'center', vertical: 'middle' };
-                row.getCell('pref').alignment = { horizontal: 'center', vertical: 'middle' };
-
-                // Apply premium coloring rules to sheet output
-                let bgColor = "C6EFCE"; let fgColor = "006100";
-                if (agentEntry.selections[day] === "Day Off") {
-                    bgColor = "E2E8F0"; fgColor = "475569";
-                }
-
-                row.getCell('pref').fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF' + bgColor } };
-                row.getCell('pref').font = { color: { argb: 'FF' + fgColor }, bold: true, name: 'Segoe UI', size: 10 };
-
-                ['name', 'dept', 'day', 'pref', 'general'].forEach(col => {
-                    row.getCell(col).border = {
+                // Apply universal grid structure borders
+                row.eachCell({ includeEmpty: true }, (cell) => {
+                    cell.border = {
                         bottom: { style: 'thin', color: { argb: 'FFE2E8F0' } },
                         right: { style: 'thin', color: { argb: 'FFE2E8F0' } }
                     };
@@ -596,11 +612,12 @@
             });
         });
 
+        // Generate matrix download package
         const buffer = await workbook.xlsx.writeBuffer();
         const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
         const link = document.createElement("a");
         link.href = URL.createObjectURL(blob);
-        link.download = `Master_Roster_Compiled.xlsx`;
+        link.download = `Master_Horizontal_Roster.xlsx`;
         link.click();
     }
 </script>

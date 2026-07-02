@@ -5,23 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panda Dynasty — Roster Portal</title>
     
-    <!-- Heavy brush font for title matching image_96f778.png + clean premium body font -->
+    <!-- Heavy brush font for titles + premium geometric body font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Rock+Salt&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rock+Salt&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
-    <!-- ExcelJS for Admin Multi-Sheet Horizontal Export -->
+    <!-- ExcelJS Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
 
     <style>
         :root {
-            --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
-            --panel-bg: #ffffff;
-            --electric-blue: #007aff;    /* Premium energetic vibrant blue */
-            --electric-hover: #0062cc;
-            --charcoal: #1e293b;         /* Sharp legible text */
-            --border-light: #e2e8f0;     /* Clean dividers */
-            --muted-gray: #64748b;       /* Clean subtitle colors */
+            --bg-mesh: radial-gradient(at 0% 0%, rgba(243, 244, 246, 1) 0px, transparent 50%),
+                       radial-gradient(at 100% 0%, rgba(224, 242, 254, 0.6) 0px, transparent 50%),
+                       radial-gradient(at 100% 100%, rgba(245, 243, 255, 0.5) 0px, transparent 50%),
+                       radial-gradient(at 0% 100%, rgba(229, 231, 235, 1) 0px, transparent 50%);
+            --panel-bg: rgba(255, 255, 255, 0.85);
+            --electric-blue: #007aff;
+            --electric-hover: #0056b3;
+            --charcoal: #0f172a;
+            --border-light: rgba(226, 232, 240, 0.8);
+            --muted-gray: #64748b;
             --sans: 'Plus Jakarta Sans', sans-serif;
             --brush: 'Rock Salt', cursive;
         }
@@ -33,7 +36,8 @@
         }
 
         body {
-            background: var(--bg-gradient);
+            background: #f1f5f9;
+            background-image: var(--bg-mesh);
             color: var(--charcoal);
             font-family: var(--sans);
             min-height: 100vh;
@@ -45,90 +49,90 @@
 
         .canvas-container {
             width: 100%;
-            max-width: 1000px;
+            max-width: 1200px; /* Wider for flawless horizontal structure */
             background: var(--panel-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border-radius: 32px;
             padding: 50px;
             position: relative;
-            box-shadow: 0 25px 60px rgba(30, 41, 59, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 30px 70px rgba(15, 23, 42, 0.06), 0 0 0 1px rgba(255, 255, 255, 0.6);
         }
 
-        /* ADMIN EXPORT BUTTON */
+        /* ADMIN EXPORT TRAY */
         .admin-tray {
             position: absolute;
-            top: 30px;
-            right: 40px;
+            top: 35px;
+            right: 50px;
             z-index: 10;
         }
 
         .btn-admin {
-            background: #f1f5f9;
+            background: rgba(15, 23, 42, 0.04);
             color: var(--muted-gray);
-            border: 1px solid var(--border-light);
-            padding: 10px 18px;
+            border: 1px solid transparent;
+            padding: 10px 20px;
             font-size: 11px;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 1px;
-            border-radius: 20px;
+            border-radius: 30px;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.25s ease;
         }
 
         .btn-admin:hover {
             background: var(--charcoal);
             color: #ffffff;
-            border-color: var(--charcoal);
         }
 
-        /* HOME SCREEN (Vibrant clean brush setup) */
+        /* BRUSH HERO TITLE */
         .home-view {
             text-align: center;
-            padding: 60px 0;
+            padding: 80px 0;
         }
 
         .brush-title {
             font-family: var(--brush);
-            font-size: 54px;
+            font-size: 58px;
             color: var(--charcoal);
-            line-height: 1.4;
-            margin-bottom: 15px;
+            line-height: 1.3;
+            margin-bottom: 12px;
             letter-spacing: -2px;
             text-transform: uppercase;
             display: inline-block;
-            text-shadow: 3px 3px 0px rgba(0, 122, 255, 0.1);
+            text-shadow: 4px 4px 0px rgba(0, 122, 255, 0.12);
         }
 
         .home-view h2 {
             font-size: 13px;
             font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 6px;
+            letter-spacing: 7px;
             color: var(--muted-gray);
             margin-bottom: 45px;
         }
 
-        /* SCREEN MANAGEMENT */
+        /* VIEWS CORE */
         .stage-view {
             display: none;
         }
 
         .stage-view.active {
             display: block;
-            animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            animation: cubicReveal 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(15px); }
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes cubicReveal {
+            from { opacity: 0; transform: scale(0.98) translateY(10px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
         }
 
         .section-header {
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 800;
             color: var(--charcoal);
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             display: flex;
             align-items: center;
             gap: 12px;
@@ -141,20 +145,20 @@
             height: 8px;
             background: var(--electric-blue);
             border-radius: 50%;
+            box-shadow: 0 0 10px rgba(0, 122, 255, 0.5);
         }
 
-        /* Clean Interface Form Styling */
         select, textarea {
             width: 100%;
-            background: #f8fafc;
+            background: rgba(15, 23, 42, 0.03);
             border: 1px solid var(--border-light);
-            padding: 18px;
+            padding: 16px 20px;
             border-radius: 16px;
             color: var(--charcoal);
             font-size: 15px;
             font-weight: 600;
             outline: none;
-            transition: all 0.2s ease;
+            transition: all 0.25s ease;
             margin-bottom: 35px;
             appearance: none;
         }
@@ -162,22 +166,22 @@
         select:focus, textarea:focus {
             background: #ffffff;
             border-color: var(--electric-blue);
-            box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.1);
+            box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.08);
         }
 
-        /* Grid Selection Setup */
+        /* CORPORATE IDENTITY GRID MESH */
         .fluid-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
             gap: 12px;
-            max-height: 280px;
+            max-height: 260px;
             overflow-y: auto;
             padding: 4px;
             margin-bottom: 40px;
         }
 
         .fluid-btn {
-            background: #f8fafc;
+            background: rgba(255, 255, 255, 0.6);
             border: 1px solid var(--border-light);
             padding: 16px;
             border-radius: 14px;
@@ -185,114 +189,143 @@
             font-size: 14px;
             font-weight: 600;
             color: var(--charcoal);
-            transition: all 0.2s ease;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
             text-align: center;
         }
 
         .fluid-btn:hover {
             border-color: var(--electric-blue);
             background: #ffffff;
+            transform: translateY(-1px);
         }
 
         .fluid-btn.selected {
             background: var(--electric-blue);
             color: #ffffff;
             border-color: var(--electric-blue);
-            box-shadow: 0 8px 20px rgba(0, 122, 255, 0.25);
+            box-shadow: 0 10px 25px rgba(0, 122, 255, 0.25);
         }
 
-        /* Roster Row Containers */
-        .cascade-flow {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-bottom: 40px;
-        }
-
-        .cascade-card {
-            background: #f8fafc;
+        /* NEW HIGH-END HORIZONTAL SCHEDULING BOARD */
+        .horizontal-board-wrapper {
+            width: 100%;
+            overflow-x: auto;
+            margin-bottom: 35px;
+            border-radius: 20px;
             border: 1px solid var(--border-light);
-            border-radius: 16px;
-            padding: 18px 25px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 20px;
+            background: rgba(255, 255, 255, 0.4);
         }
 
-        .day-label {
-            font-size: 15px;
-            font-weight: 700;
+        .roster-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            min-width: 900px; /* Ensures scannability */
+        }
+
+        .roster-table th {
+            background: rgba(15, 23, 42, 0.03);
             color: var(--charcoal);
-            min-width: 120px;
+            font-size: 12px;
+            font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 1px;
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border-light);
         }
 
-        .card-inputs {
-            display: flex;
-            gap: 15px;
-            flex: 1;
-            align-items: center;
+        .roster-table td {
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--border-light);
+            vertical-align: middle;
         }
 
-        .card-inputs select {
+        .table-agent-name {
+            font-weight: 700;
+            font-size: 15px;
+            color: var(--charcoal);
+            padding-left: 20px !important;
+        }
+
+        /* CELL INTERACTIVE SHIFT SELECTOR */
+        .board-select {
+            width: 100%;
             margin-bottom: 0;
-            flex: 1;
+            padding: 12px;
+            font-size: 13px;
+            font-weight: 700;
+            border-radius: 12px;
             background: #ffffff;
+            border: 1px solid var(--border-light);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
         }
 
-        /* Premium Buttons */
+        /* Dynamic color styling status injected via Javascript */
+        .board-select.status-active {
+            border-color: rgba(0, 122, 255, 0.3);
+            background: #f0f7ff;
+            color: var(--electric-blue);
+        }
+
+        .board-select.status-off {
+            border-color: #cbd5e1;
+            background: #f8fafc;
+            color: var(--muted-gray);
+        }
+
+        /* PREMIUM CONTROLS */
         .action-tray {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-top: 35px;
+            margin-top: 40px;
         }
 
         .btn-creative {
-            padding: 16px 42px;
+            padding: 16px 45px;
             font-size: 13px;
             font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 1.5px;
-            border-radius: 30px;
+            border-radius: 40px;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
             border: none;
         }
 
         .btn-creative-primary {
             background: var(--electric-blue);
             color: #ffffff;
-            box-shadow: 0 8px 25px rgba(0, 122, 255, 0.2);
+            box-shadow: 0 10px 28px rgba(0, 122, 255, 0.2);
         }
 
         .btn-creative-primary:hover {
             background: var(--electric-hover);
             transform: translateY(-2px);
-            box-shadow: 0 12px 30px rgba(0, 122, 255, 0.35);
+            box-shadow: 0 15px 35px rgba(0, 122, 255, 0.35);
         }
 
         .btn-creative-secondary {
-            background: #f1f5f9;
+            background: rgba(15, 23, 42, 0.05);
             color: var(--muted-gray);
         }
 
         .btn-creative-secondary:hover {
-            background: #e2e8f0;
+            background: rgba(15, 23, 42, 0.1);
             color: var(--charcoal);
         }
 
         .celebration-view {
             text-align: center;
-            padding: 50px 0;
+            padding: 60px 0;
         }
 
-        /* Custom Modern Scrollbar */
-        ::-webkit-scrollbar { width: 6px; }
+        /* SCROLLBARS */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
     </style>
 </head>
@@ -300,12 +333,12 @@
 
 <div class="canvas-container">
 
-    <!-- SUPS EXPORT MASTER TRIGGER -->
+    <!-- MASTER ADMIN ACTION TRIGGER -->
     <div class="admin-tray">
         <button class="btn-admin" onclick="triggerAdminExport()">Export Master Roster</button>
     </div>
 
-    <!-- SCREEN 0: HOME PAGE -->
+    <!-- STAGE 0: HOME PORTAL -->
     <div id="step-0" class="stage-view active">
         <div class="home-view">
             <div class="brush-title">Schedule Request</div>
@@ -314,7 +347,7 @@
         </div>
     </div>
 
-    <!-- SCREEN 1: OPERATIONAL IDENTITY -->
+    <!-- STAGE 1: DIVISION & IDENTITY SETUP -->
     <div id="step-1" class="stage-view">
         <div class="section-header">
             <div class="color-dot"></div>
@@ -338,20 +371,48 @@
         </div>
     </div>
 
-    <!-- SCREEN 2: ROSTER ENGINE -->
+    <!-- STAGE 2: HIGH-END HORIZONTAL PLANNING BOARD -->
     <div id="step-2" class="stage-view">
         <div class="section-header">
             <div class="color-dot"></div>
-            <span>Configure Weekly Plan</span>
+            <span>Weekly Roster Execution Matrix</span>
         </div>
         
-        <div class="cascade-flow" id="roster-cascade-container"></div>
+        <!-- Interactive Horizontal Grid System -->
+        <div class="horizontal-board-wrapper">
+            <table class="roster-table">
+                <thead>
+                    <tr>
+                        <th style="width: 200px; padding-left: 20px;">Agent Block</th>
+                        <th>Monday</th>
+                        <th>Tuesday</th>
+                        <th>Wednesday</th>
+                        <th>Thursday</th>
+                        <th>Friday</th>
+                        <th>Saturday</th>
+                        <th>Sunday</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td id="table-display-name" class="table-agent-name">---</td>
+                        <td><select class="board-select shift-selector" data-day="Monday" onchange="styleCellColor(this)"></select></td>
+                        <td><select class="board-select shift-selector" data-day="Tuesday" onchange="styleCellColor(this)"></select></td>
+                        <td><select class="board-select shift-selector" data-day="Wednesday" onchange="styleCellColor(this)"></select></td>
+                        <td><select class="board-select shift-selector" data-day="Thursday" onchange="styleCellColor(this)"></select></td>
+                        <td><select class="board-select shift-selector" data-day="Friday" onchange="styleCellColor(this)"></select></td>
+                        <td><select class="board-select shift-selector" data-day="Saturday" onchange="styleCellColor(this)"></select></td>
+                        <td><select class="board-select shift-selector" data-day="Sunday" onchange="styleCellColor(this)"></select></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
 
         <div class="section-header">
             <div class="color-dot"></div>
             <span>Global Strategic Notes</span>
         </div>
-        <textarea id="general-notes" rows="3" placeholder="Provide any high-level justifications, scheduling contexts..."></textarea>
+        <textarea id="general-notes" rows="3" placeholder="Provide any scheduling constraints, high-level justifications..."></textarea>
 
         <div class="action-tray">
             <button class="btn-creative btn-creative-secondary" onclick="changeStage(1)">Back</button>
@@ -359,12 +420,12 @@
         </div>
     </div>
 
-    <!-- SCREEN 3: SAVED CONFIRMATION -->
+    <!-- STAGE 3: EXECUTION LOG SUCCESS -->
     <div id="step-3" class="stage-view">
         <div class="celebration-view">
-            <h2 style="color: var(--electric-blue); font-size: 26px; margin-bottom: 15px;">Selection Saved Successfully</h2>
-            <p style="color: var(--muted-gray); font-size: 15px; max-width: 500px; margin: 0 auto 40px auto; font-weight: 600; line-height: 1.6;">
-                Your parameters have been logged into local storage. The system is ready for the next request.
+            <h2 style="color: var(--electric-blue); font-size: 28px; margin-bottom: 15px; font-weight: 800;">Selection Saved Horizontally</h2>
+            <p style="color: var(--muted-gray); font-size: 15px; max-width: 520px; margin: 0 auto 40px auto; font-weight: 600; line-height: 1.6;">
+                Your parameters have been perfectly logged into local storage. System matrix is cleared for the next team member.
             </p>
             <button class="btn-creative btn-creative-primary" onclick="resetPortal()">Log Another Request</button>
         </div>
@@ -429,16 +490,15 @@
                 alert('Please select your corporate identity before proceeding.');
                 return;
             }
-            renderRosterCanvas();
+            setupHorizontalMatrixBoard();
         }
         document.querySelectorAll('.stage-view').forEach(v => v.style.display = 'none');
         document.getElementById(`step-${stageNum}`).style.display = 'block';
         document.getElementById(`step-${stageNum}`).classList.add('active');
     }
 
-    function renderRosterCanvas() {
-        const container = document.getElementById('roster-cascade-container');
-        container.innerHTML = '';
+    function setupHorizontalMatrixBoard() {
+        document.getElementById('table-display-name').textContent = selectedAgentGlobal;
 
         const middleOnlyAgents = ["Luis Fernando Ruiz", "Marlon Wright", "Anilu Guzman Villalobos"];
         const standardAgentsNoWeekendOff = ["Keisha Cross Brown"];
@@ -446,42 +506,46 @@
         const isMiddleOnly = middleOnlyAgents.includes(selectedAgentGlobal);
         const isNoWeekendOff = isMiddleOnly || standardAgentsNoWeekendOff.includes(selectedAgentGlobal);
 
-        weekDays.forEach(day => {
+        const selectors = document.querySelectorAll('.shift-selector');
+        
+        selectors.forEach(select => {
+            const day = select.getAttribute('data-day');
             const isWeekend = (day === 'Saturday' || day === 'Sunday');
-            let selectOptionsHtml = '';
-
+            
+            let optionsHtml = '';
             if (isMiddleOnly) {
-                selectOptionsHtml += `
+                optionsHtml += `
                     <option value="09:00 - 17:00">09:00 AM - 05:00 PM</option>
                     <option value="10:00 - 18:00">10:00 AM - 06:00 PM</option>
                     <option value="11:00 - 19:00">11:00 AM - 07:00 PM</option>
                     <option value="13:00 - 21:00">01:00 PM - 09:00 PM</option>
                 `;
             } else {
-                selectOptionsHtml += `
-                    <option value="06:00 - 14:00">AM Shift (06:00 - 14:00)</option>
-                    <option value="07:00 - 15:00">AM Shift (07:00 - 15:00)</option>
-                    <option value="14:00 - 22:00">PM Shift (14:00 - 22:00)</option>
-                    <option value="15:00 - 23:00">PM Shift (15:00 - 23:00)</option>
+                optionsHtml += `
+                    <option value="06:00 - 14:00">06:00 - 14:00 (AM)</option>
+                    <option value="07:00 - 15:00">07:00 - 15:00 (AM)</option>
+                    <option value="14:00 - 22:00">14:00 - 22:00 (PM)</option>
+                    <option value="15:00 - 23:00">15:00 - 23:00 (PM)</option>
                 `;
             }
 
             if (!(isWeekend && isNoWeekendOff)) {
-                selectOptionsHtml += `<option value="Day Off">🛑 Day Off</option>`;
+                optionsHtml += `<option value="Day Off">🛑 Day Off</option>`;
             }
 
-            const rawCard = document.createElement('div');
-            rawCard.className = 'cascade-card';
-            rawCard.innerHTML = `
-                <div class="day-label">${day}</div>
-                <div class="card-inputs">
-                    <select class="shift-selector" data-day="${day}">
-                        ${selectOptionsHtml}
-                    </select>
-                </div>
-            `;
-            container.appendChild(rawCard);
+            select.innerHTML = optionsHtml;
+            styleCellColor(select); // Init standard color state
         });
+    }
+
+    function styleCellColor(elem) {
+        if (elem.value === "Day Off") {
+            elem.classList.remove('status-active');
+            elem.classList.add('status-off');
+        } else {
+            elem.classList.remove('status-off');
+            elem.classList.add('status-active');
+        }
     }
 
     function saveAgentRequestLocal() {
@@ -532,18 +596,14 @@
         }
 
         const workbook = new ExcelJS.Workbook();
-        
-        // Group data records dynamically by department
         const departmentsToProcess = ["Customer Service", "Deposits", "Payouts"];
         
         departmentsToProcess.forEach(currentDept => {
-            // Filter entries for this specific tab
             const deptEntries = masterList.filter(entry => entry.dept === currentDept);
-            if (deptEntries.length === 0) return; // Skip generating empty sheets
+            if (deptEntries.length === 0) return;
 
             const worksheet = workbook.addWorksheet(currentDept);
 
-            // Set up horizontal column schema
             worksheet.columns = [
                 { header: 'Agent Name', key: 'name', width: 28 },
                 { header: 'Monday', key: 'Monday', width: 22 },
@@ -556,14 +616,12 @@
                 { header: 'Strategic Notes', key: 'general', width: 40 }
             ];
 
-            // Format main structural row headers
             const headerRow = worksheet.getRow(1);
             headerRow.height = 28;
             headerRow.font = { name: 'Segoe UI', bold: true, color: { argb: 'FFFFFF' }, size: 11 };
             headerRow.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '007AFF' } };
             headerRow.alignment = { vertical: 'middle', horizontal: 'center' };
 
-            // Render one unified horizontal row per agent
             deptEntries.forEach(agentEntry => {
                 const rowData = {
                     name: agentEntry.name,
@@ -580,21 +638,19 @@
                 const row = worksheet.addRow(rowData);
                 row.height = 26;
 
-                // Format Name field cell
                 row.getCell('name').font = { bold: true, name: 'Segoe UI', color: { argb: '1E293B' } };
                 row.getCell('name').alignment = { vertical: 'middle' };
                 row.getCell('general').alignment = { vertical: 'middle' };
 
-                // Apply style matrix to day columns horizontally
                 weekDays.forEach(day => {
                     const cell = row.getCell(day);
                     cell.alignment = { horizontal: 'center', vertical: 'middle' };
 
-                    let bgColor = "C6EFCE"; // Standard green layout
+                    let bgColor = "C6EFCE"; 
                     let fgColor = "006100";
                     
                     if (rowData[day] === "Day Off") {
-                        bgColor = "E2E8F0"; // Grey out indicators
+                        bgColor = "E2E8F0"; 
                         fgColor = "475569";
                     }
 
@@ -602,7 +658,6 @@
                     cell.font = { color: { argb: 'FF' + fgColor }, bold: true, name: 'Segoe UI', size: 10 };
                 });
 
-                // Apply universal grid structure borders
                 row.eachCell({ includeEmpty: true }, (cell) => {
                     cell.border = {
                         bottom: { style: 'thin', color: { argb: 'FFE2E8F0' } },
@@ -612,7 +667,6 @@
             });
         });
 
-        // Generate matrix download package
         const buffer = await workbook.xlsx.writeBuffer();
         const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
         const link = document.createElement("a");

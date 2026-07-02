@@ -5,26 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panda Dynasty — Roster Portal</title>
     
-    <!-- Heavy brush font for titles + premium geometric body font -->
+    <!-- Rock Salt for heavy brush impact + Plus Jakarta Sans for high-end UI layout -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Rock+Salt&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
-    <!-- ExcelJS Library -->
+    <!-- ExcelJS Engineering -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
 
     <style>
         :root {
-            --bg-mesh: radial-gradient(at 0% 0%, rgba(243, 244, 246, 1) 0px, transparent 50%),
-                       radial-gradient(at 100% 0%, rgba(224, 242, 254, 0.6) 0px, transparent 50%),
-                       radial-gradient(at 100% 100%, rgba(245, 243, 255, 0.5) 0px, transparent 50%),
-                       radial-gradient(at 0% 100%, rgba(229, 231, 235, 1) 0px, transparent 50%);
-            --panel-bg: rgba(255, 255, 255, 0.85);
+            --bg-base: #0b0f19;
+            --panel-glass: rgba(20, 26, 44, 0.7);
             --electric-blue: #007aff;
-            --electric-hover: #0056b3;
-            --charcoal: #0f172a;
-            --border-light: rgba(226, 232, 240, 0.8);
-            --muted-gray: #64748b;
+            --neon-cyan: #0ef;
+            --text-vibrant: #f8fafc;
+            --muted-luxury: #94a3b8;
+            --border-glass: rgba(255, 255, 255, 0.08);
             --sans: 'Plus Jakarta Sans', sans-serif;
             --brush: 'Rock Salt', cursive;
         }
@@ -36,27 +33,52 @@
         }
 
         body {
-            background: #f1f5f9;
-            background-image: var(--bg-mesh);
-            color: var(--charcoal);
+            background-color: var(--bg-base);
+            color: var(--text-vibrant);
             font-family: var(--sans);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 40px 20px;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* CHUZO AURORA BACKLIGHT BACKGROUND EFFECT */
+        body::before {
+            content: '';
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(0, 122, 255, 0.18) 0%, transparent 70%);
+            top: -10%;
+            left: -10%;
+            z-index: 0;
+        }
+        body::after {
+            content: '';
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(139, 92, 246, 0.12) 0%, transparent 70%);
+            bottom: -20%;
+            right: -10%;
+            z-index: 0;
         }
 
         .canvas-container {
             width: 100%;
-            max-width: 1200px; /* Wider for flawless horizontal structure */
-            background: var(--panel-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-radius: 32px;
+            max-width: 1240px;
+            background: var(--panel-glass);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border-radius: 36px;
             padding: 50px;
             position: relative;
-            box-shadow: 0 30px 70px rgba(15, 23, 42, 0.06), 0 0 0 1px rgba(255, 255, 255, 0.6);
+            z-index: 10;
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--border-glass);
         }
 
         /* ADMIN EXPORT TRAY */
@@ -64,80 +86,82 @@
             position: absolute;
             top: 35px;
             right: 50px;
-            z-index: 10;
+            z-index: 15;
         }
 
         .btn-admin {
-            background: rgba(15, 23, 42, 0.04);
-            color: var(--muted-gray);
-            border: 1px solid transparent;
-            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--muted-luxury);
+            border: 1px solid var(--border-glass);
+            padding: 10px 22px;
             font-size: 11px;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 1px;
             border-radius: 30px;
             cursor: pointer;
-            transition: all 0.25s ease;
+            transition: all 0.3s ease;
         }
 
         .btn-admin:hover {
-            background: var(--charcoal);
-            color: #ffffff;
+            background: #ffffff;
+            color: var(--bg-base);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+            transform: translateY(-1px);
         }
 
         /* BRUSH HERO TITLE */
         .home-view {
             text-align: center;
-            padding: 80px 0;
+            padding: 70px 0;
         }
 
         .brush-title {
             font-family: var(--brush);
-            font-size: 58px;
-            color: var(--charcoal);
+            font-size: 62px;
+            color: #ffffff;
             line-height: 1.3;
-            margin-bottom: 12px;
+            margin-bottom: 15px;
             letter-spacing: -2px;
             text-transform: uppercase;
             display: inline-block;
-            text-shadow: 4px 4px 0px rgba(0, 122, 255, 0.12);
+            text-shadow: 4px 4px 0px var(--electric-blue);
         }
 
         .home-view h2 {
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 7px;
-            color: var(--muted-gray);
+            letter-spacing: 8px;
+            color: var(--electric-blue);
             margin-bottom: 45px;
         }
 
-        /* VIEWS CORE */
+        /* VIEWS LAYER CONTROL */
         .stage-view {
             display: none;
         }
 
         .stage-view.active {
             display: block;
-            animation: cubicReveal 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            animation: springReveal 0.6s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
-        @keyframes cubicReveal {
-            from { opacity: 0; transform: scale(0.98) translateY(10px); }
+        @keyframes springReveal {
+            from { opacity: 0; transform: scale(0.97) translateY(20px); }
             to { opacity: 1; transform: scale(1) translateY(0); }
         }
 
         .section-header {
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 800;
-            color: var(--charcoal);
-            margin-bottom: 20px;
+            color: #ffffff;
+            margin-bottom: 25px;
             display: flex;
             align-items: center;
             gap: 12px;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 1px;
         }
 
         .color-dot {
@@ -145,34 +169,35 @@
             height: 8px;
             background: var(--electric-blue);
             border-radius: 50%;
-            box-shadow: 0 0 10px rgba(0, 122, 255, 0.5);
+            box-shadow: 0 0 12px var(--electric-blue);
         }
 
+        /* INPUTS & SELECTS DE LUJO */
         select, textarea {
             width: 100%;
-            background: rgba(15, 23, 42, 0.03);
-            border: 1px solid var(--border-light);
-            padding: 16px 20px;
-            border-radius: 16px;
-            color: var(--charcoal);
+            background: rgba(11, 15, 25, 0.5);
+            border: 1px solid var(--border-glass);
+            padding: 18px 24px;
+            border-radius: 18px;
+            color: #ffffff;
             font-size: 15px;
             font-weight: 600;
             outline: none;
-            transition: all 0.25s ease;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             margin-bottom: 35px;
             appearance: none;
         }
 
         select:focus, textarea:focus {
-            background: #ffffff;
             border-color: var(--electric-blue);
-            box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.08);
+            box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.25);
+            background: rgba(11, 15, 25, 0.8);
         }
 
-        /* CORPORATE IDENTITY GRID MESH */
+        /* CORPORATE GRID MESH */
         .fluid-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
             gap: 12px;
             max-height: 260px;
             overflow-y: auto;
@@ -181,101 +206,106 @@
         }
 
         .fluid-btn {
-            background: rgba(255, 255, 255, 0.6);
-            border: 1px solid var(--border-light);
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-glass);
             padding: 16px;
             border-radius: 14px;
             cursor: pointer;
             font-size: 14px;
             font-weight: 600;
-            color: var(--charcoal);
-            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            color: var(--muted-luxury);
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
             text-align: center;
         }
 
         .fluid-btn:hover {
-            border-color: var(--electric-blue);
-            background: #ffffff;
-            transform: translateY(-1px);
+            border-color: rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.08);
+            color: #ffffff;
+            transform: translateY(-2px);
         }
 
         .fluid-btn.selected {
             background: var(--electric-blue);
             color: #ffffff;
             border-color: var(--electric-blue);
-            box-shadow: 0 10px 25px rgba(0, 122, 255, 0.25);
+            box-shadow: 0 12px 30px rgba(0, 122, 255, 0.4);
         }
 
-        /* NEW HIGH-END HORIZONTAL SCHEDULING BOARD */
+        /* HORIZONTAL SCHEDULING BOARD GRID */
         .horizontal-board-wrapper {
             width: 100%;
             overflow-x: auto;
-            margin-bottom: 35px;
-            border-radius: 20px;
-            border: 1px solid var(--border-light);
-            background: rgba(255, 255, 255, 0.4);
+            margin-bottom: 40px;
+            border-radius: 24px;
+            border: 1px solid var(--border-glass);
+            background: rgba(11, 15, 25, 0.4);
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.4);
         }
 
         .roster-table {
             width: 100%;
             border-collapse: collapse;
             text-align: left;
-            min-width: 900px; /* Ensures scannability */
+            min-width: 1000px;
         }
 
         .roster-table th {
-            background: rgba(15, 23, 42, 0.03);
-            color: var(--charcoal);
-            font-size: 12px;
+            background: rgba(255, 255, 255, 0.02);
+            color: var(--muted-luxury);
+            font-size: 11px;
             font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            padding: 16px 20px;
-            border-bottom: 1px solid var(--border-light);
+            letter-spacing: 1.5px;
+            padding: 18px 20px;
+            border-bottom: 1px solid var(--border-glass);
         }
 
         .roster-table td {
-            padding: 14px 16px;
-            border-bottom: 1px solid var(--border-light);
+            padding: 16px;
+            border-bottom: 1px solid var(--border-glass);
             vertical-align: middle;
         }
 
         .table-agent-name {
             font-weight: 700;
-            font-size: 15px;
-            color: var(--charcoal);
-            padding-left: 20px !important;
+            font-size: 16px;
+            color: #ffffff;
+            padding-left: 24px !important;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
         }
 
-        /* CELL INTERACTIVE SHIFT SELECTOR */
+        /* MATRIX INTERACTIVE CELL INTERFACE */
         .board-select {
             width: 100%;
             margin-bottom: 0;
-            padding: 12px;
+            padding: 12px 10px;
             font-size: 13px;
             font-weight: 700;
-            border-radius: 12px;
-            background: #ffffff;
-            border: 1px solid var(--border-light);
+            border-radius: 14px;
+            background: rgba(11, 15, 25, 0.6);
+            border: 1px solid var(--border-glass);
+            color: #ffffff;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.25s ease;
             text-align: center;
         }
 
-        /* Dynamic color styling status injected via Javascript */
+        /* Dynamic cell status injection */
         .board-select.status-active {
-            border-color: rgba(0, 122, 255, 0.3);
-            background: #f0f7ff;
-            color: var(--electric-blue);
+            border-color: var(--electric-blue);
+            background: rgba(0, 122, 255, 0.15);
+            color: #38bdf8;
+            box-shadow: 0 0 15px rgba(0, 122, 255, 0.1);
         }
 
         .board-select.status-off {
-            border-color: #cbd5e1;
-            background: #f8fafc;
-            color: var(--muted-gray);
+            border-color: rgba(239, 68, 68, 0.2);
+            background: rgba(239, 68, 68, 0.05);
+            color: #f87171;
         }
 
-        /* PREMIUM CONTROLS */
+        /* PREMIUM EXECUTION TRIGGERS */
         .action-tray {
             display: flex;
             justify-content: space-between;
@@ -284,37 +314,38 @@
         }
 
         .btn-creative {
-            padding: 16px 45px;
+            padding: 18px 48px;
             font-size: 13px;
             font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 1.5px;
+            letter-spacing: 2px;
             border-radius: 40px;
             cursor: pointer;
-            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
             border: none;
         }
 
         .btn-creative-primary {
             background: var(--electric-blue);
             color: #ffffff;
-            box-shadow: 0 10px 28px rgba(0, 122, 255, 0.2);
+            box-shadow: 0 12px 30px rgba(0, 122, 255, 0.3);
         }
 
         .btn-creative-primary:hover {
-            background: var(--electric-hover);
+            background: #0066d6;
             transform: translateY(-2px);
-            box-shadow: 0 15px 35px rgba(0, 122, 255, 0.35);
+            box-shadow: 0 15px 40px rgba(0, 122, 255, 0.5);
         }
 
         .btn-creative-secondary {
-            background: rgba(15, 23, 42, 0.05);
-            color: var(--muted-gray);
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--muted-luxury);
+            border: 1px solid var(--border-glass);
         }
 
         .btn-creative-secondary:hover {
-            background: rgba(15, 23, 42, 0.1);
-            color: var(--charcoal);
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
         }
 
         .celebration-view {
@@ -322,23 +353,23 @@
             padding: 60px 0;
         }
 
-        /* SCROLLBARS */
+        /* HIGH-END MODERN SCROLLBARS */
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.25); }
     </style>
 </head>
 <body>
 
 <div class="canvas-container">
 
-    <!-- MASTER ADMIN ACTION TRIGGER -->
+    <!-- MASTER ADMINISTRATIVE OVERLAY -->
     <div class="admin-tray">
         <button class="btn-admin" onclick="triggerAdminExport()">Export Master Roster</button>
     </div>
 
-    <!-- STAGE 0: HOME PORTAL -->
+    <!-- PORTAL INTRO -->
     <div id="step-0" class="stage-view active">
         <div class="home-view">
             <div class="brush-title">Schedule Request</div>
@@ -347,7 +378,7 @@
         </div>
     </div>
 
-    <!-- STAGE 1: DIVISION & IDENTITY SETUP -->
+    <!-- OPERATIONAL STRUCTURING -->
     <div id="step-1" class="stage-view">
         <div class="section-header">
             <div class="color-dot"></div>
@@ -371,19 +402,18 @@
         </div>
     </div>
 
-    <!-- STAGE 2: HIGH-END HORIZONTAL PLANNING BOARD -->
+    <!-- SYSTEM TIMELINE ENGAGEMENT MATRIX -->
     <div id="step-2" class="stage-view">
         <div class="section-header">
             <div class="color-dot"></div>
-            <span>Weekly Roster Execution Matrix</span>
+            <span>Weekly Schedule Matrix</span>
         </div>
         
-        <!-- Interactive Horizontal Grid System -->
         <div class="horizontal-board-wrapper">
             <table class="roster-table">
                 <thead>
                     <tr>
-                        <th style="width: 200px; padding-left: 20px;">Agent Block</th>
+                        <th style="width: 220px; padding-left: 24px;">Team Member</th>
                         <th>Monday</th>
                         <th>Tuesday</th>
                         <th>Wednesday</th>
@@ -410,9 +440,9 @@
 
         <div class="section-header">
             <div class="color-dot"></div>
-            <span>Global Strategic Notes</span>
+            <span>Strategic Support Notes</span>
         </div>
-        <textarea id="general-notes" rows="3" placeholder="Provide any scheduling constraints, high-level justifications..."></textarea>
+        <textarea id="general-notes" rows="3" placeholder="Log any special justifications, coverage requests or scheduling dependencies..."></textarea>
 
         <div class="action-tray">
             <button class="btn-creative btn-creative-secondary" onclick="changeStage(1)">Back</button>
@@ -420,12 +450,12 @@
         </div>
     </div>
 
-    <!-- STAGE 3: EXECUTION LOG SUCCESS -->
+    <!-- LOG ARCHIVAL RECOGNITION -->
     <div id="step-3" class="stage-view">
         <div class="celebration-view">
-            <h2 style="color: var(--electric-blue); font-size: 28px; margin-bottom: 15px; font-weight: 800;">Selection Saved Horizontally</h2>
-            <p style="color: var(--muted-gray); font-size: 15px; max-width: 520px; margin: 0 auto 40px auto; font-weight: 600; line-height: 1.6;">
-                Your parameters have been perfectly logged into local storage. System matrix is cleared for the next team member.
+            <h2 style="color: #38bdf8; font-size: 30px; margin-bottom: 15px; font-weight: 800; letter-spacing: -0.5px;">Schedule Saved Horizontally</h2>
+            <p style="color: var(--muted-luxury); font-size: 15px; max-width: 540px; margin: 0 auto 40px auto; font-weight: 500; line-height: 1.7;">
+                Your selections have been committed to local memory. The terminal board is cleared and prepared for the next agent record.
             </p>
             <button class="btn-creative btn-creative-primary" onclick="resetPortal()">Log Another Request</button>
         </div>
@@ -487,7 +517,7 @@
     function changeStage(stageNum) {
         if (stageNum === 2) {
             if (!selectedAgentGlobal) {
-                alert('Please select your corporate identity before proceeding.');
+                alert('Please establish your corporate identity profile before proceeding.');
                 return;
             }
             setupHorizontalMatrixBoard();
@@ -500,6 +530,7 @@
     function setupHorizontalMatrixBoard() {
         document.getElementById('table-display-name').textContent = selectedAgentGlobal;
 
+        // Special restriction groups
         const middleOnlyAgents = ["Luis Fernando Ruiz", "Marlon Wright", "Anilu Guzman Villalobos"];
         const standardAgentsNoWeekendOff = ["Keisha Cross Brown"];
 
@@ -513,7 +544,9 @@
             const isWeekend = (day === 'Saturday' || day === 'Sunday');
             
             let optionsHtml = '';
+            
             if (isMiddleOnly) {
+                // Strict special rule set
                 optionsHtml += `
                     <option value="09:00 - 17:00">09:00 AM - 05:00 PM</option>
                     <option value="10:00 - 18:00">10:00 AM - 06:00 PM</option>
@@ -521,11 +554,18 @@
                     <option value="13:00 - 21:00">01:00 PM - 09:00 PM</option>
                 `;
             } else {
+                // Extended full matrix choices for the rest of the staff
                 optionsHtml += `
-                    <option value="06:00 - 14:00">06:00 - 14:00 (AM)</option>
-                    <option value="07:00 - 15:00">07:00 - 15:00 (AM)</option>
-                    <option value="14:00 - 22:00">14:00 - 22:00 (PM)</option>
-                    <option value="15:00 - 23:00">15:00 - 23:00 (PM)</option>
+                    <option value="06:00 - 14:00">06:00 AM - 02:00 PM</option>
+                    <option value="07:00 - 15:00">07:00 AM - 03:00 PM</option>
+                    <option value="08:00 - 16:00">08:00 AM - 04:00 PM</option>
+                    <option value="09:00 - 17:00">09:00 AM - 05:00 PM</option>
+                    <option value="10:00 - 18:00">10:00 AM - 06:00 PM</option>
+                    <option value="11:00 - 19:00">11:00 AM - 07:00 PM</option>
+                    <option value="12:00 - 20:00">12:00 PM - 08:00 PM</option>
+                    <option value="13:00 - 21:00">01:00 PM - 09:00 PM</option>
+                    <option value="14:00 - 22:00">02:00 PM - 10:00 PM</option>
+                    <option value="15:00 - 23:00">03:00 PM - 11:00 PM</option>
                 `;
             }
 
@@ -534,7 +574,7 @@
             }
 
             select.innerHTML = optionsHtml;
-            styleCellColor(select); // Init standard color state
+            styleCellColor(select);
         });
     }
 

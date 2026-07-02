@@ -3,95 +3,128 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panda Dynasty — Hub de Horarios</title>
+    <title>Panda Dynasty — Roster Center</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
 
     <style>
         :root {
-            --bg-main: #090d16;
-            --card-bg: rgba(19, 26, 42, 0.65);
-            --border-subtle: rgba(255, 255, 255, 0.06);
-            --text-main: #f3f4f6;
-            --text-muted: #64748b;
-            --accent-mint: #00f2fe;
-            --accent-purple: #7c3aed;
-            --accent-danger: #ef4444;
-            --accent-vacation: #f59e0b;
-            --sans: 'Plus Jakarta Sans', sans-serif;
-            --display: 'Space Grotesk', sans-serif;
+            --bg-glow: linear-gradient(135deg, #050814 0%, #0c102b 50%, #060919 100%);
+            --panel-bg: rgba(13, 19, 43, 0.75);
+            --border-neon: rgba(0, 242, 254, 0.15);
+            --border-neon-hover: rgba(0, 242, 254, 0.4);
+            
+            /* Paleta Viva */
+            --neon-cyan: #00f2fe;
+            --neon-pink: #ff007f;
+            --neon-green: #39ff14;
+            --neon-yellow: #ffde00;
+            
+            --text-light: #f1f5f9;
+            --text-dark: #050814;
+            --font-main: 'Outfit', sans-serif;
+            --font-display: 'Space Grotesk', sans-serif;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
+        
         body {
-            background-color: var(--bg-main);
-            color: var(--text-main);
-            font-family: var(--sans);
+            background: var(--bg-glow);
+            color: var(--text-light);
+            font-family: var(--font-main);
             min-height: 100vh;
             padding: 40px 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
+            overflow-x: hidden;
+        }
+
+        /* Elementos decorativos vivos en el fondo */
+        body::before {
+            content: ''; position: absolute; width: 350px; height: 350px;
+            background: radial-gradient(circle, rgba(255, 0, 127, 0.2) 0%, transparent 70%);
+            top: 10%; right: 5%; z-index: -1; pointer-events: none;
+        }
+        body::after {
+            content: ''; position: absolute; width: 400px; height: 400px;
+            background: radial-gradient(circle, rgba(0, 242, 254, 0.15) 0%, transparent 70%);
+            bottom: 10%; left: 5%; z-index: -1; pointer-events: none;
         }
 
         .main-container {
             width: 100%;
             max-width: 1200px;
-            background: var(--card-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-radius: 24px;
-            padding: 40px;
-            border: 1px solid var(--border-subtle);
-            box-shadow: 0 30px 60px rgba(0,0,0,0.4);
-            margin-bottom: 30px;
+            background: var(--panel-bg);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-radius: 30px;
+            padding: 45px;
+            border: 1px solid var(--border-neon);
+            box-shadow: 0 20px 60px rgba(0, 242, 254, 0.08), inset 0 1px 2px rgba(255,255,255,0.1);
+            margin-bottom: 35px;
+            transition: border-color 0.3s ease;
+        }
+        .main-container:hover {
+            border-color: rgba(0, 242, 254, 0.25);
         }
 
         .header-area {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid var(--border-subtle);
-            padding-bottom: 25px;
-            margin-bottom: 35px;
+            border-bottom: 2px dashed rgba(255, 255, 255, 0.08);
+            padding-bottom: 30px;
+            margin-bottom: 40px;
         }
 
         .brand-title {
-            font-family: var(--display);
-            font-size: 26px;
+            font-family: var(--font-display);
+            font-size: 32px;
             font-weight: 700;
             letter-spacing: -0.5px;
-            background: linear-gradient(to right, #ffffff, #94a3b8);
+            background: linear-gradient(to right, #ffffff, var(--neon-cyan));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px rgba(0, 242, 254, 0.2);
         }
 
+        /* Botones Eléctricos */
         .btn-action {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid var(--border-subtle);
-            color: var(--text-main);
-            padding: 12px 24px;
-            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-light);
+            padding: 14px 28px;
+            border-radius: 14px;
             font-size: 13px;
             font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .btn-action:hover {
-            background: var(--text-main);
-            color: var(--bg-main);
-            transform: translateY(-1px);
+            background: var(--neon-pink);
+            color: #ffffff;
+            border-color: var(--neon-pink);
+            box-shadow: 0 0 20px rgba(255, 0, 127, 0.4);
+            transform: translateY(-2px);
         }
         .btn-primary {
-            background: var(--text-main);
-            color: var(--bg-main);
+            background: var(--neon-cyan);
+            color: var(--text-dark);
+            border: none;
+            font-weight: 700;
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.3);
         }
         .btn-primary:hover {
-            background: rgba(255, 255, 255, 0.85);
+            background: #ffffff;
+            color: var(--text-dark);
+            box-shadow: 0 0 25px rgba(255, 255, 255, 0.5);
         }
 
         .view-layer { display: none; }
@@ -99,66 +132,74 @@
 
         label {
             display: block;
-            font-size: 11px;
+            font-size: 12px;
             text-transform: uppercase;
-            letter-spacing: 1.5px;
-            color: var(--text-muted);
-            margin-bottom: 10px;
-            font-weight: 700;
+            letter-spacing: 2px;
+            color: var(--neon-cyan);
+            margin-bottom: 12px;
+            font-weight: 600;
         }
 
         select, textarea, input {
             width: 100%;
-            background: rgba(0, 0, 0, 0.25);
-            border: 1px solid var(--border-subtle);
-            padding: 14px 18px;
-            border-radius: 12px;
+            background: rgba(5, 8, 20, 0.8);
+            border: 1px solid var(--border-neon);
+            padding: 16px 20px;
+            border-radius: 14px;
             color: #ffffff;
-            font-size: 14px;
+            font-size: 15px;
             outline: none;
-            transition: border-color 0.2s ease;
-            margin-bottom: 25px;
+            transition: all 0.25s ease;
+            margin-bottom: 30px;
         }
-        select:focus, input:focus { border-color: var(--text-muted); }
+        select:focus, input:focus { 
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.2);
+        }
 
+        /* Cuadrícula de Nombres Estilo Botones de Energía */
         .mesh-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
-            gap: 10px;
-            max-height: 250px;
+            gap: 12px;
+            max-height: 280px;
             overflow-y: auto;
-            padding-right: 5px;
-            margin-bottom: 30px;
+            padding: 4px;
+            margin-bottom: 35px;
         }
         .mesh-item {
             background: rgba(255, 255, 255, 0.02);
-            border: 1px solid var(--border-subtle);
-            padding: 14px;
-            border-radius: 10px;
-            font-size: 13px;
-            font-weight: 500;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
             color: #94a3b8;
             cursor: pointer;
             text-align: center;
             transition: all 0.2s ease;
         }
         .mesh-item:hover {
-            border-color: rgba(255,255,255,0.15);
+            border-color: var(--neon-cyan);
             color: #fff;
+            background: rgba(0, 242, 254, 0.05);
         }
         .mesh-item.selected {
-            background: rgba(255,255,255,0.08);
-            border-color: #fff;
-            color: #fff;
+            background: var(--neon-cyan);
+            border-color: var(--neon-cyan);
+            color: var(--text-dark);
+            font-weight: 700;
+            box-shadow: 0 0 20px rgba(0, 242, 254, 0.3);
         }
 
+        /* Matriz de Horarios */
         .table-container {
             width: 100%;
             overflow-x: auto;
-            border: 1px solid var(--border-subtle);
-            border-radius: 16px;
-            background: rgba(0,0,0,0.15);
-            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            background: rgba(5, 8, 20, 0.5);
+            margin-bottom: 35px;
         }
         .matrix-table {
             width: 100%;
@@ -166,100 +207,127 @@
             min-width: 950px;
         }
         .matrix-table th {
-            padding: 16px;
-            font-size: 11px;
+            padding: 20px 16px;
+            font-size: 12px;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--text-muted);
-            border-bottom: 1px solid var(--border-subtle);
+            letter-spacing: 1.5px;
+            color: #94a3b8;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
             text-align: left;
         }
         .matrix-table td {
-            padding: 12px;
-            border-bottom: 1px solid var(--border-subtle);
+            padding: 14px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
         }
 
+        /* Selectores de Celda con Colores "Vivos" */
         .cell-select {
             width: 100%;
-            padding: 10px;
-            font-size: 12px;
-            font-weight: 600;
-            border-radius: 8px;
+            padding: 12px;
+            font-size: 13px;
+            font-weight: 700;
+            border-radius: 10px;
             margin-bottom: 0;
-            background: rgba(0,0,0,0.2);
-            border: 1px solid var(--border-subtle);
+            background: rgba(5,8,20,0.9);
+            border: 1px solid rgba(255,255,255,0.1);
             cursor: pointer;
+            transition: all 0.25s ease;
         }
-        .cell-select.st-active { border-color: var(--text-muted); color: #fff; }
-        .cell-select.st-off { border-color: rgba(239,68,68,0.2); color: #ef4444; }
-        .cell-select.st-vacation { border-color: rgba(245,158,11,0.3); color: #f59e0b; }
-        .cell-select.st-open { border-color: rgba(0,242,254,0.3); color: #00f2fe; }
+        .cell-select.st-active { 
+            border-color: var(--neon-cyan); 
+            color: var(--neon-cyan); 
+            box-shadow: 0 0 10px rgba(0, 242, 254, 0.1);
+        }
+        .cell-select.st-off { 
+            border-color: var(--neon-pink); 
+            color: var(--neon-pink); 
+            box-shadow: 0 0 10px rgba(255, 0, 127, 0.1);
+        }
+        .cell-select.st-vacation { 
+            border-color: var(--neon-yellow); 
+            color: var(--neon-yellow); 
+            box-shadow: 0 0 10px rgba(255, 222, 0, 0.15);
+        }
+        .cell-select.st-open { 
+            border-color: var(--neon-green); 
+            color: var(--neon-green); 
+            box-shadow: 0 0 10px rgba(57, 255, 20, 0.15);
+        }
 
-        /* MÓDULO DE GESTIÓN CRUCIAL */
+        /* Panel de Control de Personal (Consola Abajo) */
         .management-card {
             width: 100%;
             max-width: 1200px;
-            background: rgba(10, 14, 23, 0.4);
-            border: 1px dashed var(--border-subtle);
-            border-radius: 20px;
+            background: rgba(10, 16, 41, 0.9);
+            border: 1px solid rgba(255, 0, 127, 0.15);
+            border-radius: 24px;
             padding: 30px;
+            box-shadow: 0 10px 40px rgba(255, 0, 127, 0.05);
         }
         .mgmt-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 25px;
-            margin-top: 20px;
+            margin-top: 25px;
         }
         .sub-panel {
-            background: rgba(0,0,0,0.15);
-            padding: 20px;
-            border-radius: 12px;
-            border: 1px solid var(--border-subtle);
+            background: rgba(5, 8, 20, 0.6);
+            padding: 22px;
+            border-radius: 16px;
+            border: 1px solid rgba(255,255,255,0.05);
         }
         .mgmt-title {
-            font-size: 14px;
+            font-size: 15px;
             font-weight: 700;
-            margin-bottom: 15px;
-            color: #cbd5e1;
+            margin-bottom: 18px;
+            color: #ffffff;
             display: flex;
             align-items: center;
             gap: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
+
+        /* Scrollbars Estilo Neon Stream */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(0, 242, 254, 0.2); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--neon-cyan); }
     </style>
 </head>
 <body>
 
 <div class="main-container">
     <div class="header-area">
-        <div class="brand-title">Panda Roster Module</div>
-        <button class="btn-action" onclick="triggerExcelExport()">Export Master</button>
+        <div class="brand-title">Panda Roster Matrix</div>
+        <button class="btn-action" onclick="triggerExcelExport()">Export Roster</button>
     </div>
 
-    <!-- PASO 1: SELECCIÓN -->
+    <!-- PANTALLA 1: HOME & FILTROS -->
     <div id="step-1" class="view-layer active">
-        <label>Operational Hub</label>
+        <label>Operational Division</label>
         <select id="department" onchange="loadStaffMesh()">
-            <option value="">Select a Hub...</option>
+            <option value="">Choose Division...</option>
             <option value="Customer Service">Customer Service</option>
             <option value="Deposits">Deposits</option>
             <option value="Payouts">Payouts</option>
         </select>
 
         <div id="mesh-wrapper" style="display:none;">
-            <label>Team Member Identity</label>
+            <label>Select Team Member</label>
             <div class="mesh-grid" id="staff-mesh"></div>
         </div>
 
-        <div style="text-align: right; margin-top: 20px;">
-            <button class="btn-action btn-primary" onclick="goToMatrix()">Configure Schedule</button>
+        <div style="text-align: right; margin-top: 25px;">
+            <button class="btn-action btn-primary" onclick="goToMatrix()">Open Matrix Board</button>
         </div>
     </div>
 
-    <!-- PASO 2: MATRIZ HORIZONTAL -->
+    <!-- PANTALLA 2: MATRIZ DE ASIGNACIÓN -->
     <div id="step-2" class="view-layer">
-        <div style="margin-bottom: 20px;">
-            <span style="font-size: 12px; color: var(--text-muted); text-transform: uppercase;">Active Profile:</span>
-            <span id="active-agent-title" style="font-size: 18px; font-weight: 700; margin-left: 8px; font-family: var(--display);">---</span>
+        <div style="margin-bottom: 25px; display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 12px; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px;">Asigning:</span>
+            <span id="active-agent-title" style="font-size: 20px; font-weight: 700; color: var(--neon-cyan); font-family: var(--font-display);">---</span>
         </div>
 
         <div class="table-container">
@@ -289,70 +357,65 @@
             </table>
         </div>
 
-        <label>Shift Comments / Adjustments</label>
-        <textarea id="matrix-notes" rows="2" placeholder="Add specific notes if necessary..."></textarea>
+        <label>Operational Notes / Special Justifications</label>
+        <textarea id="matrix-notes" rows="2" placeholder="Write any internal observation here..."></textarea>
 
-        <div style="display:flex; justify-content: space-between;">
+        <div style="display:flex; justify-content: space-between; align-items: center;">
             <button class="btn-action" onclick="backToStep1()">Back</button>
-            <button class="btn-action btn-primary" onclick="commitSchedule()">Commit Data</button>
+            <button class="btn-action btn-primary" onclick="commitSchedule()">Save to Memory</button>
         </div>
     </div>
 
-    <!-- PASO 3: ARCHIVADO -->
-    <div id="step-3" class="view-layer" style="text-align:center; padding: 40px 0;">
-        <h3 style="font-family: var(--display); font-size: 22px; margin-bottom: 10px;">Data Saved</h3>
-        <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 25px;">The selection was successfully stored locally.</p>
-        <button class="btn-action btn-primary" onclick="resetFlow()">Next Record</button>
+    <!-- PANTALLA 3: COMPLETADO -->
+    <div id="step-3" class="view-layer" style="text-align:center; padding: 50px 0;">
+        <h3 style="font-family: var(--font-display); font-size: 26px; margin-bottom: 15px; color: var(--neon-green);">✨ Schedule Logs Secured</h3>
+        <p style="color: #94a3b8; font-size: 15px; margin-bottom: 30px;">Local database has been refreshed with the new entries.</p>
+        <button class="btn-action btn-primary" onclick="resetFlow()">Next Profile</button>
     </div>
 </div>
 
-<!-- MÓDULO DE GESTIÓN AVANZADA DE PERSONAL -->
+<!-- PANEL PREMIUM DE CONTROL DE PERSONAL (CRUD) -->
 <div class="management-card">
     <div style="display:flex; justify-content:space-between; align-items:center;">
-        <div style="font-family: var(--display); font-size: 16px; font-weight:700;">Staff Management Console</div>
-        <button class="btn-action" style="padding: 6px 14px; font-size:11px;" onclick="toggleMgmtPanel()">Unlock Console</button>
+        <div style="font-family: var(--font-display); font-size: 16px; font-weight:700; color: var(--neon-pink);">⚙️ Team Management Console</div>
+        <button class="btn-action" style="padding: 8px 16px; font-size:11px;" onclick="toggleMgmtPanel()">Unlock Tools</button>
     </div>
 
     <div id="mgmt-panel-content" class="mgmt-grid" style="display:none;">
         <!-- AGREGAR -->
         <div class="sub-panel">
-            <div class="mgmt-title">➕ Add New Staff</div>
+            <div class="mgmt-title" style="color: var(--neon-cyan);">➕ Add Collaborator</div>
             <input type="text" id="add-name" placeholder="Full Name">
             <select id="add-dept">
                 <option value="Customer Service">Customer Service</option>
                 <option value="Deposits">Deposits</option>
                 <option value="Payouts">Payouts</option>
             </select>
-            <button class="btn-action btn-primary" style="width:100%;" onclick="executeAddMember()">Register Member</button>
+            <button class="btn-action btn-primary" style="width:100%;" onclick="executeAddMember()">Save Profile</button>
         </div>
 
-        <!-- CAMBIAR DE DEPARTAMENTO -->
+        <!-- REASIGNAR -->
         <div class="sub-panel">
-            <div class="mgmt-title">🔄 Transfer Department</div>
-            <select id="transfer-agent-select">
-                <option value="">Select Target...</option>
-            </select>
+            <div class="mgmt-title" style="color: var(--neon-yellow);">🔄 Change Division</div>
+            <select id="transfer-agent-select"><option value="">Select Member...</option></select>
             <select id="transfer-new-dept">
                 <option value="Customer Service">Customer Service</option>
                 <option value="Deposits">Deposits</option>
                 <option value="Payouts">Payouts</option>
             </select>
-            <button class="btn-action" style="width:100%;" onclick="executeTransfer()">Transfer Location</button>
+            <button class="btn-action" style="width:100%;" onclick="executeTransfer()">Transfer Hub</button>
         </div>
 
         <!-- BORRAR -->
         <div class="sub-panel">
-            <div class="mgmt-title" style="color: var(--accent-danger);">❌ Remove Staff Member</div>
-            <select id="delete-agent-select">
-                <option value="">Select Target...</option>
-            </select>
-            <button class="btn-action" style="width:100%; background: rgba(239,68,68,0.1); border-color: var(--accent-danger); color: var(--accent-danger);" onclick="executeDeleteMember()">Terminate Entry</button>
+            <div class="mgmt-title" style="color: var(--neon-pink);">❌ Delete Profile</div>
+            <select id="delete-agent-select"><option value="">Select Member...</option></select>
+            <button class="btn-action" style="width:100%; background: rgba(255, 0, 127, 0.1); border-color: var(--neon-pink); color: var(--neon-pink);" onclick="executeDeleteMember()">Purge Data</button>
         </div>
     </div>
 </div>
 
 <script>
-    // Inicialización de datos base si no existen en localStorage
     const defaultTeam = {
         "Customer Service": [
             "Cristopher Sandoval", "Kendra Temple", "María José Fallas", "Natalia Sibaja", "Pablo Retana", 
@@ -377,9 +440,7 @@
     let currentAgent = "";
     let mgmtUnlocked = false;
 
-    function getStaffData() {
-        return JSON.parse(localStorage.getItem('panda_staff_db'));
-    }
+    function getStaffData() { return JSON.parse(localStorage.getItem('panda_staff_db')); }
 
     function saveStaffData(data) {
         localStorage.setItem('panda_staff_db', JSON.stringify(data));
@@ -389,11 +450,8 @@
 
     function toggleMgmtPanel() {
         if (!mgmtUnlocked) {
-            const pass = prompt("Enter Supervisor Access Password:");
-            if (pass !== "Sups2019") {
-                alert("Unauthorized Entry.");
-                return;
-            }
+            const pass = prompt("Access Key Required:");
+            if (pass !== "Sups2019") { alert("Access Denied."); return; }
             mgmtUnlocked = true;
         }
         const panel = document.getElementById('mgmt-panel-content');
@@ -405,19 +463,13 @@
         const dept = document.getElementById('department').value;
         const wrapper = document.getElementById('mesh-wrapper');
         const mesh = document.getElementById('staff-mesh');
-        
         mesh.innerHTML = '';
         currentAgent = "";
 
-        if (!dept) {
-            wrapper.style.display = 'none';
-            return;
-        }
-
+        if (!dept) { wrapper.style.display = 'none'; return; }
         wrapper.style.display = 'block';
-        const db = getStaffData();
 
-        db[dept].forEach(name => {
+        getStaffData()[dept].forEach(name => {
             const item = document.createElement('div');
             item.className = 'mesh-item';
             item.textContent = name;
@@ -431,32 +483,26 @@
     }
 
     function goToMatrix() {
-        if (!currentAgent) {
-            alert("Please identify a staff profile first.");
-            return;
-        }
+        if (!currentAgent) { alert("Please click on a staff name layout."); return; }
         document.getElementById('step-1').classList.remove('active');
         document.getElementById('step-2').classList.add('active');
-        
         document.getElementById('active-agent-title').textContent = currentAgent;
         buildMatrixOptions();
     }
 
     function buildMatrixOptions() {
-        const structuralRuleList = ["Luis Fernando Ruiz", "Marlon Wright", "Anilu Guzman Villalobos"];
-        const standardAgentsNoWeekendOff = ["Keisha Cross Brown"];
+        const rules = ["Luis Fernando Ruiz", "Marlon Wright", "Anilu Guzman Villalobos"];
+        const noWeekendOff = ["Keisha Cross Brown", ...rules];
 
-        const hasRestrictedHours = structuralRuleList.includes(currentAgent);
-        const denyWeekendOff = hasRestrictedHours || standardAgentsNoWeekendOff.includes(currentAgent);
+        const isRestricted = rules.includes(currentAgent);
+        const blockWeekendOff = noWeekendOff.includes(currentAgent);
 
-        const selects = document.querySelectorAll('.day-input');
-
-        selects.forEach(select => {
+        document.querySelectorAll('.day-input').forEach(select => {
             const day = select.getAttribute('data-day');
             const isWeekend = (day === 'Saturday' || day === 'Sunday');
             let html = '';
 
-            if (hasRestrictedHours) {
+            if (isRestricted) {
                 html += `
                     <option value="09:00 - 17:00">09:00 - 17:00</option>
                     <option value="10:00 - 18:00">10:00 - 18:00</option>
@@ -478,11 +524,10 @@
                 `;
             }
 
-            // Opciones de estados universales agregados
             html += `<option value="OPEN">✨ OPEN</option>`;
             html += `<option value="Vacaciones">🌴 Vacaciones</option>`;
 
-            if (!(isWeekend && denyWeekendOff)) {
+            if (!(isWeekend && blockWeekendOff)) {
                 html += `<option value="Day Off">🛑 Day Off</option>`;
             }
 
@@ -537,26 +582,21 @@
         loadStaffMesh();
     }
 
-    /* LÓGICA INTERNA DE GESTIÓN (CRUD) */
     function populateMgmtDropdowns() {
         const db = getStaffData();
-        const transferSelect = document.getElementById('transfer-agent-select');
-        const deleteSelect = document.getElementById('delete-agent-select');
+        const transSel = document.getElementById('transfer-agent-select');
+        const delSel = document.getElementById('delete-agent-select');
 
-        transferSelect.innerHTML = '<option value="">Select Target...</option>';
-        deleteSelect.innerHTML = '<option value="">Select Target...</option>';
+        transSel.innerHTML = '<option value="">Select Member...</option>';
+        delSel.innerHTML = '<option value="">Select Member...</option>';
 
         Object.keys(db).forEach(dept => {
             db[dept].forEach(name => {
-                const opt1 = document.createElement('option');
-                opt1.value = JSON.stringify({name, dept});
-                opt1.textContent = `${name} (${dept})`;
-                transferSelect.appendChild(opt1);
-
-                const opt2 = document.createElement('option');
-                opt2.value = JSON.stringify({name, dept});
-                opt2.textContent = `${name} (${dept})`;
-                deleteSelect.appendChild(opt2);
+                const innerText = `${name} (${dept})`;
+                const valueString = JSON.stringify({name, dept});
+                
+                transSel.appendChild(new Option(innerText, valueString));
+                delSel.appendChild(new Option(innerText, valueString));
             });
         });
     }
@@ -564,109 +604,91 @@
     function executeAddMember() {
         const name = document.getElementById('add-name').value.trim();
         const dept = document.getElementById('add-dept').value;
-
-        if(!name) { alert("Please provide a valid structural name."); return; }
+        if(!name) return alert("Write a proper name.");
         
         const db = getStaffData();
-        if(db[dept].includes(name)) { alert("This corporate entry already exists."); return; }
+        if(db[dept].includes(name)) return alert("Entry already active.");
 
-        db[dept].push(name);
-        db[dept].sort();
+        db[dept].push(name); db[dept].sort();
         saveStaffData(db);
-        
         document.getElementById('add-name').value = "";
-        alert(`${name} registered successfully into ${dept}.`);
+        alert("Saved successfully.");
     }
 
     function executeTransfer() {
         const targetRaw = document.getElementById('transfer-agent-select').value;
         const newDept = document.getElementById('transfer-new-dept').value;
+        if(!targetRaw) return alert("Select target.");
 
-        if(!targetRaw) { alert("Identify target entry first."); return; }
         const target = JSON.parse(targetRaw);
-
-        if(target.dept === newDept) { alert("Agent already belongs to this department."); return; }
+        if(target.dept === newDept) return alert("Target already in division.");
 
         const db = getStaffData();
         db[target.dept] = db[target.dept].filter(n => n !== target.name);
-        db[newDept].push(target.name);
-        db[newDept].sort();
-
+        db[newDept].push(target.name); db[newDept].sort();
         saveStaffData(db);
-        alert(`Transferred ${target.name} to ${newDept}.`);
+        alert("Division updated.");
     }
 
     function executeDeleteMember() {
         const targetRaw = document.getElementById('delete-agent-select').value;
-        if(!targetRaw) { alert("Identify execution target first."); return; }
+        if(!targetRaw) return alert("Select target.");
         
         const target = JSON.parse(targetRaw);
-        if(!confirm(`Confirm terminal removal of ${target.name}?`)) return;
+        if(!confirm(`Delete permanently: ${target.name}?`)) return;
 
         const db = getStaffData();
         db[target.dept] = db[target.dept].filter(n => n !== target.name);
-
         saveStaffData(db);
-        alert(`Removed ${target.name} from records.`);
+        alert("Purged complete.");
     }
 
-    /* PROCESAMIENTO EXCELJS */
     async function triggerExcelExport() {
-        const auth = prompt("Enter Administrative Verification Code:");
-        if (auth !== "Sups2019") { alert("Access Denied."); return; }
+        const auth = prompt("Admin Key:");
+        if (auth !== "Sups2019") return alert("Unauthorized.");
 
         const master = JSON.parse(localStorage.getItem('panda_master_roster')) || [];
-        if(!master.length) { alert("No stored logs found."); return; }
+        if(!master.length) return alert("No inputs found to save.");
 
         const wb = new ExcelJS.Workbook();
-        const departments = ["Customer Service", "Deposits", "Payouts"];
-
-        departments.forEach(dKey => {
+        ["Customer Service", "Deposits", "Payouts"].forEach(dKey => {
             const list = master.filter(m => m.dept === dKey);
             if(!list.length) return;
 
             const ws = wb.addWorksheet(dKey);
             ws.columns = [
-                { header: 'Agent Name', key: 'name', width: 28 },
-                { header: 'Monday', key: 'Monday', width: 18 },
-                { header: 'Tuesday', key: 'Tuesday', width: 18 },
-                { header: 'Wednesday', key: 'Wednesday', width: 18 },
-                { header: 'Thursday', key: 'Thursday', width: 18 },
-                { header: 'Friday', key: 'Friday', width: 18 },
-                { header: 'Saturday', key: 'Saturday', width: 18 },
-                { header: 'Sunday', key: 'Sunday', width: 18 },
-                { header: 'Operational Comments', key: 'notes', width: 35 }
+                { header: 'Agent Name', key: 'name', width: 26 },
+                { header: 'Monday', key: 'Monday', width: 16 },
+                { header: 'Tuesday', key: 'Tuesday', width: 16 },
+                { header: 'Wednesday', key: 'Wednesday', width: 16 },
+                { header: 'Thursday', key: 'Thursday', width: 16 },
+                { header: 'Friday', key: 'Friday', width: 16 },
+                { header: 'Saturday', key: 'Saturday', width: 16 },
+                { header: 'Sunday', key: 'Sunday', width: 16 },
+                { header: 'Notes', key: 'notes', width: 30 }
             ];
 
-            const headerRow = ws.getRow(1);
-            headerRow.height = 26;
-            headerRow.font = { name: 'Segoe UI', bold: true, color: { argb: 'FFFFFF' } };
-            headerRow.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '1E293B' } };
-            headerRow.alignment = { vertical: 'middle', horizontal: 'center' };
+            const hr = ws.getRow(1); hr.height = 25;
+            hr.font = { bold: true, color: { argb: 'FFFFFF' }, name: 'Segoe UI' };
+            hr.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '0C102B' } };
+            hr.alignment = { vertical: 'middle', horizontal: 'center' };
 
             list.forEach(entry => {
-                const dataRow = {
-                    name: entry.name,
-                    notes: entry.notes,
-                    ...entry.selections
-                };
-
-                const row = ws.addRow(dataRow);
-                row.height = 24;
-
+                const dataRow = { name: entry.name, notes: entry.notes, ...entry.selections };
+                const row = ws.addRow(dataRow); row.height = 22;
                 row.getCell('name').font = { bold: true, name: 'Segoe UI' };
                 row.getCell('name').alignment = { vertical: 'middle' };
-                row.getCell('notes').alignment = { vertical: 'middle' };
 
                 ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].forEach(day => {
                     const cell = row.getCell(day);
                     cell.alignment = { horizontal: 'center', vertical: 'middle' };
                     cell.font = { name: 'Segoe UI', bold: true, size: 10 };
 
-                    let bg = "F1F5F9"; let fg = "334155";
-                    if(dataRow[day] === "Day Off") { bg = "FEE2E2"; fg = "991B1B"; }
-                    else if(dataRow[day] === "Vacaciones") { bg = "FEF3C7"; fg = "92400E"; }
-                    else if(dataRow[day] === "OPEN") { bg = "E0F2FE"; fg = "075985"; }
+                    let bg = "FFFFFF"; let fg = "000000";
+                    if(dataRow[day] === "Day Off") { bg = "FF007F"; fg = "FFFFFF"; }
+                    else if(dataRow[day] === "Vacaciones") { bg = "FFDE00"; fg = "000000"; }
+                    else if(dataRow[day] === "OPEN") { bg = "39FF14"; fg = "000000"; }
+                    else { bg = "00F2FE"; fg = "000000"; }
 
                     cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF' + bg } };
                     cell.font.color = { argb: 'FF' + fg };
@@ -678,7 +700,7 @@
         const b = new Blob([buf], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
         const a = document.createElement("a");
         a.href = URL.createObjectURL(b);
-        a.download = `Panda_Master_Roster.xlsx`;
+        a.download = `Panda_Roster_Vibrant.xlsx`;
         a.click();
     }
 </script>

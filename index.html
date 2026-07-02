@@ -3,28 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panda Dynasty — Roster Atelier</title>
+    <title>Panda Dynasty — Roster Canvas</title>
     
-    <!-- Tipografías de Galería de Arte y Alta Costura -->
+    <!-- Tipografías: Una con trazo de pincel/caligráfica y otra ultra limpia -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     
-    <!-- Librería interna para el empaquetado nativo de Excel -->
+    <!-- ExcelJS para exportar el Roster de forma nativa -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
 
     <style>
         :root {
-            --canvas: #fdfbf7;      /* Color lienzo crudo/lino */
-            --ink: #1e2229;         /* Tinta carbón lavado */
-            --ink-muted: #7e8494;   /* Tinta diluida */
-            --clay: #f5f1e9;        /* Arcilla suave para fondos de tarjetas */
-            --clay-hover: #ede6da;  /* Arcilla expuesta */
-            --sage: #8da399;        /* Verde salvia artístico */
-            --border: rgba(30, 34, 41, 0.08);
-            --border-focus: rgba(30, 34, 41, 0.4);
-            --serif: 'Cormorant Garamond', serif;
+            --vibrant-orange: #ff6b4a;  /* Mandarina/Terracota vivo */
+            --warm-yellow: #feca57;     /* Amarillo sol */
+            --creative-sage: #5f27cd;   /* Toque de violeta/salvia eléctrico para contraste */
+            --soft-cream: #fff9f5;      /* Fondo base cálido y vivo */
+            --charcoal: #222f3e;         /* Tinta oscura para legibilidad */
             --sans: 'Plus Jakarta Sans', sans-serif;
+            --brush: 'Alex Brush', cursive;
         }
 
         * {
@@ -34,379 +31,364 @@
         }
 
         body {
-            background-color: var(--canvas);
-            color: var(--ink);
+            background-color: var(--soft-cream);
+            color: var(--charcoal);
             font-family: var(--sans);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 60px 20px;
-            -webkit-font-smoothing: antialiased;
-            /* Textura sutil orgánica de fondo */
-            background-image: radial-gradient(rgba(30, 34, 41, 0.015) 1px, transparent 0);
-            background-size: 24px 24px;
+            padding: 30px 20px;
+            overflow-x: hidden;
+            /* Manchas de acuarela abstractas de fondo */
+            background-image: 
+                radial-gradient(circle at 90% 10%, rgba(254, 202, 87, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 10% 80%, rgba(255, 107, 74, 0.2) 0%, transparent 60%);
         }
 
-        .atelier-card {
+        .canvas-container {
             width: 100%;
-            max-width: 1150px;
-            background: transparent;
+            max-width: 1050px;
+            background: #ffffff;
+            border-radius: 40px;
+            box-shadow: 0 30px 70px rgba(255, 107, 74, 0.15);
+            padding: 50px;
             position: relative;
+            border: 2px solid rgba(255, 107, 74, 0.08);
+            overflow: hidden;
         }
 
-        /* Encabezado de Revista de Diseño */
-        header {
-            margin-bottom: 60px;
-            border-bottom: 1px solid var(--border);
-            padding-bottom: 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            flex-wrap: wrap;
-            gap: 20px;
-        }
-
-        .brand h1 {
-            font-family: var(--serif);
-            font-size: 46px;
-            font-weight: 300;
-            letter-spacing: -1px;
-            line-height: 1;
-        }
-
-        .brand h1 span {
-            font-style: italic;
-            font-weight: 400;
-            color: var(--sage);
-        }
-
-        .brand p {
-            font-size: 13px;
-            color: var(--ink-muted);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-top: 10px;
-            font-weight: 500;
-        }
-
-        .counter-tag {
-            font-family: var(--serif);
-            font-style: italic;
-            font-size: 20px;
-            color: var(--ink-muted);
-        }
-
-        /* Vistas y Transiciones Fluidas */
-        .sculpt-view {
-            display: none;
-        }
-
-        .sculpt-view.active {
-            display: block;
-            animation: organicFade 0.6s cubic-bezier(0.25, 1, 0.5, 1);
-        }
-
-        @keyframes organicFade {
-            from { opacity: 0; transform: translateY(15px) scale(0.99); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
-        }
-
-        .editorial-title {
-            font-family: var(--serif);
-            font-size: 28px;
-            font-weight: 400;
-            margin-bottom: 24px;
-            color: var(--ink);
-        }
-
-        /* Selectores Minimalistas Esculturales */
-        select {
-            width: 100%;
-            background: var(--clay);
-            border: 1px solid var(--border);
-            padding: 20px;
-            border-radius: 0px; /* Bordes rectos tipo bloque arquitectónico */
-            color: var(--ink);
-            font-size: 16px;
-            outline: none;
-            transition: all 0.3s ease;
-            appearance: none;
-            margin-bottom: 40px;
-            font-family: var(--sans);
-        }
-
-        select:focus {
-            border-color: var(--border-focus);
-            background: #ffffff;
-        }
-
-        /* Mosaico Asimétrico de Nombres (Malla Artística) */
-        .mosaic-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-            gap: 14px;
-            max-height: 340px;
-            overflow-y: auto;
-            padding: 10px;
-            margin-bottom: 40px;
-            border-top: 1px solid var(--border);
-            border-bottom: 1px solid var(--border);
-        }
-
-        .mosaic-tile {
-            background: transparent;
-            border: 1px solid var(--border);
-            padding: 18px 24px;
-            cursor: pointer;
-            font-size: 15px;
-            font-weight: 400;
-            color: var(--ink);
-            transition: all 0.25s ease;
-            text-align: left;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .mosaic-tile:hover {
-            background: var(--clay);
-            border-color: var(--border-focus);
-            transform: skewX(-2px); /* Pequeña distorsión artística controlada */
-        }
-
-        .mosaic-tile.selected {
-            background: var(--ink);
-            color: var(--canvas);
-            border-color: var(--ink);
-            font-weight: 500;
-        }
-
-        /* Lienzo de Calendario Semanal */
-        .editorial-mesh {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 30px;
-            margin-bottom: 40px;
-        }
-
-        .day-sculpt {
-            background: #ffffff;
-            border: 1px solid var(--border);
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(30, 34, 41, 0.01);
-            transition: all 0.3s ease;
-        }
-
-        .day-sculpt:hover {
-            box-shadow: 0 20px 40px rgba(30, 34, 41, 0.03);
-            border-color: var(--border-focus);
-        }
-
-        .day-sculpt-header {
-            font-family: var(--serif);
-            font-size: 24px;
-            font-weight: 400;
-            margin-bottom: 20px;
-            border-bottom: 1px solid var(--border);
-            padding-bottom: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-        }
-
-        .day-sculpt-header span {
-            font-family: var(--sans);
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--ink-muted);
-        }
-
-        .shift-select {
-            margin-bottom: 16px;
-            padding: 14px;
-            font-size: 14px;
-            background: var(--canvas);
-        }
-
-        .sculpt-input {
-            width: 100%;
-            background: transparent;
-            border: none;
-            border-bottom: 1px solid var(--border);
-            padding: 10px 0;
-            font-size: 14px;
-            color: var(--ink);
-            outline: none;
-            transition: border-color 0.3s;
-        }
-
-        .sculpt-input:focus {
-            border-color: var(--ink);
-        }
-
-        textarea.sculpt-textarea {
-            width: 100%;
-            background: #ffffff;
-            border: 1px solid var(--border);
-            padding: 20px;
-            font-size: 15px;
-            outline: none;
-            color: var(--ink);
-            resize: vertical;
-            margin-bottom: 40px;
-        }
-
-        textarea.sculpt-textarea:focus {
-            border-color: var(--ink);
-        }
-
-        /* Botones Escultóricos de Acción */
-        .sculpt-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-top: 1px solid var(--border);
-            padding-top: 30px;
-        }
-
-        .btn-atelier {
-            padding: 18px 40px;
-            font-size: 13px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: none;
-        }
-
-        .btn-atelier-dark {
-            background: var(--ink);
-            color: var(--canvas);
-        }
-
-        .btn-atelier-dark:hover {
-            background: var(--sage);
-            color: #ffffff;
-        }
-
-        .btn-atelier-outline {
-            background: transparent;
-            color: var(--ink-muted);
-            border: 1px solid var(--border);
-        }
-
-        .btn-atelier-outline:hover {
-            color: var(--ink);
-            border-color: var(--ink);
-        }
-
-        /* Pantalla Final Poetica */
-        .poetic-end {
+        /* PANTALLA DE INICIO (HOME PAGE ARTÍSTICA) */
+        .home-view {
             text-align: center;
             padding: 60px 0;
         }
 
-        .poetic-end h2 {
-            font-family: var(--serif);
-            font-size: 40px;
-            font-weight: 300;
-            margin-bottom: 16px;
+        .brush-title {
+            font-family: var(--brush);
+            font-size: 96px;
+            color: var(--vibrant-orange);
+            line-height: 0.8;
+            margin-bottom: 5px;
+            display: inline-block;
+            transform: rotate(-3deg);
+            text-shadow: 2px 2px 0px rgba(254, 202, 87, 0.4);
         }
 
-        .poetic-end p {
-            color: var(--ink-muted);
+        .home-view h2 {
+            font-size: 24px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 6px;
+            color: var(--charcoal);
+            margin-bottom: 40px;
+        }
+
+        /* INTERFAZ DE FLUJO INTERACTIVO */
+        .stage-view {
+            display: none;
+        }
+
+        .stage-view.active {
+            display: block;
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes popIn {
+            from { opacity: 0; transform: scale(0.95) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .section-header {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--vibrant-orange);
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .color-dot {
+            width: 16px;
+            height: 16px;
+            background: var(--warm-yellow);
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        /* Selectores Vivos */
+        select, input[type="text"], textarea {
+            width: 100%;
+            background: #fff0eb;
+            border: 2px solid transparent;
+            padding: 20px;
+            border-radius: 20px;
+            color: var(--charcoal);
             font-size: 16px;
-            max-width: 500px;
-            margin: 0 auto 40px auto;
-            line-height: 1.6;
+            font-weight: 600;
+            outline: none;
+            transition: all 0.3s ease;
+            margin-bottom: 30px;
         }
 
-        /* Custom Scrollbar Suave */
-        ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: var(--border-focus); }
+        select:focus, input[type="text"]:focus, textarea:focus {
+            background: #ffffff;
+            border-color: var(--vibrant-orange);
+            box-shadow: 0 10px 25px rgba(255, 107, 74, 0.1);
+        }
+
+        /* Mosaico de Selección Líquido */
+        .fluid-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 15px;
+            max-height: 280px;
+            overflow-y: auto;
+            padding: 10px;
+            margin-bottom: 40px;
+        }
+
+        .fluid-btn {
+            background: #ffffff;
+            border: 2px solid #fff0eb;
+            padding: 16px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--charcoal);
+            transition: all 0.25s ease;
+            text-align: center;
+        }
+
+        .fluid-btn:hover {
+            border-color: var(--warm-yellow);
+            transform: translateY(-3px) scale(1.02);
+            background: #fffdf9;
+        }
+
+        .fluid-btn.selected {
+            background: var(--vibrant-orange);
+            color: #ffffff;
+            border-color: var(--vibrant-orange);
+            box-shadow: 0 10px 20px rgba(255, 107, 74, 0.3);
+        }
+
+        /* El nuevo Roster en Cascada de Color */
+        .cascade-flow {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+
+        .cascade-card {
+            background: #fffdfb;
+            border: 2px solid #fff0eb;
+            border-radius: 24px;
+            padding: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            flex-wrap: wrap;
+            transition: all 0.3s ease;
+        }
+
+        .cascade-card:hover {
+            border-color: var(--warm-yellow);
+            background: #ffffff;
+            box-shadow: 0 15px 30px rgba(254, 202, 87, 0.1);
+        }
+
+        .day-label {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--charcoal);
+            min-width: 120px;
+        }
+
+        .card-inputs {
+            display: flex;
+            gap: 15px;
+            flex: 1;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .card-inputs select {
+            margin-bottom: 0;
+            flex: 1;
+            min-width: 180px;
+            background: #ffffff;
+            border: 2px solid #fff0eb;
+        }
+
+        .card-inputs input {
+            margin-bottom: 0;
+            flex: 2;
+            min-width: 240px;
+            background: #ffffff;
+            border: 2px solid #fff0eb;
+        }
+
+        /* Botones Creativos Magnéticos */
+        .action-tray {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+        }
+
+        .btn-creative {
+            padding: 18px 45px;
+            font-size: 15px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: none;
+        }
+
+        .btn-creative-primary {
+            background: linear-gradient(135deg, var(--vibrant-orange), #ff8469);
+            color: #ffffff;
+            box-shadow: 0 10px 25px rgba(255, 107, 74, 0.3);
+        }
+
+        .btn-creative-primary:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 35px rgba(255, 107, 74, 0.5);
+        }
+
+        .btn-creative-secondary {
+            background: #fff0eb;
+            color: var(--vibrant-orange);
+        }
+
+        .btn-creative-secondary:hover {
+            background: #ffe3da;
+            transform: translateY(-2px);
+        }
+
+        /* Vista Final Éxito */
+        .celebration-view {
+            text-align: center;
+            padding: 40px 0;
+        }
+
+        .spark-icon {
+            font-size: 50px;
+            margin-bottom: 20px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Scrollbar Personalizado Colorido */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #fff0eb; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: var(--vibrant-orange); border-radius: 10px; }
     </style>
 </head>
 <body>
 
-<div class="atelier-card">
-    <header>
-        <div class="brand">
-            <h1>Panda Dynasty <span>Atelier</span></h1>
-            <p>Schedule Architecture Control</p>
-        </div>
-        <div class="counter-tag" id="phase-tag">I / III</div>
-    </header>
+<div class="canvas-container">
 
-    <!-- ESTUDIO 1: Identificación Estructural -->
-    <div id="step-1" class="sculpt-view active">
-        <div class="editorial-title">Selecciona la división de trabajo</div>
-        <select id="department" onchange="drawCreativeMosaic()">
-            <option value="">Buscar división...</option>
+    <!-- PANTALLA 1: HOME PAGE (Letras estilo Pincel Viva) -->
+    <div id="step-0" class="stage-view active" style="display: block;">
+        <div class="home-view">
+            <div class="brush-title">Schedule Request</div>
+            <h2>Panda Dynasty Portal</h2>
+            <button class="btn-creative btn-creative-primary" onclick="changeStage(1)">Comenzar Solicitud</button>
+        </div>
+    </div>
+
+    <!-- PANTALLA 2: Identidad Colectiva -->
+    <div id="step-1" class="stage-view">
+        <div class="section-header">
+            <div class="color-dot"></div>
+            <span>¿Cuál es tu División?</span>
+        </div>
+        <select id="department" onchange="buildFluidMesh()">
+            <option value="">Selecciona tu área operativa...</option>
             <option value="Customer Service">Customer Service</option>
             <option value="Deposits">Deposits</option>
             <option value="Payouts">Payouts</option>
         </select>
 
-        <div class="editorial-title" id="mosaic-title" style="display:none;">Selecciona tu nombre del registro</div>
-        <div class="mosaic-grid" id="creative-mosaic" style="display:none;">
-            <!-- Azulejos inyectados por código -->
+        <div class="section-header" id="mesh-header" style="display:none;">
+            <div class="color-dot" style="background-color: var(--vibrant-orange);"></div>
+            <span>Selecciona tu Nombre</span>
+        </div>
+        <div class="fluid-grid" id="fluid-name-mesh" style="display:none;">
+            <!-- Inyectado dinámicamente -->
         </div>
 
-        <div class="sculpt-footer" style="justify-content: flex-end;">
-            <button class="btn-atelier btn-atelier-dark" onclick="nextStep(2)">Continuar</button>
+        <div class="action-tray" style="justify-content: flex-end;">
+            <button class="btn-creative btn-creative-primary" onclick="changeStage(2)">Siguiente</button>
         </div>
     </div>
 
-    <!-- ESTUDIO 2: El Lienzo de Tiempos -->
-    <div id="step-2" class="sculpt-view">
-        <div class="editorial-title">Establece tu proyección semanal</div>
+    <!-- PANTALLA 3: Distribución Creativa de Turnos -->
+    <div id="step-2" class="stage-view">
+        <div class="section-header">
+            <div class="color-dot"></div>
+            <span>Configura tu Planificación Semanal</span>
+        </div>
         
-        <div class="editorial-mesh">
+        <div class="cascade-flow">
             <script>
-                const week = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-                week.forEach(day => {
+                const weekDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+                weekDays.forEach(day => {
                     document.write(`
-                        <div class="day-sculpt">
-                            <div class="day-sculpt-header">
-                                ${day}
-                                <span>Bloque</span>
+                        <div class="cascade-card">
+                            <div class="day-label">${day}</div>
+                            <div class="card-inputs">
+                                <select class="shift-selector" data-day="${day}">
+                                    <option value="AM Shift">☀️ Mañana (AM Shift)</option>
+                                    <option value="PM Shift">⛅ Tarde (PM Shift)</option>
+                                    <option value="Graveyard Shift">🌙 Noche (Graveyard)</option>
+                                    <option value="Day Off">🛑 Día Libre (Day Off)</option>
+                                </select>
+                                <input type="text" class="shift-comment" data-day="${day}" placeholder="Especificar horas o comentarios opcionales...">
                             </div>
-                            <select class="shift-select" data-day="${day}">
-                                <option value="AM Shift">Mañana (AM Shift)</option>
-                                <option value="PM Shift">Tarde (PM Shift)</option>
-                                <option value="Graveyard Shift">Noche (Graveyard)</option>
-                                <option value="Day Off">Día Libre (Day Off)</option>
-                            </select>
-                            <input type="text" class="sculpt-input" data-day="${day}" placeholder="Escribe notas horarias específicas...">
                         </div>
                     `);
                 });
             </script>
         </div>
 
-        <div class="editorial-title">Notas poéticas, académicas o de salud</div>
-        <textarea id="general-notes" class="sculpt-textarea" rows="3" placeholder="Inserta aquí observaciones o requerimientos del bloque de la semana..."></textarea>
+        <div class="section-header">
+            <div class="color-dot" style="background-color: var(--vibrant-orange);"></div>
+            <span>Notas Adicionales Importantes</span>
+        </div>
+        <textarea id="general-notes" rows="3" placeholder="Añade justificaciones, recordatorios académicos o médicos globales..."></textarea>
 
-        <div class="sculpt-footer">
-            <button class="btn-atelier btn-atelier-outline" onclick="prevStep(1)">Regresar</button>
-            <button class="btn-atelier btn-atelier-dark" onclick="buildArtisanalExcel()">Exportar Documento</button>
+        <div class="action-tray">
+            <button class="btn-creative btn-creative-secondary" onclick="changeStage(1)">Atrás</button>
+            <button class="btn-creative btn-creative-primary" onclick="generateVibrantExcel()">Compilar Contenedor</button>
         </div>
     </div>
 
-    <!-- ESTUDIO 3: Despacho Exitoso -->
-    <div id="step-3" class="sculpt-view">
-        <div class="poetic-end">
-            <h2>El documento ha sido esculpido.</h2>
-            <p>
-                Tu archivo de preferencias horarias se compiló de forma nativa en un contenedor Excel refinado con estilos tonales y ya descansa en tu sistema local.
+    <!-- PANTALLA 4: Final de Alta Energía -->
+    <div id="step-3" class="stage-view">
+        <div class="celebration-view">
+            <div class="spark-icon">🎨</div>
+            <h2 style="color: var(--vibrant-orange); margin-bottom: 15px;">¡Diseño Compilado!</h2>
+            <p style="color: var(--charcoal); font-size: 16px; max-width: 550px; margin: 0 auto 35px auto; font-weight: 600;">
+                Tu documento de turnos se ha procesado limpiamente en un contenedor Excel con colores armónicos y optimizados. Ya está listo en tus descargas.
             </p>
-            <button class="btn-atelier btn-atelier-outline" onclick="resetAtelier()">Generar nueva hoja</button>
+            <button class="btn-creative btn-creative-secondary" onclick="resetPortal()">Crear Otra Planilla</button>
         </div>
     </div>
+
 </div>
 
 <script>
@@ -429,99 +411,91 @@
 
     let selectedAgentGlobal = "";
 
-    function drawCreativeMosaic() {
+    function buildFluidMesh() {
         const dept = document.getElementById('department').value;
-        const mosaic = document.getElementById('creative-mosaic');
-        const title = document.getElementById('mosaic-title');
+        const mesh = document.getElementById('fluid-name-mesh');
+        const header = document.getElementById('mesh-header');
         
-        mosaic.innerHTML = '';
+        mesh.innerHTML = '';
         selectedAgentGlobal = "";
 
         if (!dept) {
-            mosaic.style.display = 'none';
-            title.style.display = 'none';
+            mesh.style.display = 'none';
+            header.style.display = 'none';
             return;
         }
 
-        title.style.display = 'block';
-        mosaic.style.display = 'grid';
+        header.style.display = 'flex';
+        mesh.style.display = 'grid';
 
         teamData[dept].forEach(name => {
-            const tile = document.createElement('div');
-            tile.className = 'mosaic-tile';
-            tile.innerHTML = `<span>${name}</span>`;
-            tile.onclick = () => {
-                document.querySelectorAll('.mosaic-tile').forEach(t => t.classList.remove('selected'));
-                tile.classList.add('selected');
+            const btn = document.createElement('div');
+            btn.className = 'fluid-btn';
+            btn.textContent = name;
+            btn.onclick = () => {
+                document.querySelectorAll('.fluid-btn').forEach(b => b.classList.remove('selected'));
+                btn.classList.add('selected');
                 selectedAgentGlobal = name;
             };
-            mosaic.appendChild(tile);
+            mesh.appendChild(btn);
         });
     }
 
-    function nextStep(stepNum) {
-        if (stepNum === 2 && !selectedAgentGlobal) {
-            alert('Por favor selecciona tu nombre del registro artístico antes de avanzar.');
+    function changeStage(stageNum) {
+        if (stageNum === 2 && !selectedAgentGlobal) {
+            alert('Por favor selecciona tu nombre antes de pasar al lienzo de turnos.');
             return;
         }
-        const RomanNumerals = ["", "I / III", "II / III", "III / III"];
-        document.getElementById('phase-tag').textContent = RomanNumerals[stepNum];
-        document.querySelectorAll('.sculpt-view').forEach(v => v.classList.remove('active'));
-        document.getElementById(`step-${stepNum}`).classList.add('active');
+        document.querySelectorAll('.stage-view').forEach(v => v.style.display = 'none');
+        document.getElementById(`step-${stageNum}`).style.display = 'block';
+        document.getElementById(`step-${stageNum}`).classList.add('active');
     }
 
-    function prevStep(stepNum) {
-        const RomanNumerals = ["", "I / III", "II / III", "III / III"];
-        document.getElementById('phase-tag').textContent = RomanNumerals[stepNum];
-        document.querySelectorAll('.sculpt-view').forEach(v => v.classList.remove('active'));
-        document.getElementById(`step-${stepNum}`).classList.add('active');
-    }
-
-    function resetAtelier() {
+    function resetPortal() {
         document.getElementById('department').value = "";
-        drawCreativeMosaic();
+        buildFluidMesh();
         document.getElementById('general-notes').value = "";
-        document.querySelectorAll('.sculpt-input').forEach(i => i.value = "");
-        nextStep(1);
+        document.querySelectorAll('.shift-comment').forEach(c => c.value = "");
+        changeStage(0);
     }
 
-    async function buildArtisanalExcel() {
+    async function generateVibrantExcel() {
         const dept = document.getElementById('department').value;
         const name = selectedAgentGlobal;
         const generalNotes = document.getElementById('general-notes').value || "None";
 
-        // Paleta sofisticada suave estilo Lino/Tierra para Excel
-        const stylePalette = {
-            "AM Shift": { bg: "E2EFDA", fg: "375623" },
-            "PM Shift": { bg: "FFF2CC", fg: "7F6000" },
-            "Graveyard Shift": { bg: "FCE4D6", fg: "C65911" },
-            "Day Off": { bg: "EDEDED", fg: "595959" }
+        // Paleta limpia y profesional para celdas de Excel
+        const excelPalette = {
+            "AM Shift": { bg: "C6EFCE", fg: "006100" },
+            "PM Shift": { bg: "FFEB9C", fg: "9C6500" },
+            "Graveyard Shift": { bg: "FFC7CE", fg: "9C0006" },
+            "Day Off": { bg: "E2E8F0", fg: "475569" }
         };
 
         const workbook = new ExcelJS.Workbook();
-        const worksheet = workbook.addWorksheet('Atelier Roster');
+        const worksheet = workbook.addWorksheet('Roster Design');
 
         worksheet.columns = [
-            { header: 'Architect Name', key: 'name', width: 30 },
-            { header: 'Division', key: 'dept', width: 22 },
-            { header: 'Timeline Day', key: 'day', width: 16 },
-            { header: 'Shift Assignment', key: 'pref', width: 22 },
-            { header: 'Atelier Specific Notes', key: 'notes', width: 35 },
-            { header: 'Strategic General Comments', key: 'general', width: 40 }
+            { header: 'Agent Name', key: 'name', width: 28 },
+            { header: 'Department', key: 'dept', width: 20 },
+            { header: 'Day', key: 'day', width: 15 },
+            { header: 'Shift Selection', key: 'pref', width: 22 },
+            { header: 'Specific Day Comments', key: 'notes', width: 35 },
+            { header: 'Global Strategy Notes', key: 'general', width: 40 }
         ];
 
-        // Fila superior en Tinta Sólida Minimalista (Midnight Matte)
+        // Encabezado en Mandarina Oscuro para hacer juego con la marca
         const headerRow = worksheet.getRow(1);
         headerRow.height = 28;
         headerRow.font = { name: 'Segoe UI', bold: true, color: { argb: 'FFFFFF' }, size: 11 };
-        headerRow.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '1E2229' } };
+        headerRow.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'D35400' } };
         headerRow.alignment = { vertical: 'middle', horizontal: 'center' };
 
-        const selects = document.querySelectorAll('.shift-select');
-        selects.forEach((select, index) => {
+        const selectors = document.querySelectorAll('.shift-selector');
+        selectors.forEach((select, index) => {
             const day = select.getAttribute('data-day');
             const pref = select.value;
-            const comment = document.querySelector(`.sculpt-input[data-day="${day}"]`).value || "Standard Alignment";
+            const comment = document.querySelector(`.shift-comment[data-day="${day}"]`).value || "As Scheduled";
 
             const row = worksheet.addRow({
                 name: (index === 0) ? name : '',
@@ -533,21 +507,21 @@
             });
 
             row.height = 24;
-            row.getCell('name').font = { bold: true, name: 'Segoe UI', color: { argb: '1E2229' } };
+            row.getCell('name').font = { bold: true, name: 'Segoe UI', color: { argb: '2C3E50' } };
             row.getCell('day').font = { bold: true, name: 'Segoe UI' };
             row.getCell('day').alignment = { horizontal: 'center', vertical: 'middle' };
             row.getCell('pref').alignment = { horizontal: 'center', vertical: 'middle' };
 
-            if (stylePalette[pref]) {
-                const config = stylePalette[pref];
-                row.getCell('pref').fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF' + config.bg } };
-                row.getCell('pref').font = { color: { argb: 'FF' + config.fg }, bold: true, name: 'Segoe UI', size: 10 };
+            if (excelPalette[pref]) {
+                const cfg = excelPalette[pref];
+                row.getCell('pref').fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF' + cfg.bg } };
+                row.getCell('pref').font = { color: { argb: 'FF' + cfg.fg }, bold: true, name: 'Segoe UI', size: 10 };
             }
 
-            ['name', 'dept', 'day', 'pref', 'notes', 'general'].forEach(k => {
-                row.getCell(k).border = {
-                    bottom: { style: 'thin', color: { argb: 'FFEAEAEA' } },
-                    right: { style: 'thin', color: { argb: 'FFEAEAEA' } }
+            ['name', 'dept', 'day', 'pref', 'notes', 'general'].forEach(col => {
+                row.getCell(col).border = {
+                    bottom: { style: 'thin', color: { argb: 'FFE5E9F0' } },
+                    right: { style: 'thin', color: { argb: 'FFE5E9F0' } }
                 };
             });
         });
@@ -556,10 +530,10 @@
         const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
         const link = document.createElement("a");
         link.href = URL.createObjectURL(blob);
-        link.download = `Atelier_Roster_${name.replace(/\s+/g, '_')}.xlsx`;
+        link.download = `Canvas_Roster_${name.replace(/\s+/g, '_')}.xlsx`;
         link.click();
 
-        nextStep(3);
+        changeStage(3);
     }
 </script>
 </body>

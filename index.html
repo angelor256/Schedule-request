@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WFM Tactical Enterprise // v6.0 Balanced Engine</title>
+    <title>WFM Tactical Enterprise // v7.0 Perfect Balance Engine</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -150,7 +150,7 @@
     <div class="top-bar">
         <div class="app-title">
             <h1>Tactical Workforce Management Panel</h1>
-            <p>Roster Schedule Engine v6.0 // Matrix Stability Control</p>
+            <p>Roster Schedule Engine v7.0 // Perfect Symmetry Curve & 12h Rest Protections</p>
         </div>
         <div style="display: flex; gap: 10px;">
             <button class="btn btn-purple" onclick="executeSmartEngine()">⚡ Generate Balanced Schedule</button>
@@ -161,7 +161,7 @@
     <div class="main-card" style="overflow-x: auto;">
         <div class="card-header-title">
             <span>Operational Master Roster Grid</span>
-            <span style="font-size:12px; color:#64748b; font-weight:400;">12h transitions and Weekend Lockouts active</span>
+            <span style="font-size:12px; color:#64748b; font-weight:400;">Perfect 50/50 AM-PM Allocation Curves applied</span>
         </div>
         <table class="roster-table">
             <thead>
@@ -212,8 +212,6 @@
     };
 
     const middleShiftRules = ["Luis Fernando Ruiz", "Marlon Wright", "Anilu Guzman Villalobos"];
-    
-    // Lista de exclusión estricta: No pueden tener libre fines de semana
     const weekendOffBlocklist = ["Luis Fernando Ruiz", "Marlon Wright", "Anilu Guzman Villalobos", "Keisha Cross Brown"];
 
     const amWindows = ["06:00 AM", "07:00 AM", "09:00 AM", "10:00 AM"];
@@ -327,16 +325,15 @@
         calculateAndRenderMetrics();
     }
 
-    // MOTOR v6.0: PIVOTA TRANSICIONES USANDO DAYS OFF Y APLICA EXCLUSIÓN DE FINES DE SEMANA
+    // MOTOR v7.0: IMPLEMENTA REGLAS DE BLOQUES ESPEJO BALANCEADOS (50% AM / 50% PM REAL)
     function executeSmartEngine() {
         let cache = getCache();
         const depts = ["Calculo Phones", "Calculo Chats"];
-        const structuralTiers = ["VIP", "Senior", "Tier 2", "Tier 1"];
-
+        
         depts.forEach(dept => {
-            let agentPatternCounter = 0;
+            let globalAgentCount = 0;
 
-            structuralTiers.forEach(tier => {
+            Object.keys(masterRosterStructure[dept]).forEach(tier => {
                 const groupNames = masterRosterStructure[dept][tier];
                 
                 groupNames.forEach(name => {
@@ -344,60 +341,59 @@
                     const isMiddle = middleShiftRules.includes(name);
                     const isRestrictedWE = weekendOffBlocklist.includes(name);
 
-                    // Definición estratégica de Days Off Pivote
+                    // 1. ASIGNACIÓN MATEMÁTICA DE DAYS OFF UPTIME
                     let off1Idx, off2Idx;
                     if (isRestrictedWE) {
-                        // Forzar libres entre semana distribuidos (ej: Lun/Mie, Mar/Jue) para que cubran obligatoriamente Sábado y Domingo
-                        off1Idx = (agentPatternCounter % 3); // Lunes, Martes o Miércoles
-                        off2Idx = off1Idx + 3;               // Jueves o Viernes
+                        // Bloqueo estricto de fin de semana: Días libres escalonados de Lun a Vie
+                        off1Idx = (globalAgentCount % 2 === 0) ? 0 : 1; // Lunes o Martes
+                        off2Idx = (globalAgentCount % 2 === 0) ? 3 : 4; // Jueves o Viernes
                     } else {
-                        // Agentes normales rotan en toda la semana incluyendo el fin de semana
-                        off1Idx = (agentPatternCounter) % 7;
-                        off2Idx = (agentPatternCounter + 4) % 7;
-                        if(off1Idx === off2Idx) off2Idx = (off2Idx + 1) % 7;
+                        // Distribución cruzada normal de días libres por toda la semana
+                        off1Idx = (globalAgentCount * 2) % 7;
+                        off2Idx = (globalAgentCount * 2 + 3) % 7;
+                        if (off1Idx === off2Idx) off2Idx = (off2Idx + 1) % 7;
                     }
 
                     let offDay1 = daysOfWeek[off1Idx];
                     let offDay2 = daysOfWeek[off2Idx];
-                    
-                    agentPatternCounter++;
 
-                    // Matrices de asignación lineal balanceada de turnos
-                    // Patrón de alternancia limpia: Evita acumulación en las tardes
+                    // 2. DETERMINAR EL BLOQUE BASE OPERATIVO DEL AGENTE PARA ESTA SEMANA (AM o PM)
+                    // Para evitar que todos vayan a un solo lado, dividimos los agentes limpiamente en base a un índice alterno puro.
+                    let baseBlock = (globalAgentCount % 2 === 0) ? "AM" : "PM";
+                    globalAgentCount++;
+
+                    // 3. GENERAR EL CALENDARIO DE LA SEMANA DÍA POR DÍA
                     for (let i = 0; i < daysOfWeek.length; i++) {
                         let day = daysOfWeek[i];
 
+                        // Respetar estados manuales intocables
                         if(agentRecord.shifts[day] === "Vacaciones" || agentRecord.shifts[day] === "OPEN") {
                             continue;
                         }
 
-                        // Asignar Día Libre estricto
+                        // Setear Día Libre
                         if (day === offDay1 || day === offDay2) {
                             agentRecord.shifts[day] = "Day Off";
                             continue;
                         }
 
-                        // REGLA DE PIVOTE DE TRANSICIÓN:
-                        // Si el día anterior fue un bloque PM, y hoy NO es día libre, ver si ocupamos saltar a AM de forma segura.
-                        let mustBePM = false;
-                        if (i > 0) {
-                            let yesterday = daysOfWeek[i - 1];
-                            let yesterdayShift = agentRecord.shifts[yesterday];
-                            // Si ayer trabajó PM (sale tarde) y hoy NO es libre, HOY DEBE SEGUIR EN PM para respetar las 12 horas.
-                            if (yesterdayShift && pmWindows.includes(yesterdayShift)) {
-                                mustBePM = true;
-                            }
-                        }
-
-                        // Ejecutar asignación balanceada por bloque espejo (50% AM / 50% PM en el Roster General)
-                        if (mustBePM) {
-                            agentRecord.shifts[day] = isMiddle ? "02:00 PM" : "02:00 PM";
-                        } else {
-                            // Si viene de un Day Off (i-1 fue Day Off) o ayer fue AM, puede tomar AM perfectamente estabilizando los números de la mañana
-                            if ((agentPatternCounter + i) % 2 === 0) {
-                                agentRecord.shifts[day] = isMiddle ? "09:00 AM" : "06:00 AM";
+                        // CONTROL DE TRANSICIÓN DE 12 HORAS MEDIANTE REGLA DE BLOQUE BASE
+                        // Si el agente pertenece al bloque base PM, se queda en PM para no violar descansos.
+                        // Si pertenece al bloque base AM, se queda en AM. 
+                        // Nota: La transición segura de AM a PM o viceversa ocurrirá la siguiente semana tras pasar por un Day Off.
+                        if (baseBlock === "PM") {
+                            // Distribución interna de turnos PM
+                            if (isMiddle) {
+                                agentRecord.shifts[day] = (i % 2 === 0) ? "01:00 PM" : "11:00 AM";
                             } else {
-                                agentRecord.shifts[day] = isMiddle ? "10:00 AM" : "07:00 AM";
+                                agentRecord.shifts[day] = (i % 2 === 0) ? "02:00 PM" : "03:00 PM";
+                            }
+                        } else {
+                            // Distribución interna de turnos AM
+                            if (isMiddle) {
+                                agentRecord.shifts[day] = (i % 2 === 0) ? "09:00 AM" : "10:00 AM";
+                            } else {
+                                agentRecord.shifts[day] = (i % 2 === 0) ? "06:00 AM" : "07:00 AM";
                             }
                         }
                     }
@@ -408,7 +404,7 @@
         setCache(cache);
         renderRosterGrid();
         calculateAndRenderMetrics();
-        alert("⚡ Engine v6.0 Complete: Headcount perfectly mirrored, 12h Pivot Offs applied & Weekend Restrictions locked.");
+        alert("⚡ Engine v7.0 Activated: Symmetrical AM/PM Distribution & 12h Rest Protections Fully Synced.");
     }
 
     function switchMetricsView(viewName) {
@@ -499,7 +495,7 @@
         const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
         const trigger = document.createElement("a");
         trigger.href = URL.createObjectURL(blob);
-        trigger.download = `WFM_v6_Master_Balanced.xlsx`;
+        trigger.download = `WFM_v7_Master_Symmetric.xlsx`;
         trigger.click();
     }
 </script>

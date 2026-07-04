@@ -3,130 +3,781 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WFM // Mocha Mousse Edition</title>
+    <title>WFM Tactical Enterprise // v15.6 Hard-Locked Balance Engine</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&family=Oswald:wght@500&display=swap" rel="stylesheet">
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
 
     <style>
         :root {
-            --mocha-primary: #9a7d6d; /* Color Mocha Mousse base */
-            --mocha-light: #dccbc0;
-            --mocha-bg: #f5f2ef;
-            --mocha-text: #4a3f38;
-            --white: #ffffff;
+            /* Inspirado en la imagen: Mocha Mousse y tonos relacionados */
+            --bg-main: #f4f1ea; /* Un beige muy claro y cálido */
+            --bg-surface: #ffffff;
+            --mocha-mousse: #a38b7a; /* Tono principal Mocha Mousse */
+            --mocha-mousse-dark: #8c7362;
+            --mocha-mousse-light: #bdaf9c;
+            
+            --border-subtle: #d8d0c5;
+            --border-focus: var(--mocha-mousse);
+            
+            --text-primary: #3c3530; /* Un marrón muy oscuro */
+            --text-secondary: #6e6158;
+            --text-muted: #a89f96;
+            --accent-color: var(--mocha-mousse);
+            
+            /* Paleta de Pasteles Suaves para Turnos (revisada para calidez) */
+            --sh-am-bg: #fdfaf3; --sh-am-txt: #8c7362; --sh-am-border: #e8e0d5;
+            --sh-pm-bg: #f8f4ed; --sh-pm-txt: #7a6e65; --sh-pm-border: #dfd8cf;
+            --sh-off-bg: #fff5f5; --sh-off-txt: #991b1b; --sh-off-border: #fecaca;
+            --sh-vac-bg: #fffbeb; --sh-vac-txt: #92400e; --sh-vac-border: #fef3c7;
+            --sh-op-bg: #f0fdf4; --sh-op-txt: #166534; --sh-op-border: #bbf7d0;
         }
 
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            background-color: var(--mocha-bg);
-            color: var(--mocha-text);
+            background-color: var(--bg-main);
+            color: var(--text-primary);
             font-family: 'Inter', sans-serif;
-            margin: 0;
-            padding: 20px;
+            padding: 40px 24px;
+            line-height: 1.5;
         }
 
-        .container { max-width: 1000px; margin: 0 auto; }
+        .container { max-width: 1680px; margin: 0 auto; }
 
-        /* Estilo de la nueva Home Page */
-        .home-card {
-            background: var(--white);
-            border: 1px solid var(--mocha-light);
-            border-radius: 16px;
-            padding: 40px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-            text-align: center;
-            margin-top: 50px;
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            padding: 24px 32px;
+            border-radius: 12px;
+            margin-bottom: 32px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
         }
+        .app-title h1 { font-size: 20px; font-weight: 700; color: var(--text-primary); letter-spacing: -0.5px; }
+        .app-title p { font-size: 12px; color: var(--text-secondary); margin-top: 2px; font-family: 'JetBrains Mono', monospace; }
 
-        .home-card h1 {
-            font-size: 2.5rem;
-            color: var(--mocha-primary);
-            margin-bottom: 20px;
+        .navigation-dock {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+            border-bottom: 1px solid var(--border-subtle);
+            padding-bottom: 1px;
         }
-
-        .home-card p {
-            font-size: 1.1rem;
-            color: var(--mocha-text);
-            margin-bottom: 30px;
-        }
-
-        .btn-start {
-            background: var(--mocha-primary);
-            color: white;
-            padding: 15px 30px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 600;
-            cursor: pointer;
+        .dock-tab {
+            background: transparent;
             border: none;
+            color: var(--text-secondary);
+            padding: 12px 20px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border-radius: 6px 6px 0 0;
+            margin-bottom: -1px;
+        }
+        .dock-tab:hover { color: var(--text-primary); background-color: #f1f5f9; }
+        .dock-tab.active-tab { 
+            color: var(--accent-color); 
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-bottom-color: var(--bg-surface);
+            font-weight: 600;
         }
 
-        /* Estilos generales para las tablas y paneles existentes */
+        .action-btn {
+            background: var(--bg-surface); border: 1px solid var(--border-subtle); color: var(--text-secondary); padding: 10px 18px; font-size: 13px; font-weight: 500; border-radius: 8px; cursor: pointer; transition: all 0.15s ease; display: inline-flex; align-items: center; gap: 8px;
+        }
+        .action-btn:hover { background: #fdfaf3; border-color: var(--border-focus); color: var(--text-primary); }
+        .btn-accent { background: var(--accent-color); color: #ffffff; border: none; font-weight: 600; }
+        .btn-accent:hover { background: var(--mocha-mousse-dark); color: #ffffff; box-shadow: 0 4px 12px rgba(163,139,122,0.3); }
+
         .panel-view { display: none; }
         .panel-view.active-view { display: block; }
-        
+
+        /* Estilo de Tarjeta para Paneles (inspirado en image_0.png) */
         .panel-card { 
-            background: var(--white); 
-            border: 1px solid var(--mocha-light); 
+            background: var(--bg-surface); 
+            border: 1px solid var(--border-subtle); 
             border-radius: 12px; 
             padding: 28px; 
-            margin-top: 20px;
+            margin-bottom: 32px; 
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* Sombra más pronunciada */
+        }
+        .card-title-bar { font-size: 15px; color: var(--text-primary); font-weight: 600; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+
+        .dept-switcher {
+            display: flex;
+            gap: 6px;
+            background: #f1f5f9;
+            padding: 4px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: inline-flex;
+        }
+        .dept-btn {
+            background: transparent; border: none; color: var(--text-secondary); padding: 6px 14px; font-size: 12px; font-weight: 600; border-radius: 6px; cursor: pointer; transition: all 0.15s;
+        }
+        .dept-btn.active-dept {
+            background: var(--bg-surface); color: var(--text-primary); box-shadow: 0 1px 2px rgba(0,0,0,0.05);
         }
 
-        .interactive-table { width: 100%; border-collapse: collapse; }
-        .interactive-table th { background: #fdfaf8; border-bottom: 2px solid var(--mocha-light); padding: 12px; }
-        .interactive-table td { border-bottom: 1px solid #eee; padding: 10px; }
+        .interactive-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        .interactive-table th { background: #fdfaf3; color: var(--text-secondary); text-align: left; padding: 14px 16px; font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid var(--border-subtle); }
+        .interactive-table td { padding: 10px 16px; border-bottom: 1px solid #f8f4ed; color: var(--text-primary); }
+        
+        .row-squad-header { background: #fbf9f6; color: var(--mocha-mousse) !important; font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; padding: 10px 16px !important; border-bottom: 1px solid var(--border-subtle) !important; }
 
-        .navigation-dock { margin-bottom: 20px; display: flex; gap: 10px; }
-        .dock-tab { padding: 10px 20px; border-radius: 8px; border: 1px solid var(--mocha-light); background: transparent; cursor: pointer; }
-        .dock-tab.active-tab { background: var(--mocha-primary); color: white; border-color: var(--mocha-primary); }
+        .badge-pill { font-size: 11px; padding: 2px 8px; border-radius: 6px; font-weight: 500; background: #fdfaf3; color: var(--text-secondary); border: 1px solid var(--border-subtle); }
+        .badge-vip { background: #fff1f2; color: #9f1239; border-color: #ffe4e6; font-weight: 600; }
+
+        .custom-dropdown { background: #ffffff; border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 7px 10px; border-radius: 6px; font-family: 'JetBrains Mono', monospace; font-size: 11px; width: 120px; outline: none; cursor: pointer; text-align: center; font-weight: 500; transition: all 0.15s ease; }
+        .custom-dropdown:focus { border-color: var(--border-focus); }
+        .custom-dropdown.s-am { background: var(--sh-am-bg); color: var(--sh-am-txt); border-color: var(--sh-am-border); }
+        .custom-dropdown.s-pm { background: var(--sh-pm-bg); color: var(--sh-pm-txt); border-color: var(--sh-pm-border); }
+        .custom-dropdown.s-off { background: var(--sh-off-bg); color: var(--sh-off-txt); border-color: var(--sh-off-border); font-weight: 600; }
+        .custom-dropdown.s-vac { background: var(--sh-vac-bg); color: var(--sh-vac-txt); border-color: var(--sh-vac-border); }
+        .custom-dropdown.s-op { background: var(--sh-op-bg); color: var(--sh-op-txt); border-color: var(--sh-op-border); }
+
+        .analytics-matrix { width: 100%; border-collapse: collapse; font-family: 'JetBrains Mono', monospace; font-size: 12px; }
+        .analytics-matrix th, .analytics-matrix td { border: 1px solid var(--border-subtle); padding: 10px 12px; text-align: center; }
+        .analytics-matrix th { background: #fdfaf3; color: var(--text-secondary); font-weight: 600; font-size: 11px; }
+        .analytics-section-title { text-align: left !important; font-weight: 600; color: var(--text-primary); background: #f8f4ed !important; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .total-row-am { background: #fdfaf3; font-weight: 600; color: var(--sh-am-txt); }
+        .total-row-pm { background: #fdfaf3; font-weight: 600; color: var(--sh-pm-txt); }
+        .total-row-shrinkage { background: #fff5f5; font-weight: 600; color: var(--sh-off-txt); }
+
+        /* Estilos para el nuevo Home Page (NUEVO) */
+        .home-page {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 70vh;
+            padding: 20px;
+        }
+        .home-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            width: 100%;
+            max-width: 650px; /* Ajuste para coincidir con la imagen */
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        .home-card-image {
+            background-image: linear-gradient(135deg, var(--mocha-mousse-light) 0%, var(--mocha-mousse) 100%); /* Degradado cálido */
+            height: 380px; /* Coincide con la imagen */
+            position: relative;
+            display: flex;
+            justify-content: flex-start;
+            align-items: flex-start;
+            padding: 40px;
+        }
+        
+        /* Efecto de línea diagonal sutil (NUEVO, inspirado en image_0.png) */
+        .home-card-image::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 100%;
+            height: 2px;
+            background-color: rgba(0,0,0,0.05); /* Línea muy tenue */
+            transform: rotate(-15deg);
+            transform-origin: bottom right;
+        }
+
+        .home-card-content {
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        /* Título grande con formato de image_0.png (NUEVO) */
+        .home-card-title {
+            font-size: 28px;
+            font-weight: 600;
+            color: #000; /* Negro para el título principal */
+            line-height: 1.2;
+            font-family: 'Oswald', sans-serif; /* Usando una fuente más condensada para el título */
+            text-transform: uppercase;
+        }
+
+        .home-card-meta {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+        .meta-item { display: flex; align-items: center; gap: 6px; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <!-- Home Page Section -->
-    <div id="home-view" class="panel-view active-view">
-        <div class="home-card">
-            <h1>Schedule Request Customer Service</h1>
-            <p>Welcome to the tactical engine. Please proceed to manage your shifts.</p>
-            <button class="btn-start" onclick="toggleView('request')">Enter Dashboard</button>
+
+    <header>
+        <div class="app-title">
+            <h1>Tactical Workforce Management</h1>
+            <p>// ENGINE VERSION 15.6 // ANTI-ASYMMETRY LOCKED</p>
+        </div>
+        <div>
+            <button class="action-btn" onclick="exportDataToExcel()">📥 Export Matrix to Excel</button>
+        </div>
+    </header>
+
+    <div class="navigation-dock">
+        <!-- Pestaña Home añadida (NUEVO) -->
+        <button class="dock-tab active-tab" id="tab-home" onclick="toggleViewSegment('home')">00 / Home Page</button>
+        <button class="dock-tab" id="tab-request" onclick="toggleViewSegment('request')">01 / Preferences Dashboard</button>
+        <button class="dock-tab" id="tab-engine" onclick="toggleViewSegment('engine')">02 / Master Shift Roster</button>
+    </div>
+
+    <!-- Nuevo Panel Home Page (NUEVO) -->
+    <div id="view-home" class="panel-view active-view">
+        <div class="home-page">
+            <div class="home-card">
+                <div class="home-card-image">
+                    <!-- Sección de imagen superior con degradado (NUEVO) -->
+                </div>
+                <div class="home-card-content">
+                    <h2 class="home-card-title">Schedule request Customer Service</h2>
+                    <div class="home-card-meta">
+                        <div class="meta-item">
+                            <span style="color: var(--mocha-mousse);">■</span> <!-- Icono cuadrado -->
+                            <span>System Interface</span>
+                        </div>
+                        <div class="meta-item">
+                            <span style="color: var(--border-subtle);">|</span> <!-- Separador -->
+                        </div>
+                        <div class="meta-item">
+                            <span>WFM Enterprise</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- Navigation (Hidden until user enters) -->
-    <div id="main-content" style="display:none;">
-        <div class="navigation-dock">
-            <button class="dock-tab active-tab" onclick="toggleView('request')">Preferences</button>
-            <button class="dock-tab" onclick="toggleView('engine')">Production Schedule</button>
-        </div>
-
-        <div id="view-request" class="panel-view active-view">
-            <div class="panel-card">
-                <h3>Input Deck</h3>
-                <div id="reqBodyPhones"></div>
+    <div id="view-request" class="panel-view">
+        <div class="panel-card">
+            <div class="card-title-bar">
+                <span>📋 Input Deck (Agent Preferences & Leaves)</span>
+                <button class="action-btn btn-accent" onclick="compileRosterPipeline()">Generate Balanced Schedule ⚙️</button>
             </div>
-        </div>
+            
+            <div class="dept-switcher">
+                <button class="dept-btn active-dept" id="req-btn-phones" onclick="switchDeptView('Phones', 'request')">Calculo Phones</button>
+                <button class="dept-btn" id="req-btn-chats" onclick="switchDeptView('Chats', 'request')">Calculo Chats</button>
+            </div>
 
-        <div id="view-engine" class="panel-view">
-            <div class="panel-card">
-                <h3>Production Schedule</h3>
+            <div id="req-container-Phones" class="dept-table-container">
+                <table class="interactive-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 280px;">Agent Name</th>
+                            <th style="width: 140px;">Tier Level</th>
+                            <th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th><th>Sun</th>
+                        </tr>
+                    </thead>
+                    <tbody id="reqBodyPhones"></tbody>
+                </table>
+            </div>
+
+            <div id="req-container-Chats" class="dept-table-container" style="display: none;">
+                <table class="interactive-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 280px;">Agent Name</th>
+                            <th style="width: 140px;">Tier Level</th>
+                            <th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th><th>Sun</th>
+                        </tr>
+                    </thead>
+                    <tbody id="reqBodyChats"></tbody>
+                </table>
             </div>
         </div>
     </div>
+
+    <div id="view-engine" class="panel-view">
+        <div class="panel-card">
+            <div class="card-title-bar">
+                <span>📅 Production Schedule (Enforced Perfect Block Balancing)</span>
+            </div>
+
+            <div class="dept-switcher">
+                <button class="dept-btn active-dept" id="out-btn-phones" onclick="switchDeptView('Phones', 'output')">Calculo Phones</button>
+                <button class="dept-btn" id="out-btn-chats" onclick="switchDeptView('Chats', 'output')">Calculo Chats</button>
+            </div>
+
+            <div id="out-container-Phones" class="dept-table-container">
+                <table class="interactive-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 280px;">Agent Name</th>
+                            <th style="width: 140px;">Tier Level</th>
+                            <th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th><th>Sun</th>
+                        </tr>
+                    </thead>
+                    <tbody id="outBodyPhones"></tbody>
+                </table>
+            </div>
+
+            <div id="out-container-Chats" class="dept-table-container" style="display: none;">
+                <table class="interactive-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 280px;">Agent Name</th>
+                            <th style="width: 140px;">Tier Level</th>
+                            <th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th><th>Sun</th>
+                        </tr>
+                    </thead>
+                    <tbody id="outBodyChats"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="panel-card">
+            <div class="card-title-bar">
+                <span>📈 Real-time Supply Statistics</span>
+                <div class="dept-switcher" style="margin-bottom: 0;">
+                    <button class="dept-btn active-dept" id="an-btn-all" onclick="changeMetricsFilter('all')">Global View</button>
+                    <button class="dept-btn" id="an-btn-phones" onclick="changeMetricsFilter('Calculo Phones')">Phones Analytics</button>
+                    <button class="dept-btn" id="an-btn-chats" onclick="changeMetricsFilter('Calculo Chats')">Chats Analytics</button>
+                </div>
+            </div>
+            <div style="overflow-x: auto;">
+                <table class="analytics-matrix">
+                    <thead>
+                        <tr>
+                            <th style="width: 260px; text-align: left;">Roster Block Window</th>
+                            <th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th><th>Sun</th>
+                        </tr>
+                    </thead>
+                    <tbody id="analyticsDataBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 <script>
-    function toggleView(view) {
-        // Muestra el contenido principal
-        document.getElementById('home-view').style.display = 'none';
-        document.getElementById('main-content').style.display = 'block';
-        
-        // Lógica de navegación existente adaptada
+    const coreRosterMap = {
+        "Calculo Phones": {
+            "VIP": ["Emerson Hernandez", "Stephannie Cunningham", "Thimy Gonzalez", "Yasser Quiros"],
+            "Senior": ["Andrey Castillo", "Rory Bulgarelli", "Phillip Desanti", "Eddison Prendas"],
+            "Tier 2": ["Carlos Alejandro Amador Luna", "Carlos Ortiz", "David Vogler", "Valerie Alfaro", "Jose Maria Cartin Peralta", "Samuel Carballo"],
+            "Tier 1": ["Luis Fernando Ruiz"]
+        },
+        "Calculo Chats": {
+            "VIP": ["Elena Rojas", "Elliot Navarro", "Julian Mena", "Sebastian Puerta", "Maria Jose Quiros Quiros"],
+            "Senior": ["Naomy Sanchez", "Adrian Navarro", "Diego Matamoros"],
+            "Tier 2": ["Carolina Castro", "Isaac Barrantes Alvarado", "Pablo Guzman", "Anilu Guzman Villalobos", "Sheydron Clark"],
+            "Tier 1": ["Keisha Cross Brown", "Marlon Wright"]
+        }
+    };
+
+    const middleShiftRules = ["Luis Fernando Ruiz", "Marlon Wright", "Anilu Guzman Villalobos"];
+    const weekendOffBlocklist = ["Luis Fernando Ruiz", "Marlon Wright", "Anilu Guzman Villalobos", "Keisha Cross Brown"];
+
+    const amWindows = ["06:00 AM", "07:00 AM", "09:00 AM", "10:00 AM"];
+    const pmWindows = ["11:00 AM", "01:00 PM", "02:00 PM", "03:00 PM"];
+    const hoursPriority = ["06:00 AM", "07:00 AM", "09:00 AM", "10:00 AM", "11:00 AM", "01:00 PM", "02:00 PM", "03:00 PM"];
+    const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+
+    let selectedMetricsFilter = "all";
+    let activeReqDept = "Phones";
+    let activeOutDept = "Phones";
+
+    window.onload = function() {
+        if (!localStorage.getItem('wfm_v15_request_cache')) initDatabaseStructure();
+        if (!localStorage.getItem('wfm_v15_output_cache')) localStorage.setItem('wfm_v15_output_cache', localStorage.getItem('wfm_v15_request_cache'));
+        renderInputGrid();
+        renderEngineGrid();
+        processAnalyticsRefresh();
+    };
+
+    function initDatabaseStructure() {
+        const cache = [];
+        let indexer = 0;
+        Object.keys(coreRosterMap).forEach(dept => {
+            Object.keys(coreRosterMap[dept]).forEach(squad => {
+                coreRosterMap[dept][squad].forEach(name => {
+                    let defaultShifts = {};
+                    let off1 = (indexer * 2) % 7;
+                    let off2 = (indexer * 2 + 3) % 7;
+                    if(off1 === off2) off2 = (off2 + 1) % 7;
+                    daysOfWeek.forEach((d, idx) => {
+                        defaultShifts[d] = (idx === off1 || idx === off2) ? "Day Off" : "OPEN";
+                    });
+                    cache.push({ name, dept, squad, shifts: defaultShifts });
+                    indexer++;
+                });
+            });
+        });
+        localStorage.setItem('wfm_v15_request_cache', JSON.stringify(cache));
+    }
+
+    function toggleViewSegment(view) {
         document.querySelectorAll('.panel-view').forEach(p => p.classList.remove('active-view'));
+        document.querySelectorAll('.dock-tab').forEach(t => t.classList.remove('active-tab'));
         document.getElementById(`view-${view}`).classList.add('active-view');
+        document.getElementById(`tab-${view}`).classList.add('active-tab');
+    }
+
+    function switchDeptView(dept, type) {
+        if (type === 'request') {
+            activeReqDept = dept;
+            document.querySelectorAll('#view-request .dept-btn').forEach(b => b.classList.remove('active-dept'));
+            document.getElementById(`req-btn-${dept.toLowerCase()}`).classList.add('active-dept');
+            document.querySelectorAll('#view-request .dept-table-container').forEach(c => c.style.display = 'none');
+            document.getElementById(`req-container-${dept}`).style.display = 'block';
+        } else {
+            activeOutDept = dept;
+            document.querySelectorAll('#view-engine .dept-btn').forEach(b => b.classList.remove('active-dept'));
+            document.getElementById(`out-btn-${dept.toLowerCase()}`).classList.add('active-dept');
+            document.querySelectorAll('#view-engine .dept-table-container').forEach(c => c.style.display = 'none');
+            document.getElementById(`out-container-${dept}`).style.display = 'block';
+        }
+    }
+
+    function renderInputGrid() {
+        const data = JSON.parse(localStorage.getItem('wfm_v15_request_cache'));
+        const tbodyPhones = document.getElementById('reqBodyPhones'); tbodyPhones.innerHTML = "";
+        const tbodyChats = document.getElementById('reqBodyChats'); tbodyChats.innerHTML = "";
+
+        Object.keys(coreRosterMap).forEach(dept => {
+            const currentTbody = (dept === "Calculo Phones") ? tbodyPhones : tbodyChats;
+            Object.keys(coreRosterMap[dept]).forEach(squad => {
+                currentTbody.innerHTML += `<tr><td colspan="9" class="row-squad-header">✦ ${squad} Group</td></tr>`;
+                coreRosterMap[dept][squad].forEach(name => {
+                    const agent = data.find(r => r.name === name); if(!agent) return;
+                    const tr = document.createElement('tr');
+                    let isVip = squad === "VIP";
+                    let cells = `<td><span style="font-weight:600;">${name}</span></td>`;
+                    cells += `<td><span class="badge-pill ${isVip ? 'badge-vip' : ''}">${squad}</span></td>`;
+                    daysOfWeek.forEach(day => { cells += `<td>${buildSelectOptions(name, day, agent.shifts[day], 'request')}</td>`; });
+                    tr.innerHTML = cells; currentTbody.appendChild(tr);
+                });
+            });
+        });
+    }
+
+    function renderEngineGrid() {
+        const data = JSON.parse(localStorage.getItem('wfm_v15_output_cache'));
+        const tbodyPhones = document.getElementById('outBodyPhones'); tbodyPhones.innerHTML = "";
+        const tbodyChats = document.getElementById('outBodyChats'); tbodyChats.innerHTML = "";
+
+        Object.keys(coreRosterMap).forEach(dept => {
+            const currentTbody = (dept === "Calculo Phones") ? tbodyPhones : tbodyChats;
+            Object.keys(coreRosterMap[dept]).forEach(squad => {
+                currentTbody.innerHTML += `<tr><td colspan="9" class="row-squad-header">✦ ${squad} Group</td></tr>`;
+                coreRosterMap[dept][squad].forEach(name => {
+                    const agent = data.find(r => r.name === name); if(!agent) return;
+                    const tr = document.createElement('tr');
+                    let isVip = squad === "VIP";
+                    let cells = `<td><span style="font-weight:600;">${name}</span></td>`;
+                    cells += `<td><span class="badge-pill ${isVip ? 'badge-vip' : ''}">${squad}</span></td>`;
+                    daysOfWeek.forEach(day => { cells += `<td>${buildSelectOptions(name, day, agent.shifts[day], 'output')}</td>`; });
+                    tr.innerHTML = cells; currentTbody.appendChild(tr);
+                });
+            });
+        });
+    }
+
+    function buildSelectOptions(name, day, currentVal, type) {
+        let pools = ["06:00 AM", "07:00 AM", "09:00 AM", "10:00 AM", "11:00 AM", "01:00 PM", "02:00 PM", "03:00 PM", "OPEN", "Vacaciones", "Day Off"];
+        let styleClass = "s-am";
+        if (pmWindows.includes(currentVal)) styleClass = "s-pm";
+        if (currentVal === "Day Off") styleClass = "s-off";
+        if (currentVal === "Vacaciones") styleClass = "s-vac";
+        if (currentVal === "OPEN") styleClass = "s-op";
+        let callback = type === 'request' ? 'syncLiveRequest(this)' : 'syncLiveOutput(this)';
+        let html = `<select class="custom-dropdown ${styleClass}" data-name="${name}" data-day="${day}" onchange="${callback}">`;
+        pools.forEach(p => { html += `<option value="${p}" ${currentVal === p ? 'selected' : ''}>${p}</option>`; });
+        return html + `</select>`;
+    }
+
+    function syncLiveRequest(el) {
+        const name = el.getAttribute('data-name'); const day = el.getAttribute('data-day');
+        let data = JSON.parse(localStorage.getItem('wfm_v15_request_cache'));
+        let target = data.find(r => r.name === name); if(target) target.shifts[day] = el.value;
+        localStorage.setItem('wfm_v15_request_cache', JSON.stringify(data));
+        repaintDropdown(el);
+    }
+
+    function syncLiveOutput(el) {
+        const name = el.getAttribute('data-name'); const day = el.getAttribute('data-day');
+        let data = JSON.parse(localStorage.getItem('wfm_v15_output_cache'));
+        let target = data.find(r => r.name === name); if(target) target.shifts[day] = el.value;
+        localStorage.setItem('wfm_v15_output_cache', JSON.stringify(data));
+        repaintDropdown(el); processAnalyticsRefresh();
+    }
+
+    function repaintDropdown(el) {
+        el.classList.remove('s-am', 's-pm', 's-off', 's-vac', 's-op');
+        let val = el.value;
+        if (amWindows.includes(val)) el.classList.add('s-am');
+        if (pmWindows.includes(val)) el.classList.add('s-pm');
+        if (val === "Day Off") el.classList.add('s-off');
+        if (val === "Vacaciones") el.classList.add('s-vac');
+        if (val === "OPEN") el.classList.add('s-op');
+    }
+
+    function changeMetricsFilter(filterMode) {
+        selectedMetricsFilter = filterMode;
+        document.querySelectorAll('#view-engine .dept-switcher .dept-btn').forEach(b => b.classList.remove('active-dept'));
+        if (filterMode === 'all') document.getElementById('an-btn-all').classList.add('active-dept');
+        if (filterMode === 'Calculo Phones') document.getElementById('an-btn-phones').classList.add('active-dept');
+        if (filterMode === 'Calculo Chats') document.getElementById('an-btn-chats').classList.add('active-dept');
+        processAnalyticsRefresh();
+    }
+
+    function compileRosterPipeline() {
+        let requests = JSON.parse(localStorage.getItem('wfm_v15_request_cache'));
+        let output = JSON.parse(JSON.stringify(requests)); 
+        const departments = ["Calculo Phones", "Calculo Chats"];
+
+        departments.forEach(dept => {
+            let vips = output.filter(r => r.dept === dept && r.squad === "VIP");
+            let supportTiers = output.filter(r => r.dept === dept && r.squad !== "VIP");
+
+            // 1. REGLA VIP - DISTRIBUCIÓN SIMÉTRICA BASE
+            vips.forEach(v => {
+                daysOfWeek.forEach(day => {
+                    if (v.shifts[day] !== "Vacaciones") v.shifts[day] = "OPEN";
+                });
+            });
+
+            if (dept === "Calculo Phones" && vips.length === 4) {
+                const perfectPhonesMatrix = {
+                    0: ["Day Off", "OPEN", "OPEN", "OPEN", "Day Off", "OPEN", "OPEN"], 
+                    1: ["OPEN", "Day Off", "OPEN", "OPEN", "OPEN", "Day Off", "OPEN"], 
+                    2: ["OPEN", "OPEN", "Day Off", "OPEN", "OPEN", "OPEN", "Day Off"], 
+                    3: ["OPEN", "OPEN", "OPEN", "Day Off", "Day Off", "OPEN", "OPEN"]  
+                };
+                vips.forEach((v, idx) => {
+                    daysOfWeek.forEach((day, dIdx) => {
+                        if (v.shifts[day] !== "Vacaciones") v.shifts[day] = perfectPhonesMatrix[idx][dIdx];
+                    });
+                });
+            } else {
+                let currentOffPointers = {}; 
+                daysOfWeek.forEach(d => currentOffPointers[d] = vips.filter(v => v.shifts[d] === "Vacaciones").length);
+
+                vips.forEach(v => {
+                    let totalOffs = daysOfWeek.filter(d => v.shifts[d] === "Vacaciones" || v.shifts[d] === "Day Off").length;
+                    if (totalOffs < 2) {
+                        let sortedDays = [...daysOfWeek].sort((a, b) => currentOffPointers[a] - currentOffPointers[b]);
+                        for (let day of sortedDays) {
+                            if (v.shifts[day] === "OPEN") {
+                                v.shifts[day] = "Day Off";
+                                currentOffPointers[day]++;
+                                totalOffs++;
+                                if (totalOffs === 2) break;
+                            }
+                        }
+                    }
+                });
+            }
+
+            daysOfWeek.forEach(day => {
+                let activeVips = vips.filter(v => v.shifts[day] !== "Day Off" && v.shifts[day] !== "Vacaciones");
+                let countActiveVips = activeVips.length;
+
+                if (countActiveVips >= 4) {
+                    activeVips[0].shifts[day] = "06:00 AM"; activeVips[1].shifts[day] = "07:00 AM";
+                    activeVips[2].shifts[day] = "02:00 PM"; activeVips[3].shifts[day] = "03:00 PM";
+                    for(let i=4; i<countActiveVips; i++) activeVips[i].shifts[day] = i % 2 === 0 ? "07:00 AM" : "02:00 PM";
+                } else if (countActiveVips === 3) {
+                    activeVips[0].shifts[day] = "06:00 AM"; activeVips[1].shifts[day] = "09:00 AM"; activeVips[2].shifts[day] = "03:00 PM";
+                } else if (countActiveVips === 2) {
+                    activeVips[0].shifts[day] = "06:00 AM"; activeVips[1].shifts[day] = "02:00 PM";
+                } else if (countActiveVips === 1) {
+                    activeVips[0].shifts[day] = "06:00 AM";
+                }
+            });
+
+            // 2. LOGÍSTICA SOPORTE: REESTRUCTURACIÓN DE CONTENEDORES INMUTABLES
+            supportTiers.forEach(agent => {
+                daysOfWeek.forEach(day => {
+                    if (agent.shifts[day] !== "Day Off" && agent.shifts[day] !== "Vacaciones") {
+                        agent.shifts[day] = "OPEN";
+                    }
+                });
+            });
+
+            let supportOffCounters = {};
+            daysOfWeek.forEach(d => supportOffCounters[d] = 0);
+
+            supportTiers.forEach(agent => {
+                let currentOffs = daysOfWeek.filter(d => agent.shifts[d] === "Day Off" || agent.shifts[d] === "Vacaciones").length;
+                if (currentOffs < 2) {
+                    let blockWE = weekendOffBlocklist.includes(agent.name);
+                    let allowedDays = blockWE 
+                        ? ["Wednesday", "Thursday", "Tuesday", "Monday", "Friday"]
+                        : ["Sunday", "Saturday", "Wednesday", "Thursday", "Tuesday", "Monday", "Friday"];
+                    
+                    allowedDays.sort((a, b) => supportOffCounters[a] - supportOffCounters[b]);
+
+                    for (let d of allowedDays) {
+                        if (agent.shifts[d] === "OPEN") {
+                            agent.shifts[d] = "Day Off";
+                            supportOffCounters[d]++;
+                            currentOffs++;
+                            if (currentOffs === 2) break;
+                        }
+                    }
+                }
+            });
+
+            // CONTROL ESTRICTO DE LLEGADA HORARIA - BLINDAJE ANTI-DESFASE
+            daysOfWeek.forEach(day => {
+                let activeSupport = supportTiers.filter(s => s.shifts[day] === "OPEN");
+                
+                let middleSupport = activeSupport.filter(s => middleShiftRules.includes(s.name));
+                let standardSupport = activeSupport.filter(s => !middleShiftRules.includes(s.name));
+
+                // Turnos medios (fijos)
+                middleSupport.forEach((s, sIdx) => {
+                    let midPool = ["09:00 AM", "10:00 AM", "11:00 AM"];
+                    s.shifts[day] = midPool[sIdx % midPool.length];
+                });
+
+                let totalStandard = standardSupport.length;
+                if (totalStandard > 0) {
+                    let amCount = Math.floor(totalStandard / 2);
+                    let pmCount = totalStandard - amCount; 
+
+                    // Forzar alternancia estricta uno por uno en la mañana para paridad 6am y 7am
+                    let masterSlotsPool = [];
+                    for (let i = 0; i < amCount; i++) {
+                        masterSlotsPool.push(i % 2 === 0 ? "06:00 AM" : "07:00 AM");
+                    }
+                    // Forzar alternancia estricta uno por uno en la tarde
+                    for (let i = 0; i < pmCount; i++) {
+                        masterSlotsPool.push(i % 2 === 0 ? "02:00 PM" : "03:00 PM");
+                    }
+
+                    // Inyectar sin alterar el orden
+                    standardSupport.forEach((agent, index) => {
+                        agent.shifts[day] = masterSlotsPool[index] || "02:00 PM";
+                    });
+                }
+            });
+        });
+
+        // CONTROL ERGONÓMICO INTERJORNADA POR INTERCAMBIO SIMÉTRICO ESTRICTO (ZERO-SUM SWAP)
+        for (let i = 0; i < daysOfWeek.length - 1; i++) {
+            let currentDay = daysOfWeek[i]; 
+            let nextDay = daysOfWeek[i + 1];
+
+            departments.forEach(dept => {
+                let deptAgents = output.filter(p => p.dept === dept && p.squad !== "VIP");
+
+                deptAgents.forEach(agent => {
+                    // Si trabaja tarde hoy, y mañana entra temprano (06:00 AM o 07:00 AM)...
+                    if (pmWindows.includes(agent.shifts[currentDay]) && (agent.shifts[nextDay] === "06:00 AM" || agent.shifts[nextDay] === "07:00 AM")) {
+                        
+                        // Buscamos un compañero espejo perfecto: que MAÑANA trabaje de tarde, y HOY trabaje de mañana.
+                        // Esto garantiza que al intercambiar los turnos del 'nextDay', la mañana y la tarde se mantienen intactas numéricamente.
+                        let perfectPeer = deptAgents.find(p => 
+                            p.name !== agent.name && 
+                            pmWindows.includes(p.shifts[nextDay]) && 
+                            (p.shifts[currentDay] === "06:00 AM" || p.shifts[currentDay] === "07:00 AM" || p.shifts[currentDay] === "09:00 AM" || p.shifts[currentDay] === "10:00 AM")
+                        );
+
+                        if (perfectPeer) {
+                            let tempShift = agent.shifts[nextDay];
+                            agent.shifts[nextDay] = perfectPeer.shifts[nextDay];
+                            perfectPeer.shifts[nextDay] = tempShift;
+                        }
+                    }
+                });
+            });
+        }
+
+        localStorage.setItem('wfm_v15_output_cache', JSON.stringify(output));
+        renderEngineGrid();
+        processAnalyticsRefresh();
+        toggleViewSegment('engine');
+    }
+
+    function processAnalyticsRefresh() {
+        const rawData = JSON.parse(localStorage.getItem('wfm_v15_output_cache')) || [];
+        let filteredData = rawData;
+        if (selectedMetricsFilter !== "all") filteredData = rawData.filter(agent => agent.dept === selectedMetricsFilter);
+
+        const calculatedMatrix = {}; hoursPriority.forEach(h => { calculatedMatrix[h] = {}; daysOfWeek.forEach(d => calculatedMatrix[h][d] = 0); });
+        const totalizerAM = {}; const totalizerPM = {}; const totalizerShrink = {};
+        daysOfWeek.forEach(d => { totalizerAM[d] = 0; totalizerPM[d] = 0; totalizerShrink[d] = 0; });
+
+        filteredData.forEach(agent => {
+            daysOfWeek.forEach(day => {
+                const activeShift = agent.shifts[day] || "Day Off";
+                if (calculatedMatrix[activeShift]) calculatedMatrix[activeShift][day]++;
+                if (amWindows.includes(activeShift)) totalizerAM[day]++;
+                if (pmWindows.includes(activeShift)) totalizerPM[day]++;
+                if (activeShift === "Day Off" || activeShift === "Vacaciones") totalizerShrink[day]++;
+            });
+        });
+
+        const targetTbody = document.getElementById('analyticsDataBody'); targetTbody.innerHTML = "";
+        targetTbody.innerHTML += `<tr><td colspan="8" class="analytics-section-title">▲ AM Capacity Blocks</td></tr>`;
+        amWindows.forEach(windowBlock => {
+            let tr = `<tr><td style="text-align:left; font-weight:500; color: var(--text-secondary);">${windowBlock}</td>`;
+            daysOfWeek.forEach(d => tr += `<td>${calculatedMatrix[windowBlock][d]}</td>`);
+            targetTbody.innerHTML += tr + `</tr>`;
+        });
+        let sumAMRow = `<tr class="total-row-am"><td style="text-align:left;">Net Capacity AM</td>`;
+        daysOfWeek.forEach(d => sumAMRow += `<td>${totalizerAM[d]}</td>`);
+        targetTbody.innerHTML += sumAMRow + `</tr>`;
+
+        targetTbody.innerHTML += `<tr><td colspan="8" class="analytics-section-title">▼ PM Capacity Blocks</td></tr>`;
+        pmWindows.forEach(windowBlock => {
+            let tr = `<tr><td style="text-align:left; font-weight:500; color: var(--text-secondary);">${windowBlock}</td>`;
+            daysOfWeek.forEach(d => tr += `<td>${calculatedMatrix[windowBlock][d]}</td>`);
+            targetTbody.innerHTML += tr + `</tr>`;
+        });
+        let sumPMRow = `<tr class="total-row-pm"><td style="text-align:left;">Net Capacity PM</td>`;
+        daysOfWeek.forEach(d => sumPMRow += `<td>${totalizerPM[d]}</td>`);
+        targetTbody.innerHTML += sumPMRow + `</tr>`;
+
+        let shrinkRow = `<tr class="total-row-shrinkage"><td style="text-align:left;">Total Off / Volume Loss</td>`;
+        daysOfWeek.forEach(d => shrinkRow += `<td>${totalizerShrink[d]} Ag.</td>`);
+        targetTbody.innerHTML += shrinkRow + `</tr>`;
+    }
+
+    async function exportDataToExcel() {
+        const log = JSON.parse(localStorage.getItem('wfm_v15_output_cache'));
+        const workbook = new ExcelJS.Workbook();
+        ["Calculo Phones", "Calculo Chats"].forEach(deptName => {
+            const sheet = workbook.addWorksheet(deptName);
+            sheet.columns = [
+                { header: 'Agent Full Name', key: 'name', width: 28 },
+                { header: 'Squad Level', key: 'squad', width: 15 },
+                ...daysOfWeek.map(d => ({ header: d, key: d, width: 15 }))
+            ];
+            log.filter(e => e.dept === deptName).forEach(entry => {
+                sheet.addRow({ name: entry.name, squad: entry.squad, ...entry.shifts });
+            });
+        });
+        const buffer = await workbook.xlsx.writeBuffer();
+        const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+        const trigger = document.createElement("a");
+        trigger.href = URL.createObjectURL(blob);
+        trigger.download = `WFM_v15_6_HardBalanced_Roster.xlsx`;
+        trigger.click();
     }
 </script>
-
 </body>
 </html>

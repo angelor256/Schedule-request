@@ -3,292 +3,295 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panda Dynasty — Roster Board</title>
+    <title>WFM Studio — Central Board</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
 
     <style>
         :root {
-            --bg-base: #eecfbf0; /* Arena / Crema cálido */
-            --bg-container: #e3dfd5;
-            --olive-deep: #4a532b; /* Verde oliva de la referencia */
-            --text-dark: #1e2315;
-            --text-muted: #6b715c;
-            --border-fine: rgba(74, 83, 43, 0.15);
+            --bg-canvas: #f8f7f4; /* Tono lino pálido, cálido y premium */
+            --bg-card: #ffffff;
+            --brand-primary: #2b2e2a; /* Carbón vegetal profundo */
+            --brand-neutral: #717568; /* Sage apagado */
+            --border-color: #e5e4df;
             
-            /* Estados en tonos orgánicos sofisticados */
-            --st-active-bg: #f4f2ed;
-            --st-off-color: #a96151; /* Terracota apagado */
-            --st-vacation-color: #c49a45; /* Ocre suave */
-            --st-open-color: #6e8467; /* Verde salvia */
+            /* Estados en tonos orgánicos tenues */
+            --bg-off: #f2ebe9;
+            --text-off: #9e5346;
+            --bg-vacation: #f6efe2;
+            --text-vacation: #b88630;
+            --bg-open: #edf2ec;
+            --text-open: #54734b;
             
-            --font-serif: 'Cormorant Garamond', serif;
-            --font-sans: 'Inter', sans-serif;
+            --font-global: 'Plus Jakarta Sans', sans-serif;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
         
         body {
-            background-color: #eae6dc;
-            color: var(--text-dark);
-            font-family: var(--font-sans);
+            background-color: var(--bg-canvas);
+            color: var(--brand-primary);
+            font-family: var(--font-global);
             min-height: 100vh;
-            padding: 60px 20px;
+            padding: 50px 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
             letter-spacing: -0.01em;
         }
 
-        .main-container {
+        .workspace-card {
             width: 100%;
             max-width: 1100px;
-            background: var(--bg-container);
-            border-radius: 4px; /* Bordes rectos y limpios, más editoriales */
-            padding: 50px;
-            border: 1px solid var(--border-fine);
-            box-shadow: 0 30px 70px rgba(74, 83, 43, 0.06);
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 45px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 20px 50px rgba(43, 46, 42, 0.03);
+            margin-bottom: 30px;
+        }
+
+        .app-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 25px;
             margin-bottom: 40px;
         }
 
-        .header-area {
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-            border-bottom: 1px solid var(--border-fine);
-            padding-bottom: 20px;
-            margin-bottom: 45px;
-        }
-
-        .brand-title {
-            font-family: var(--font-serif);
-            font-size: 38px;
-            font-weight: 400;
-            color: var(--olive-deep);
-            font-style: italic;
-        }
-
-        /* Botones de Estilo Atemporal */
-        .btn-action {
-            background: transparent;
-            border: 1px solid var(--olive-deep);
-            color: var(--olive-deep);
-            padding: 10px 24px;
-            border-radius: 0px; /* Rectangular de alta gama */
-            font-size: 12px;
-            font-weight: 500;
+        .app-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--brand-primary);
             text-transform: uppercase;
-            letter-spacing: 2px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        .btn-action:hover {
-            background: var(--olive-deep);
-            color: #ffffff;
-        }
-        .btn-primary {
-            background: var(--olive-deep);
-            color: #ffffff;
-        }
-        .btn-primary:hover {
-            background: transparent;
-            color: var(--olive-deep);
+            letter-spacing: 0.5px;
         }
 
-        .view-layer { display: none; }
-        .view-layer.active { display: block; }
+        /* Botones de Estilo Escandinavo */
+        .action-button {
+            background: transparent;
+            border: 1px solid var(--brand-primary);
+            color: var(--brand-primary);
+            padding: 10px 24px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .action-button:hover {
+            background: var(--brand-primary);
+            color: #ffffff;
+        }
+        .btn-callout {
+            background: var(--brand-primary);
+            color: #ffffff;
+        }
+        .btn-callout:hover {
+            background: transparent;
+            color: var(--brand-primary);
+        }
+
+        .view-step { display: none; }
+        .view-step.active { display: block; }
 
         label {
             display: block;
             font-size: 11px;
             text-transform: uppercase;
-            letter-spacing: 2.5px;
-            color: var(--text-muted);
-            margin-bottom: 14px;
-            font-weight: 500;
+            letter-spacing: 1px;
+            color: var(--brand-neutral);
+            margin-bottom: 10px;
+            font-weight: 600;
         }
 
         select, textarea, input {
             width: 100%;
-            background: #f4f2ed;
-            border: 1px solid var(--border-fine);
-            padding: 14px 18px;
-            border-radius: 0px;
-            color: var(--text-dark);
+            background: #faf9f6;
+            border: 1px solid var(--border-color);
+            padding: 14px 16px;
+            border-radius: 8px;
+            color: var(--brand-primary);
             font-size: 14px;
-            font-family: var(--font-sans);
+            font-family: var(--font-global);
             outline: none;
-            transition: all 0.3s ease;
-            margin-bottom: 35px;
+            transition: all 0.2s ease;
+            margin-bottom: 30px;
         }
         select:focus, input:focus { 
-            border-color: var(--olive-deep);
+            border-color: var(--brand-primary);
             background: #ffffff;
         }
 
-        /* Grid de Selección Estilo Galería */
-        .mesh-grid {
+        /* Grid Organizador de Personal */
+        .directory-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
-            gap: 1px;
-            background: var(--border-fine);
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 12px;
             max-height: 290px;
             overflow-y: auto;
             margin-bottom: 40px;
-            border: 1px solid var(--border-fine);
+            padding-right: 5px;
         }
-        .mesh-item {
-            background: #f4f2ed;
-            padding: 18px;
+        .directory-item {
+            background: #faf9f6;
+            border: 1px solid var(--border-color);
+            padding: 15px 18px;
             font-size: 13px;
-            font-weight: 400;
-            color: var(--text-dark);
+            font-weight: 500;
+            border-radius: 8px;
+            color: var(--brand-primary);
             cursor: pointer;
-            text-align: left;
             transition: all 0.2s ease;
         }
-        .mesh-item:hover {
-            background: #ebe7de;
+        .directory-item:hover {
+            border-color: var(--brand-neutral);
+            background: #f4f3ee;
         }
-        .mesh-item.selected {
-            background: var(--olive-deep);
+        .directory-item.selected {
+            background: var(--brand-primary);
+            border-color: var(--brand-primary);
             color: #ffffff;
         }
 
-        /* Tabla de Horarios Minimalista */
-        .table-container {
+        /* Contenedor e Interfaz de Tabla */
+        .table-responsive {
             width: 100%;
             overflow-x: auto;
-            margin-bottom: 40px;
+            margin-bottom: 35px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
         }
-        .matrix-table {
+        .roster-table {
             width: 100%;
             border-collapse: collapse;
             min-width: 900px;
         }
-        .matrix-table th {
-            padding: 16px 12px;
+        .roster-table th {
+            background: #faf9f6;
+            padding: 16px;
             font-size: 11px;
             text-transform: uppercase;
-            letter-spacing: 2px;
-            color: var(--text-muted);
-            border-bottom: 1px solid var(--olive-deep);
+            letter-spacing: 0.5px;
+            color: var(--brand-neutral);
+            border-bottom: 1px solid var(--border-color);
             text-align: left;
-            font-weight: 500;
+            font-weight: 600;
         }
-        .matrix-table td {
-            padding: 10px 6px;
-            border-bottom: 1px solid var(--border-fine);
+        .roster-table td {
+            padding: 12px;
+            border-bottom: 1px solid var(--border-color);
+            background: #ffffff;
         }
 
-        /* Selectores dentro de la Matriz */
-        .cell-select {
+        /* Estilo Interno de la Matriz */
+        .cell-selector {
             width: 100%;
-            padding: 10px;
-            font-size: 12px;
+            padding: 10px 12px;
+            font-size: 13px;
             font-weight: 500;
-            border-radius: 0px;
+            border-radius: 6px;
             margin-bottom: 0;
-            background: #f4f2ed;
+            background: #faf9f6;
             border: 1px solid transparent;
             cursor: pointer;
-            transition: all 0.25s ease;
+            transition: all 0.2s ease;
         }
-        .cell-select.st-active { 
-            color: var(--text-dark);
-            border-color: var(--border-fine);
+        .cell-selector.st-active { 
+            color: var(--brand-primary);
+            border-color: var(--border-color);
+            background: #ffffff;
         }
-        .cell-select.st-off { 
-            color: var(--st-off-color); 
-            background: rgba(169, 97, 81, 0.06);
-            border-color: rgba(169, 97, 81, 0.2);
+        .cell-selector.st-off { 
+            color: var(--text-off); 
+            background: var(--bg-off);
         }
-        .cell-select.st-vacation { 
-            color: var(--st-vacation-color); 
-            background: rgba(196, 154, 69, 0.06);
-            border-color: rgba(196, 154, 69, 0.2);
+        .cell-selector.st-vacation { 
+            color: var(--text-vacation); 
+            background: var(--bg-vacation);
         }
-        .cell-select.st-open { 
-            color: var(--st-open-color); 
-            background: rgba(110, 132, 103, 0.06);
-            border-color: rgba(110, 132, 103, 0.2);
+        .cell-selector.st-open { 
+            color: var(--text-open); 
+            background: var(--bg-open);
         }
 
-        /* Consola de Gestión inferior */
-        .management-card {
+        /* Panel Administrativo */
+        .admin-card {
             width: 100%;
             max-width: 1100px;
-            background: var(--bg-container);
-            border: 1px solid var(--border-fine);
-            border-radius: 4px;
-            padding: 35px 50px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 35px 45px;
         }
-        .mgmt-grid {
+        .admin-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 30px;
-            margin-top: 30px;
+            margin-top: 25px;
         }
-        .sub-panel {
-            background: #f4f2ed;
+        .panel-box {
+            background: #faf9f6;
             padding: 24px;
-            border: 1px solid var(--border-fine);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
         }
-        .mgmt-title {
-            font-family: var(--font-serif);
-            font-size: 18px;
-            font-weight: 400;
-            margin-bottom: 20px;
-            color: var(--olive-deep);
+        .panel-title {
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 18px;
+            color: var(--brand-primary);
         }
 
-        /* Estilización de Scroll */
-        ::-webkit-scrollbar { width: 4px; height: 4px; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: var(--text-muted); }
+        ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
     </style>
 </head>
 <body>
 
-<div class="main-container">
-    <div class="header-area">
-        <div class="brand-title">Panda Roster Studio</div>
-        <button class="btn-action" onclick="triggerExcelExport()">Export Sheet</button>
+<div class="workspace-card">
+    <div class="app-header">
+        <div class="app-title">WFM System Directory</div>
+        <button class="action-button" onclick="triggerExcelExport()">Export Dataset</button>
     </div>
 
-    <!-- ESCENA 1: SELECCIÓN -->
-    <div id="step-1" class="view-layer active">
-        <label>Operational Division</label>
+    <!-- PASO 1: SELECCIÓN DE SQUAD -->
+    <div id="step-1" class="view-step active">
+        <label>Operational Group</label>
         <select id="department" onchange="loadStaffMesh()">
-            <option value="">Select Department...</option>
-            <option value="Customer Service">Customer Service</option>
-            <option value="Deposits">Deposits</option>
-            <option value="Payouts">Payouts</option>
+            <option value="">Select Group...</option>
+            <option value="Calculo Phones">Calculo Phones</option>
+            <option value="Calculo Chats">Calculo Chats</option>
+            <option value="Calculo Processing Squad">Calculo Processing Squad</option>
         </select>
 
         <div id="mesh-wrapper" style="display:none;">
-            <label>Team Members</label>
-            <div class="mesh-grid" id="staff-mesh"></div>
+            <label>Squad Roster</label>
+            <div class="directory-grid" id="staff-mesh"></div>
         </div>
 
         <div style="text-align: right; margin-top: 10px;">
-            <button class="btn-action btn-primary" onclick="goToMatrix()">Configure Schedule</button>
+            <button class="action-button btn-callout" onclick="goToMatrix()">Open Matrix</button>
         </div>
     </div>
 
-    <!-- ESCENA 2: PLACA DE HORARIOS -->
-    <div id="step-2" class="view-layer">
+    <!-- PASO 2: ASIGNACIÓN DE TURNOS -->
+    <div id="step-2" class="view-step">
         <div style="margin-bottom: 30px;">
-            <span style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px;">Editing Profile</span>
-            <div id="active-agent-title" style="font-size: 28px; font-family: var(--font-serif); color: var(--olive-deep); margin-top: 4px;">---</div>
+            <span style="font-size: 11px; color: var(--brand-neutral); text-transform: uppercase; letter-spacing: 0.5px;">Active Profile</span>
+            <div id="active-agent-title" style="font-size: 24px; font-weight: 700; margin-top: 2px;">---</div>
         </div>
 
-        <div class="table-container">
-            <table class="matrix-table">
+        <div class="table-responsive">
+            <table class="roster-table">
                 <thead>
                     <tr>
                         <th>Monday</th>
@@ -302,92 +305,94 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td><select class="cell-select day-input" data-day="Monday" onchange="refreshCellClass(this)"></select></td>
-                        <td><select class="cell-select day-input" data-day="Tuesday" onchange="refreshCellClass(this)"></select></td>
-                        <td><select class="cell-select day-input" data-day="Wednesday" onchange="refreshCellClass(this)"></select></td>
-                        <td><select class="cell-select day-input" data-day="Thursday" onchange="refreshCellClass(this)"></select></td>
-                        <td><select class="cell-select day-input" data-day="Friday" onchange="refreshCellClass(this)"></select></td>
-                        <td><select class="cell-select day-input" data-day="Saturday" onchange="refreshCellClass(this)"></select></td>
-                        <td><select class="cell-select day-input" data-day="Sunday" onchange="refreshCellClass(this)"></select></td>
+                        <td><select class="cell-selector day-input" data-day="Monday" onchange="refreshCellClass(this)"></select></td>
+                        <td><select class="cell-selector day-input" data-day="Tuesday" onchange="refreshCellClass(this)"></select></td>
+                        <td><select class="cell-selector day-input" data-day="Wednesday" onchange="refreshCellClass(this)"></select></td>
+                        <td><select class="cell-selector day-input" data-day="Thursday" onchange="refreshCellClass(this)"></select></td>
+                        <td><select class="cell-selector day-input" data-day="Friday" onchange="refreshCellClass(this)"></select></td>
+                        <td><select class="cell-selector day-input" data-day="Saturday" onchange="refreshCellClass(this)"></select></td>
+                        <td><select class="cell-selector day-input" data-day="Sunday" onchange="refreshCellClass(this)"></select></td>
                     </tr>
                 </tbody>
             </table>
         </div>
 
-        <label>Observations & Notes</label>
-        <textarea id="matrix-notes" rows="2" placeholder="Add optional details..."></textarea>
+        <label>System Comments / Audit Notes</label>
+        <textarea id="matrix-notes" rows="2" placeholder="Describe exceptions or updates..."></textarea>
 
         <div style="display:flex; justify-content: space-between;">
-            <button class="btn-action" onclick="backToStep1()">Back</button>
-            <button class="btn-action btn-primary" onclick="commitSchedule()">Save Assignment</button>
+            <button class="action-button" onclick="backToStep1()">Back</button>
+            <button class="action-button btn-callout" onclick="commitSchedule()">Save Schedule</button>
         </div>
     </div>
 
-    <!-- ESCENA 3: ÉXITO -->
-    <div id="step-3" class="view-layer" style="text-align:center; padding: 40px 0;">
-        <h3 style="font-family: var(--font-serif); font-size: 30px; margin-bottom: 10px; font-weight: 400;">Changes Recorded</h3>
-        <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 30px;">The data has been gracefully stored in the system memory.</p>
-        <button class="btn-action btn-primary" onclick="resetFlow()">Next Record</button>
+    <!-- PASO 3: CONFIRMACIÓN -->
+    <div id="step-3" class="view-step" style="text-align:center; padding: 30px 0;">
+        <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 8px;">Schedule Committed</h3>
+        <p style="color: var(--brand-neutral); font-size: 13px; margin-bottom: 25px;">Changes have been cached cleanly in system local tables.</p>
+        <button class="action-button btn-callout" onclick="resetFlow()">Process Next</button>
     </div>
 </div>
 
-<!-- MÓDULO DE GESTIÓN ADMINISTRATIVA -->
-<div class="management-card">
+<!-- GESTIÓN INTEGRAL DE GRUPOS -->
+<div class="admin-card">
     <div style="display:flex; justify-content:space-between; align-items:center;">
-        <div style="font-family: var(--font-serif); font-size: 20px; color: var(--olive-deep);">Staff Management Console</div>
-        <button class="btn-action" style="padding: 6px 16px; font-size: 11px;" onclick="toggleMgmtPanel()">Unlock Console</button>
+        <div style="font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Squad Registry Console</div>
+        <button class="action-button" style="padding: 6px 16px; font-size: 11px;" onclick="toggleMgmtPanel()">Unlock Access</button>
     </div>
 
-    <div id="mgmt-panel-content" class="mgmt-grid" style="display:none;">
-        <!-- AGREGAR -->
-        <div class="sub-panel">
-            <div class="mgmt-title">Add Profile</div>
+    <div id="mgmt-panel-content" class="admin-grid" style="display:none;">
+        <!-- INSERTAR ELEMENTO -->
+        <div class="panel-box">
+            <div class="panel-title">Add To Group</div>
             <input type="text" id="add-name" placeholder="Full Name">
             <select id="add-dept">
-                <option value="Customer Service">Customer Service</option>
-                <option value="Deposits">Deposits</option>
-                <option value="Payouts">Payouts</option>
+                <option value="Calculo Phones">Calculo Phones</option>
+                <option value="Calculo Chats">Calculo Chats</option>
+                <option value="Calculo Processing Squad">Calculo Processing Squad</option>
             </select>
-            <button class="btn-action btn-primary" style="width:100%;" onclick="executeAddMember()">Register Member</button>
+            <button class="action-button btn-callout" style="width:100%;" onclick="executeAddMember()">Add Member</button>
         </div>
 
-        <!-- TRANSLADAR -->
-        <div class="sub-panel">
-            <div class="mgmt-title">Transfer Hub</div>
+        <!-- TRANSLADAR ELEMENTO -->
+        <div class="panel-box">
+            <div class="panel-title">Shift Group Allocation</div>
             <select id="transfer-agent-select"><option value="">Select Member...</option></select>
             <select id="transfer-new-dept">
-                <option value="Customer Service">Customer Service</option>
-                <option value="Deposits">Deposits</option>
-                <option value="Payouts">Payouts</option>
+                <option value="Calculo Phones">Calculo Phones</option>
+                <option value="Calculo Chats">Calculo Chats</option>
+                <option value="Calculo Processing Squad">Calculo Processing Squad</option>
             </select>
-            <button class="btn-action" style="width:100%;" onclick="executeTransfer()">Apply Transfer</button>
+            <button class="action-button" style="width:100%;" onclick="executeTransfer()">Transfer Member</button>
         </div>
 
-        <!-- REMOVER -->
-        <div class="sub-panel">
-            <div class="mgmt-title" style="color: var(--st-off-color);">Remove Entry</div>
+        <!-- REMOVER ELEMENTO -->
+        <div class="panel-box">
+            <div class="panel-title" style="color: var(--text-off);">Remove From Database</div>
             <select id="delete-agent-select"><option value="">Select Member...</option></select>
-            <button class="btn-action" style="width:100%; background: transparent; border-color: var(--st-off-color); color: var(--st-off-color);" onclick="executeDeleteMember()">Delete Permanently</button>
+            <button class="action-button" style="width:100%; border-color: var(--text-off); color: var(--text-off);" onclick="executeDeleteMember()">Remove Member</button>
         </div>
     </div>
 </div>
 
 <script>
     const defaultTeam = {
-        "Customer Service": [
-            "Cristopher Sandoval", "Kendra Temple", "María José Fallas", "Natalia Sibaja", "Pablo Retana", 
-            "Victor Ramírez", "Luis Carvajal", "Kendall Montoya", "Josué Vargas", "Kevin Salazar", 
-            "Israel Aburto", "Vanessa Umana", "Naigell Beckford", "Nicole Román", "Mariana Varela", 
-            "Tamara Donaire", "Eckart Lutz", "Isaac Porras", "Michelle Saborio", "Emerson Hernandez", 
-            "Stephannie Cunningham", "Thimy Gonzalez", "Yasser Quiros", "Elena Rojas", "Elliot Navarro", 
-            "Julian Mena", "Sebastian Puerta", "Maria Jose Quiros Quiros", "Andrey Castillo", "Rory Bulgarelli", 
-            "Phillip Desanti", "Eddison Prendas", "Naomy Sanchez ", "Adrian Navarro", "Carlos Alejandro Amador Luna", 
-            "Carlos Ortiz", "David Vogler", "Valerie Alfaro", "Jose Maria Cartin Peralta", "Carolina Castro", 
-            "Daniel Leandro Rojas", "Isaac Barrantes Alvarado", "Pablo Guzman", "Anilu Guzman Villalobos", 
-            "Luis Fernando Ruiz", "Keisha Cross Brown", "Marlon Wright"
+        "Calculo Phones": [
+            "Emerson Hernandez", "Stephannie Cunningham", "Thimy Gonzalez", "Yasser Quiros", 
+            "Andrey Castillo", "Rory Bulgarelli", "Phillip Desanti", "Eddison Prendas", 
+            "Carlos Alejandro Amador Luna", "Carlos Ortiz", "David Vogler", "Valerie Alfaro", 
+            "Jose Maria Cartin Peralta", "Samuel Carballo", "Luis Fernando Ruiz"
         ],
-        "Deposits": ["Mariana Bejarano", "Cristopher Sandoval", "Eddison Prendas", "Diego Matamoros"],
-        "Payouts": ["Carlos Amador", "Fer Blanco", "Graciela Bravo ", "Ignacio Blanco", "Kevin Zamora", "Samuel Carballo", "Sheydron Clark", "Sebastian Rivera", "Silvana Suarez"]
+        "Calculo Chats": [
+            "Elena Rojas", "Elliot Navarro", "Julian Mena", "Sebastian Puerta", 
+            "Maria Jose Quiros Quiros", "Naomy Sanchez", "Adrian Navarro", "Diego Matamoros", 
+            "Carolina Castro", "Isaac Barrantes Alvarado", "Pablo Guzman", "Anilu Guzman Villalobos", 
+            "Sheydron Clark", "Keisha Cross Brown", "Marlon Wright"
+        ],
+        "Calculo Processing Squad": [
+            "Carlos Amador", "Fer Blanco", "Graciela Bravo", "Ignacio Blanco", 
+            "Kevin Zamora", "Sebastian Rivera", "Silvana Suarez"
+        ]
     };
 
     if (!localStorage.getItem('panda_staff_db')) {
@@ -428,10 +433,10 @@
 
         getStaffData()[dept].forEach(name => {
             const item = document.createElement('div');
-            item.className = 'mesh-item';
+            item.className = 'directory-item';
             item.textContent = name;
             item.onclick = () => {
-                document.querySelectorAll('.mesh-item').forEach(i => i.classList.remove('selected'));
+                document.querySelectorAll('.directory-item').forEach(i => i.classList.remove('selected'));
                 item.classList.add('selected');
                 currentAgent = name;
             };
@@ -440,7 +445,7 @@
     }
 
     function goToMatrix() {
-        if (!currentAgent) { alert("Select a team member first."); return; }
+        if (!currentAgent) { alert("Please pick an agent first."); return; }
         document.getElementById('step-1').classList.remove('active');
         document.getElementById('step-2').classList.add('active');
         document.getElementById('active-agent-title').textContent = currentAgent;
@@ -564,12 +569,12 @@
         if(!name) return alert("Please specify a name.");
         
         const db = getStaffData();
-        if(db[dept].includes(name)) return alert("Member already exists.");
+        if(db[dept].includes(name)) return alert("Member already exists in this group.");
 
         db[dept].push(name); db[dept].sort();
         saveStaffData(db);
         document.getElementById('add-name').value = "";
-        alert("Member added.");
+        alert("Member registered successfully.");
     }
 
     function executeTransfer() {
@@ -578,13 +583,13 @@
         if(!targetRaw) return alert("Select a member first.");
 
         const target = JSON.parse(targetRaw);
-        if(target.dept === newDept) return alert("Member is already in that department.");
+        if(target.dept === newDept) return alert("Member is already in that group.");
 
         const db = getStaffData();
         db[target.dept] = db[target.dept].filter(n => n !== target.name);
         db[newDept].push(target.name); db[newDept].sort();
         saveStaffData(db);
-        alert("Department updated successfully.");
+        alert("Group membership transferred.");
     }
 
     function executeDeleteMember() {
@@ -597,18 +602,18 @@
         const db = getStaffData();
         db[target.dept] = db[target.dept].filter(n => n !== target.name);
         saveStaffData(db);
-        alert("Member removed.");
+        alert("Member deleted.");
     }
 
     async function triggerExcelExport() {
-        const auth = prompt("Admin Key Verification:");
-        if (auth !== "Sups2019") return alert("Unauthorized.");
+        const auth = prompt("Admin Security Verification:");
+        if (auth !== "Sups2019") return alert("Access Denied.");
 
         const master = JSON.parse(localStorage.getItem('panda_master_roster')) || [];
-        if(!master.length) return alert("No active logs to export.");
+        if(!master.length) return alert("No active data entries to export.");
 
         const wb = new ExcelJS.Workbook();
-        ["Customer Service", "Deposits", "Payouts"].forEach(dKey => {
+        ["Calculo Phones", "Calculo Chats", "Calculo Processing Squad"].forEach(dKey => {
             const list = master.filter(m => m.dept === dKey);
             if(!list.length) return;
 
@@ -627,7 +632,7 @@
 
             const hr = ws.getRow(1); hr.height = 28;
             hr.font = { bold: true, color: { argb: 'FFFFFF' }, name: 'Segoe UI' };
-            hr.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '4A532B' } };
+            hr.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '2B2E2A' } };
             hr.alignment = { vertical: 'middle', horizontal: 'center' };
 
             list.forEach(entry => {
@@ -641,10 +646,10 @@
                     cell.alignment = { horizontal: 'center', vertical: 'middle' };
                     cell.font = { name: 'Segoe UI', bold: false, size: 10 };
 
-                    let bg = "F4F2ED"; let fg = "1E2315";
-                    if(dataRow[day] === "Day Off") { bg = "F3ECEB"; fg = "A96151"; }
-                    else if(dataRow[day] === "Vacaciones") { bg = "F5EFE3"; fg = "C49A45"; }
-                    else if(dataRow[day] === "OPEN") { bg = "EBF0EA"; fg = "6E8467"; }
+                    let bg = "FFFFFF"; let fg = "2B2E2A";
+                    if(dataRow[day] === "Day Off") { bg = "F2ECEB"; fg = "9E5346"; }
+                    else if(dataRow[day] === "Vacaciones") { bg = "F6EFE2"; fg = "B88630"; }
+                    else if(dataRow[day] === "OPEN") { bg = "EDF2EC"; fg = "54734b"; }
 
                     cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF' + bg } };
                     cell.font.color = { argb: 'FF' + fg };
@@ -656,7 +661,7 @@
         const b = new Blob([buf], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
         const a = document.createElement("a");
         a.href = URL.createObjectURL(b);
-        a.download = `Panda_Editorial_Roster.xlsx`;
+        a.download = `WFM_Studio_Roster.xlsx`;
         a.click();
     }
 </script>

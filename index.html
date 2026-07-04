@@ -11,135 +11,43 @@
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
 
-    <style>
-        :root {
-            --bg-main: #f8fafc;
-            --bg-surface: #ffffff;
-            --border-subtle: #e2e8f0;
-            --border-focus: #94a3b8;
-            
-            --text-primary: #0f172a;
-            --text-secondary: #475569;
-            --text-muted: #94a3b8;
-            --accent-color: #2563eb;
-            
-            /* Soft Pastels Palette for Shifts */
-            --sh-am-bg: #eff6ff; --sh-am-txt: #1e40af; --sh-am-border: #bfdbfe;
-            --sh-pm-bg: #faf5ff; --sh-pm-txt: #6b21a8; --sh-pm-border: #e9d5ff;
-            --sh-off-bg: #fef2f2; --sh-off-txt: #991b1b; --sh-off-border: #fecaca;
-            --sh-vac-bg: #fffbeb; --sh-vac-txt: #92400e; --sh-vac-border: #fef3c7;
-            --sh-op-bg: #f0fdf4; --sh-op-txt: #166534; --sh-op-border: #bbf7d0;
-        }
+<style>
+    :root {
+        --bg-main: #f5f0ed; --bg-surface: #ffffff;
+        --border-subtle: #d6ccc2; --border-focus: #a39180;
+        --text-primary: #4a3f35; --text-secondary: #7d6e60;
+        --accent-color: #8c7664;
+        --sh-am-bg: #fdfaf7; --sh-am-txt: #6d5b4a; --sh-pm-bg: #f5ede6; --sh-pm-txt: #8c7664;
+        --sh-off-bg: #fcece8; --sh-off-txt: #a65e52; --sh-vac-bg: #fffbf0; --sh-vac-txt: #a68b52;
+        --sh-op-bg: #f0f5f0; --sh-op-txt: #526652;
+    }
+    body { background-color: var(--bg-main); color: var(--text-primary); font-family: 'Inter', sans-serif; padding: 40px 24px; }
+    .panel-view { display: none; }
+    .panel-view.active-view { display: block; }
+    
+    /* Estilo Home */
+    .home-hero { text-align: center; padding: 100px 20px; background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: 20px; max-width: 800px; margin: 100px auto; }
+    .home-btn { display: inline-block; padding: 15px 40px; background: var(--accent-color); color: white; text-decoration: none; border-radius: 8px; font-weight: 600; cursor: pointer; border: none; margin-top: 20px; }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body {
-            background-color: var(--bg-main);
-            color: var(--text-primary);
-            font-family: 'Inter', sans-serif;
-            padding: 40px 24px;
-            line-height: 1.5;
-        }
-
-        .container { max-width: 1680px; margin: 0 auto; }
-
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: var(--bg-surface);
-            border: 1px solid var(--border-subtle);
-            padding: 24px 32px;
-            border-radius: 12px;
-            margin-bottom: 32px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-        }
-        .app-title h1 { font-size: 20px; font-weight: 700; color: var(--text-primary); letter-spacing: -0.5px; }
-        .app-title p { font-size: 12px; color: var(--text-secondary); margin-top: 2px; font-family: 'JetBrains Mono', monospace; }
-
-        .navigation-dock {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 24px;
-            border-bottom: 1px solid var(--border-subtle);
-            padding-bottom: 1px;
-        }
-        .dock-tab {
-            background: transparent;
-            border: none;
-            color: var(--text-secondary);
-            padding: 12px 20px;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            border-radius: 6px 6px 0 0;
-            margin-bottom: -1px;
-        }
-        .dock-tab:hover { color: var(--text-primary); background-color: #f1f5f9; }
-        .dock-tab.active-tab { 
-            color: var(--accent-color); 
-            background: var(--bg-surface);
-            border: 1px solid var(--border-subtle);
-            border-bottom-color: var(--bg-surface);
-            font-weight: 600;
-        }
-
-        .action-btn {
-            background: var(--bg-surface); border: 1px solid var(--border-subtle); color: var(--text-secondary); padding: 10px 18px; font-size: 13px; font-weight: 500; border-radius: 8px; cursor: pointer; transition: all 0.15s ease; display: inline-flex; align-items: center; gap: 8px;
-        }
-        .action-btn:hover { background: #f8fafc; border-color: var(--border-focus); color: var(--text-primary); }
-        .btn-accent { background: var(--accent-color); color: #ffffff; border: none; font-weight: 600; }
-        .btn-accent:hover { background: #1d4ed8; color: #ffffff; box-shadow: 0 4px 12px rgba(37,99,235,0.15); }
-
-        .panel-view { display: none; }
-        .panel-view.active-view { display: block; }
-
-        .panel-card { background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 28px; margin-bottom: 32px; box-shadow: 0 1px 3px rgba(0,0,0,0.02); }
-        .card-title-bar { font-size: 15px; color: var(--text-primary); font-weight: 600; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
-
-        .dept-switcher {
-            display: flex;
-            gap: 6px;
-            background: #f1f5f9;
-            padding: 4px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            display: inline-flex;
-        }
-        .dept-btn {
-            background: transparent; border: none; color: var(--text-secondary); padding: 6px 14px; font-size: 12px; font-weight: 600; border-radius: 6px; cursor: pointer; transition: all 0.15s;
-        }
-        .dept-btn.active-dept {
-            background: var(--bg-surface); color: var(--text-primary); box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-        }
-
-        .interactive-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-        .interactive-table th { background: #f8fafc; color: var(--text-secondary); text-align: left; padding: 14px 16px; font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid var(--border-subtle); }
-        .interactive-table td { padding: 10px 16px; border-bottom: 1px solid #f1f5f9; color: var(--text-primary); }
-        
-        .row-squad-header { background: #fafafa; color: var(--text-secondary) !important; font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; padding: 10px 16px !important; border-bottom: 1px solid var(--border-subtle) !important; }
-
-        .badge-pill { font-size: 11px; padding: 2px 8px; border-radius: 6px; font-weight: 500; background: #f1f5f9; color: var(--text-secondary); border: 1px solid var(--border-subtle); }
-        .badge-vip { background: #fff1f2; color: #9f1239; border-color: #ffe4e6; font-weight: 600; }
-
-        .custom-dropdown { background: #ffffff; border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 7px 10px; border-radius: 6px; font-family: 'JetBrains Mono', monospace; font-size: 11px; width: 120px; outline: none; cursor: pointer; text-align: center; font-weight: 500; transition: all 0.15s ease; }
-        .custom-dropdown:focus { border-color: var(--border-focus); }
-        .custom-dropdown.s-am { background: var(--sh-am-bg); color: var(--sh-am-txt); border-color: var(--sh-am-border); }
-        .custom-dropdown.s-pm { background: var(--sh-pm-bg); color: var(--sh-pm-txt); border-color: var(--sh-pm-border); }
-        .custom-dropdown.s-off { background: var(--sh-off-bg); color: var(--sh-off-txt); border-color: var(--sh-off-border); font-weight: 600; }
-        .custom-dropdown.s-vac { background: var(--sh-vac-bg); color: var(--sh-vac-txt); border-color: var(--sh-vac-border); }
-        .custom-dropdown.s-op { background: var(--sh-op-bg); color: var(--sh-op-txt); border-color: var(--sh-op-border); }
-
-        .analytics-matrix { width: 100%; border-collapse: collapse; font-family: 'JetBrains Mono', monospace; font-size: 12px; }
-        .analytics-matrix th, .analytics-matrix td { border: 1px solid var(--border-subtle); padding: 10px 12px; text-align: center; }
-        .analytics-matrix th { background: #f8fafc; color: var(--text-secondary); font-weight: 600; font-size: 11px; }
-        .analytics-section-title { text-align: left !important; font-weight: 600; color: var(--text-primary); background: #f1f5f9 !important; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; }
-        .total-row-am { background: #f8fafc; font-weight: 600; color: var(--sh-am-txt); }
-        .total-row-pm { background: #f8fafc; font-weight: 600; color: var(--sh-pm-txt); }
-        .total-row-shrinkage { background: #fff5f5; font-weight: 600; color: var(--sh-off-txt); }
-    </style>
+    /* Mantén el resto de tus clases (interactive-table, header, etc.) pero actualiza los colores usando las variables anteriores */
+    .action-btn.btn-accent { background: var(--accent-color); color: #fff; }
+    .interactive-table th { background: #fdfaf7; color: var(--text-secondary); border-bottom: 2px solid var(--border-subtle); }
+</style>
 </head>
 <body>
+    <!-- NUEVA PANTALLA DE INICIO -->
+    <div id="view-home" class="panel-view active-view">
+        <div class="home-hero">
+            <h1 style="color: var(--accent-color);">Schedule Request</h1>
+            <p>Tactical Workforce Management // v15.6</p>
+            <button class="home-btn" onclick="toggleView('app')">Enter Engine</button>
+        </div>
+    </div>
+
+    <!-- TODO TU CONTENIDO ACTUAL (Container y sus hijos) DENTRO DE ESTO -->
+    <div id="view-app" class="panel-view">
+        <!-- ... aquí va todo tu código actual que ya tenías ... -->
+    </div>
 
 <div class="container">
 

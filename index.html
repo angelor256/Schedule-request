@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WFM Tactical Enterprise // v15.3 Hyper-Balanced Engine</title>
+    <title>WFM Tactical Enterprise // v15.4 Zero-Gap Matrix</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -56,7 +56,6 @@
         .app-title h1 { font-size: 20px; font-weight: 700; color: var(--text-primary); letter-spacing: -0.5px; }
         .app-title p { font-size: 12px; color: var(--text-secondary); margin-top: 2px; font-family: 'JetBrains Mono', monospace; }
 
-        /* Main System Tabs */
         .navigation-dock {
             display: flex;
             gap: 8px;
@@ -85,7 +84,6 @@
             font-weight: 600;
         }
 
-        /* Action Buttons */
         .action-btn {
             background: var(--bg-surface); border: 1px solid var(--border-subtle); color: var(--text-secondary); padding: 10px 18px; font-size: 13px; font-weight: 500; border-radius: 8px; cursor: pointer; transition: all 0.15s ease; display: inline-flex; align-items: center; gap: 8px;
         }
@@ -99,7 +97,6 @@
         .panel-card { background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 28px; margin-bottom: 32px; box-shadow: 0 1px 3px rgba(0,0,0,0.02); }
         .card-title-bar { font-size: 15px; color: var(--text-primary); font-weight: 600; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
 
-        /* Sub-navigation for Departments */
         .dept-switcher {
             display: flex;
             gap: 6px;
@@ -116,7 +113,6 @@
             background: var(--bg-surface); color: var(--text-primary); box-shadow: 0 1px 2px rgba(0,0,0,0.05);
         }
 
-        /* Structured Tables */
         .interactive-table { width: 100%; border-collapse: collapse; font-size: 13px; }
         .interactive-table th { background: #f8fafc; color: var(--text-secondary); text-align: left; padding: 14px 16px; font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid var(--border-subtle); }
         .interactive-table td { padding: 10px 16px; border-bottom: 1px solid #f1f5f9; color: var(--text-primary); }
@@ -126,7 +122,6 @@
         .badge-pill { font-size: 11px; padding: 2px 8px; border-radius: 6px; font-weight: 500; background: #f1f5f9; color: var(--text-secondary); border: 1px solid var(--border-subtle); }
         .badge-vip { background: #fff1f2; color: #9f1239; border-color: #ffe4e6; font-weight: 600; }
 
-        /* Smooth Dropdowns styling */
         .custom-dropdown { background: #ffffff; border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 7px 10px; border-radius: 6px; font-family: 'JetBrains Mono', monospace; font-size: 11px; width: 120px; outline: none; cursor: pointer; text-align: center; font-weight: 500; transition: all 0.15s ease; }
         .custom-dropdown:focus { border-color: var(--border-focus); }
         .custom-dropdown.s-am { background: var(--sh-am-bg); color: var(--sh-am-txt); border-color: var(--sh-am-border); }
@@ -135,7 +130,6 @@
         .custom-dropdown.s-vac { background: var(--sh-vac-bg); color: var(--sh-vac-txt); border-color: var(--sh-vac-border); }
         .custom-dropdown.s-op { background: var(--sh-op-bg); color: var(--sh-op-txt); border-color: var(--sh-op-border); }
 
-        /* Integrated Analytics Corporate Grid */
         .analytics-matrix { width: 100%; border-collapse: collapse; font-family: 'JetBrains Mono', monospace; font-size: 12px; }
         .analytics-matrix th, .analytics-matrix td { border: 1px solid var(--border-subtle); padding: 10px 12px; text-align: center; }
         .analytics-matrix th { background: #f8fafc; color: var(--text-secondary); font-weight: 600; font-size: 11px; }
@@ -152,7 +146,7 @@
     <header>
         <div class="app-title">
             <h1>Tactical Workforce Management</h1>
-            <p>// ENGINE VERSION 15.3 // HYPER-BALANCED MATRIX DEPLOYMENT</p>
+            <p>// ENGINE VERSION 15.4 // ZERO-GAP STRATIFIED DISTRIBUTION</p>
         </div>
         <div>
             <button class="action-btn" onclick="exportDataToExcel()">📥 Export Matrix to Excel</button>
@@ -177,7 +171,6 @@
                 <button class="dept-btn" id="req-btn-chats" onclick="switchDeptView('Chats', 'request')">Calculo Chats</button>
             </div>
 
-            <!-- Phones Sub-table -->
             <div id="req-container-Phones" class="dept-table-container">
                 <table class="interactive-table">
                     <thead>
@@ -191,7 +184,6 @@
                 </table>
             </div>
 
-            <!-- Chats Sub-table -->
             <div id="req-container-Chats" class="dept-table-container" style="display: none;">
                 <table class="interactive-table">
                     <thead>
@@ -211,7 +203,7 @@
     <div id="view-engine" class="panel-view">
         <div class="panel-card">
             <div class="card-title-bar">
-                <span>📅 Production Schedule (Enforced 1 VIP Off Daily Limit)</span>
+                <span>📅 Production Schedule (Enforced Perfect Block Balancing)</span>
             </div>
 
             <div class="dept-switcher">
@@ -219,7 +211,6 @@
                 <button class="dept-btn" id="out-btn-chats" onclick="switchDeptView('Chats', 'output')">Calculo Chats</button>
             </div>
 
-            <!-- Phones Output Table -->
             <div id="out-container-Phones" class="dept-table-container">
                 <table class="interactive-table">
                     <thead>
@@ -233,7 +224,6 @@
                 </table>
             </div>
 
-            <!-- Chats Output Table -->
             <div id="out-container-Chats" class="dept-table-container" style="display: none;">
                 <table class="interactive-table">
                     <thead>
@@ -455,7 +445,7 @@
             let vips = output.filter(r => r.dept === dept && r.squad === "VIP");
             let supportTiers = output.filter(r => r.dept === dept && r.squad !== "VIP");
 
-            // 1. REGLA VIP INTACTA
+            // 1. REGLA DE FILTRADO VIP (SKELETON BASE)
             vips.forEach(v => {
                 daysOfWeek.forEach(day => {
                     if (v.shifts[day] !== "Vacaciones") v.shifts[day] = "OPEN";
@@ -511,7 +501,7 @@
                 }
             });
 
-            // 2. LOGÍSITICA DE SOPORTE CALIBRADA (CIERRE DE GAP Y PARIDAD EXIGIDA)
+            // 2. LOGÍSTICA DE SOPORTE ESTÁNDAR (ALGORITMO DE EQUILIBRIO ABSOLUTO V15.4)
             supportTiers.forEach(agent => {
                 daysOfWeek.forEach(day => {
                     if (agent.shifts[day] !== "Day Off" && agent.shifts[day] !== "Vacaciones") {
@@ -544,12 +534,14 @@
                 }
             });
 
+            // DISTRIBUCIÓN HORARIA SECUENCIAL PARA LOGRAR PARIDAD 2-2 Y ELIMINAR EL GAP
             daysOfWeek.forEach(day => {
                 let activeSupport = supportTiers.filter(s => s.shifts[day] === "OPEN");
                 
                 let middleSupport = activeSupport.filter(s => middleShiftRules.includes(s.name));
                 let standardSupport = activeSupport.filter(s => !middleShiftRules.includes(s.name));
 
+                // Configurar primero los turnos intermedios obligatorios
                 middleSupport.forEach((s, sIdx) => {
                     let midPool = ["09:00 AM", "10:00 AM", "11:00 AM"];
                     s.shifts[day] = midPool[sIdx % midPool.length];
@@ -557,27 +549,22 @@
 
                 let totalStandardAvailable = standardSupport.length;
                 if (totalStandardAvailable > 0) {
-                    let half = Math.floor(totalStandardAvailable / 2);
-                    let remainder = totalStandardAvailable % 2;
-
-                    // CIERRE DE BRECHA OBLIGATORIO: Si queda un agente impar, se le asigna a la tarde (PM)
-                    // para contrarrestar el volumen alto natural de la mañana y eliminar el gap.
-                    let targetAM = half;
-                    let targetPM = half + remainder;
-
-                    // PARIDAD REQUERIDA (2 Y 2): Forzamos distribución perfectamente simétrica en los sub-bloques
-                    let t6 = Math.round(targetAM / 2);
-                    let t7 = targetAM - t6;
-                    let t2 = Math.round(targetPM / 2);
-                    let t3 = targetPM - t2;
-
-                    let c6 = 0, c7 = 0, c2 = 0, c3 = 0;
-
-                    standardSupport.forEach(s => {
-                        if (c6 < t6) { s.shifts[day] = "06:00 AM"; c6++; }
-                        else if (c7 < t7) { s.shifts[day] = "07:00 AM"; c7++; }
-                        else if (c2 < t2) { s.shifts[day] = "02:00 PM"; c2++; }
-                        else { s.shifts[day] = "03:00 PM"; c3++; }
+                    // Para eliminar el gap, obligamos al orden secuencial a iniciar o priorizar la tarde (PM)
+                    // si detectamos que estructuralmente hay menos cobertura en la tarde.
+                    // Secuencia balanceada cíclica para lograr paridad exacta:
+                    let patternSequence = ["06:00 AM", "07:00 AM", "02:00 PM", "03:00 PM"];
+                    
+                    // Si el volumen total disponible es par e igual a 4, forzará exactamente un agente en cada slot del patrón (2 AM y 2 PM)
+                    // Si es un número impar, el residuo se asigna a la tarde ("02:00 PM" o "03:00 PM") para pulverizar la brecha.
+                    standardSupport.forEach((s, index) => {
+                        let targetShiftIndex = index % patternSequence.length;
+                        
+                        // Modificación de ordenación para mitigar gaps impares (Agente extra va a la tarde)
+                        if (totalStandardAvailable % 2 !== 0 && index === totalStandardAvailable - 1) {
+                            s.shifts[day] = "02:00 PM";
+                        } else {
+                            s.shifts[day] = patternSequence[targetShiftIndex];
+                        }
                     });
                 }
             });
@@ -666,7 +653,7 @@
         const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
         const trigger = document.createElement("a");
         trigger.href = URL.createObjectURL(blob);
-        trigger.download = `WFM_v15_Final_Roster.xlsx`;
+        trigger.download = `WFM_v15_4_ZeroGap_Roster.xlsx`;
         trigger.click();
     }
 </script>

@@ -7,28 +7,26 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&family=Oswald:wght@500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
 
     <style>
         :root {
-            /* Inspirado en la imagen: Mocha Mousse y tonos relacionados */
-            --bg-main: #f4f1ea; /* Un beige muy claro y cálido */
+            --bg-main: #f4f1ea; 
             --bg-surface: #ffffff;
-            --mocha-mousse: #a38b7a; /* Tono principal Mocha Mousse */
+            --mocha-mousse: #a38b7a; 
             --mocha-mousse-dark: #8c7362;
             --mocha-mousse-light: #bdaf9c;
             
             --border-subtle: #d8d0c5;
             --border-focus: var(--mocha-mousse);
             
-            --text-primary: #3c3530; /* Un marrón muy oscuro */
+            --text-primary: #3c3530; 
             --text-secondary: #6e6158;
             --text-muted: #a89f96;
             --accent-color: var(--mocha-mousse);
             
-            /* Paleta de Pasteles Suaves para Turnos (revisada para calidez) */
             --sh-am-bg: #fdfaf3; --sh-am-txt: #8c7362; --sh-am-border: #e8e0d5;
             --sh-pm-bg: #f8f4ed; --sh-pm-txt: #7a6e65; --sh-pm-border: #dfd8cf;
             --sh-off-bg: #fff5f5; --sh-off-txt: #991b1b; --sh-off-border: #fecaca;
@@ -99,14 +97,13 @@
         .panel-view { display: none; }
         .panel-view.active-view { display: block; }
 
-        /* Estilo de Tarjeta para Paneles (inspirado en image_0.png) */
         .panel-card { 
             background: var(--bg-surface); 
             border: 1px solid var(--border-subtle); 
             border-radius: 12px; 
             padding: 28px; 
             margin-bottom: 32px; 
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* Sombra más pronunciada */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
         }
         .card-title-bar { font-size: 15px; color: var(--text-primary); font-weight: 600; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
 
@@ -151,7 +148,7 @@
         .total-row-pm { background: #fdfaf3; font-weight: 600; color: var(--sh-pm-txt); }
         .total-row-shrinkage { background: #fff5f5; font-weight: 600; color: var(--sh-off-txt); }
 
-        /* Estilos para el nuevo Home Page (NUEVO) */
+        /* Estilos Reestructurados del Home Page (Réplica exacta de image_ae0ece.png) */
         .home-page {
             display: flex;
             justify-content: center;
@@ -162,60 +159,107 @@
         .home-card {
             background: var(--bg-surface);
             border: 1px solid var(--border-subtle);
-            border-radius: 12px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            border-radius: 4px; /* Bordes menos redondeados al estilo de tarjetas clásicas */
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
             width: 100%;
-            max-width: 650px; /* Ajuste para coincidir con la imagen */
+            max-width: 580px; 
             overflow: hidden;
             display: flex;
             flex-direction: column;
         }
         .home-card-image {
-            background-image: linear-gradient(135deg, var(--mocha-mousse-light) 0%, var(--mocha-mousse) 100%); /* Degradado cálido */
-            height: 380px; /* Coincide con la imagen */
+            background-color: var(--mocha-mousse); /* Color plano e idéntico de fondo */
+            height: 340px; 
             position: relative;
             display: flex;
+            flex-direction: column;
             justify-content: flex-start;
             align-items: flex-start;
-            padding: 40px;
+            padding: 36px;
         }
         
-        /* Efecto de línea diagonal sutil (NUEVO, inspirado en image_0.png) */
+        /* Réplica de la línea diagonal de fondo en la sección marrón */
         .home-card-image::after {
             content: '';
             position: absolute;
             bottom: 0;
             right: 0;
             width: 100%;
-            height: 2px;
-            background-color: rgba(0,0,0,0.05); /* Línea muy tenue */
-            transform: rotate(-15deg);
-            transform-origin: bottom right;
+            height: 100%;
+            background: linear-gradient(115deg, transparent 65%, rgba(0, 0, 0, 0.15) 65.5%, transparent 66%);
+            pointer-events: none;
         }
 
-        .home-card-content {
-            padding: 40px;
+        /* Cuadro de Muestra Pantone® Flotante */
+        .pantone-swatch {
+            background: #ffffff;
+            border: 2px solid #ffffff;
+            padding: 16px;
+            width: 140px;
+            height: 165px;
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            justify-content: space-between;
+            font-family: 'Inter', sans-serif;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .pantone-swatch .swatch-meta {
+            font-size: 11px;
+            font-weight: 600;
+            color: #555;
+            line-height: 1.2;
+        }
+        .pantone-swatch .swatch-brand {
+            font-size: 15px;
+            font-weight: 700;
+            color: #000;
+            letter-spacing: 0.5px;
+            border-top: 1px solid #eee;
+            padding-top: 6px;
+            margin-top: 10px;
+        }
+
+        /* Texto inferior dentro del área Mocha Mousse */
+        .swatch-title-display {
+            margin-top: auto;
+            color: #ffffff;
+            font-family: 'Inter', sans-serif;
+        }
+        .swatch-title-display h3 {
+            font-size: 26px;
+            font-weight: 600;
+            line-height: 1.1;
+        }
+        .swatch-title-display p {
+            font-size: 14px;
+            opacity: 0.85;
+            margin-top: 2px;
+        }
+
+        /* Contenedor del Título de Blog Inferior */
+        .home-card-content {
+            padding: 32px 36px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            background: #ffffff;
         }
         
-        /* Título grande con formato de image_0.png (NUEVO) */
         .home-card-title {
-            font-size: 28px;
-            font-weight: 600;
-            color: #000; /* Negro para el título principal */
-            line-height: 1.2;
-            font-family: 'Oswald', sans-serif; /* Usando una fuente más condensada para el título */
-            text-transform: uppercase;
+            font-size: 23px;
+            font-weight: 700;
+            color: #000000; 
+            line-height: 1.3;
+            letter-spacing: -0.3px;
         }
 
         .home-card-meta {
             display: flex;
             align-items: center;
             gap: 16px;
-            font-size: 14px;
+            font-size: 12px;
             color: var(--text-secondary);
+            font-weight: 500;
         }
         .meta-item { display: flex; align-items: center; gap: 6px; }
     </style>
@@ -235,29 +279,43 @@
     </header>
 
     <div class="navigation-dock">
-        <!-- Pestaña Home añadida (NUEVO) -->
         <button class="dock-tab active-tab" id="tab-home" onclick="toggleViewSegment('home')">00 / Home Page</button>
         <button class="dock-tab" id="tab-request" onclick="toggleViewSegment('request')">01 / Preferences Dashboard</button>
         <button class="dock-tab" id="tab-engine" onclick="toggleViewSegment('engine')">02 / Master Shift Roster</button>
     </div>
 
-    <!-- Nuevo Panel Home Page (NUEVO) -->
+    <!-- Réplica Exacta de la Estructura en imágenes -->
     <div id="view-home" class="panel-view active-view">
         <div class="home-page">
             <div class="home-card">
                 <div class="home-card-image">
-                    <!-- Sección de imagen superior con degradado (NUEVO) -->
+                    <!-- Cuadro interno de Pantone -->
+                    <div class="pantone-swatch">
+                        <div class="swatch-meta">
+                            Color of<br>the Year<br>2025
+                        </div>
+                        <div class="swatch-brand">
+                            PANTONE<sup>®</sup>
+                        </div>
+                    </div>
+                    <!-- Texto de Identificación de Color dentro del bloque -->
+                    <div class="swatch-title-display">
+                        <h3>Mocha Mousse</h3>
+                        <p>17-1230</p>
+                    </div>
                 </div>
                 <div class="home-card-content">
-                    <h2 class="home-card-title">Schedule request Customer Service</h2>
+                    <!-- Título formateado idéntico al Blog -->
+                    <h2 class="home-card-title">Mocha Mousse: Schedule request Customer Service</h2>
                     <div class="home-card-meta">
                         <div class="meta-item">
-                            <span style="color: var(--mocha-mousse);">■</span> <!-- Icono cuadrado -->
-                            <span>System Interface</span>
+                            <span>📅 July 04, 2026</span>
                         </div>
+                        <div class="meta-item">•</div>
                         <div class="meta-item">
-                            <span style="color: var(--border-subtle);">|</span> <!-- Separador -->
+                            <span>👤 System Interface</span>
                         </div>
+                        <div class="meta-item">•</div>
                         <div class="meta-item">
                             <span>WFM Enterprise</span>
                         </div>
@@ -551,7 +609,6 @@
             let vips = output.filter(r => r.dept === dept && r.squad === "VIP");
             let supportTiers = output.filter(r => r.dept === dept && r.squad !== "VIP");
 
-            // 1. REGLA VIP - DISTRIBUCIÓN SIMÉTRICA BASE
             vips.forEach(v => {
                 daysOfWeek.forEach(day => {
                     if (v.shifts[day] !== "Vacaciones") v.shifts[day] = "OPEN";
@@ -607,7 +664,6 @@
                 }
             });
 
-            // 2. LOGÍSTICA SOPORTE: REESTRUCTURACIÓN DE CONTENEDORES INMUTABLES
             supportTiers.forEach(agent => {
                 daysOfWeek.forEach(day => {
                     if (agent.shifts[day] !== "Day Off" && agent.shifts[day] !== "Vacaciones") {
@@ -640,14 +696,12 @@
                 }
             });
 
-            // CONTROL ESTRICTO DE LLEGADA HORARIA - BLINDAJE ANTI-DESFASE
             daysOfWeek.forEach(day => {
                 let activeSupport = supportTiers.filter(s => s.shifts[day] === "OPEN");
                 
                 let middleSupport = activeSupport.filter(s => middleShiftRules.includes(s.name));
                 let standardSupport = activeSupport.filter(s => !middleShiftRules.includes(s.name));
 
-                // Turnos medios (fijos)
                 middleSupport.forEach((s, sIdx) => {
                     let midPool = ["09:00 AM", "10:00 AM", "11:00 AM"];
                     s.shifts[day] = midPool[sIdx % midPool.length];
@@ -658,17 +712,14 @@
                     let amCount = Math.floor(totalStandard / 2);
                     let pmCount = totalStandard - amCount; 
 
-                    // Forzar alternancia estricta uno por uno en la mañana para paridad 6am y 7am
                     let masterSlotsPool = [];
                     for (let i = 0; i < amCount; i++) {
                         masterSlotsPool.push(i % 2 === 0 ? "06:00 AM" : "07:00 AM");
                     }
-                    // Forzar alternancia estricta uno por uno en la tarde
                     for (let i = 0; i < pmCount; i++) {
                         masterSlotsPool.push(i % 2 === 0 ? "02:00 PM" : "03:00 PM");
                     }
 
-                    // Inyectar sin alterar el orden
                     standardSupport.forEach((agent, index) => {
                         agent.shifts[day] = masterSlotsPool[index] || "02:00 PM";
                     });
@@ -676,7 +727,6 @@
             });
         });
 
-        // CONTROL ERGONÓMICO INTERJORNADA POR INTERCAMBIO SIMÉTRICO ESTRICTO (ZERO-SUM SWAP)
         for (let i = 0; i < daysOfWeek.length - 1; i++) {
             let currentDay = daysOfWeek[i]; 
             let nextDay = daysOfWeek[i + 1];
@@ -685,11 +735,8 @@
                 let deptAgents = output.filter(p => p.dept === dept && p.squad !== "VIP");
 
                 deptAgents.forEach(agent => {
-                    // Si trabaja tarde hoy, y mañana entra temprano (06:00 AM o 07:00 AM)...
                     if (pmWindows.includes(agent.shifts[currentDay]) && (agent.shifts[nextDay] === "06:00 AM" || agent.shifts[nextDay] === "07:00 AM")) {
                         
-                        // Buscamos un compañero espejo perfecto: que MAÑANA trabaje de tarde, y HOY trabaje de mañana.
-                        // Esto garantiza que al intercambiar los turnos del 'nextDay', la mañana y la tarde se mantienen intactas numéricamente.
                         let perfectPeer = deptAgents.find(p => 
                             p.name !== agent.name && 
                             pmWindows.includes(p.shifts[nextDay]) && 

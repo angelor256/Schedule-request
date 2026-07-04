@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WFM Studio — Central Board</title>
+    <title>WFM Innovation Hub</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,285 +13,326 @@
 
     <style>
         :root {
-            --bg-canvas: #f8f7f4; /* Tono lino pálido, cálido y premium */
-            --bg-card: #ffffff;
-            --brand-primary: #2b2e2a; /* Carbón vegetal profundo */
-            --brand-neutral: #717568; /* Sage apagado */
-            --border-color: #e5e4df;
+            --bg-gradient: radial-gradient(circle at 50% 0%, #1e221b 0%, #0d0f0c 100%);
+            --glass-card: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.07);
+            --glass-border-glow: rgba(163, 184, 150, 0.3);
             
-            /* Estados en tonos orgánicos tenues */
-            --bg-off: #f2ebe9;
-            --text-off: #9e5346;
-            --bg-vacation: #f6efe2;
-            --text-vacation: #b88630;
-            --bg-open: #edf2ec;
-            --text-open: #54734b;
+            --accent-glow: #a3b896; /* Verde musgo luminoso sutil */
+            --text-main: #f0f2ee;
+            --text-muted: #8a9286;
             
-            --font-global: 'Plus Jakarta Sans', sans-serif;
+            /* Estados líquidos */
+            --st-off-bg: rgba(230, 100, 100, 0.1);
+            --st-off-border: rgba(230, 100, 100, 0.3);
+            --st-off-text: #ff8888;
+            
+            --st-vac-bg: rgba(230, 180, 80, 0.1);
+            --st-vac-border: rgba(230, 180, 80, 0.3);
+            --st-vac-text: #ffd075;
+            
+            --st-open-bg: rgba(100, 210, 140, 0.1);
+            --st-open-border: rgba(100, 210, 140, 0.3);
+            --st-open-text: #8bf0b2;
+
+            --font: 'Plus Jakarta Sans', sans-serif;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
         
         body {
-            background-color: var(--bg-canvas);
-            color: var(--brand-primary);
-            font-family: var(--font-global);
+            background: var(--bg-gradient);
+            color: var(--text-main);
+            font-family: var(--font);
             min-height: 100vh;
-            padding: 50px 20px;
+            padding: 60px 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            letter-spacing: -0.01em;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
         }
 
-        .workspace-card {
+        /* Contenedor Flotante de Cristal */
+        .glass-container {
             width: 100%;
-            max-width: 1100px;
-            background: var(--bg-card);
-            border-radius: 12px;
-            padding: 45px;
-            border: 1px solid var(--border-color);
-            box-shadow: 0 20px 50px rgba(43, 46, 42, 0.03);
-            margin-bottom: 30px;
+            max-width: 1150px;
+            background: var(--glass-card);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 50px;
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6);
+            margin-bottom: 40px;
+            position: relative;
         }
 
-        .app-header {
+        .glass-container::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 10%; right: 10%; height: 1px;
+            background: linear-gradient(90deg, transparent, var(--glass-border-glow), transparent);
+        }
+
+        .header-workspace {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 25px;
-            margin-bottom: 40px;
+            border-bottom: 1px solid var(--glass-border);
+            padding-bottom: 30px;
+            margin-bottom: 45px;
         }
 
-        .app-title {
-            font-size: 20px;
+        .brand-logo {
+            font-size: 22px;
             font-weight: 700;
-            color: var(--brand-primary);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: -0.5px;
+            background: linear-gradient(120deg, #ffffff, var(--text-muted));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        /* Botones de Estilo Escandinavo */
-        .action-button {
-            background: transparent;
-            border: 1px solid var(--brand-primary);
-            color: var(--brand-primary);
-            padding: 10px 24px;
-            border-radius: 6px;
-            font-size: 12px;
+        /* Botones Fluídos */
+        .btn-fluid {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            color: var(--text-main);
+            padding: 12px 28px;
+            border-radius: 14px;
+            font-size: 13px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s ease;
+            backdrop-filter: blur(5px);
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
-        .action-button:hover {
-            background: var(--brand-primary);
-            color: #ffffff;
+        .btn-fluid:hover {
+            background: #ffffff;
+            color: #0d0f0c;
+            box-shadow: 0 0 25px rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
         }
-        .btn-callout {
-            background: var(--brand-primary);
-            color: #ffffff;
+        .btn-glow {
+            background: var(--accent-glow);
+            color: #0d0f0c;
+            border: none;
         }
-        .btn-callout:hover {
-            background: transparent;
-            color: var(--brand-primary);
+        .btn-glow:hover {
+            background: #ffffff;
+            box-shadow: 0 0 30px var(--accent-glow);
         }
 
-        .view-step { display: none; }
-        .view-step.active { display: block; }
+        .step-layer { display: none; }
+        .step-layer.active { display: block; animation: fadeIn 0.5s ease forwards; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
         label {
             display: block;
-            font-size: 11px;
+            font-size: 12px;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--brand-neutral);
-            margin-bottom: 10px;
+            letter-spacing: 1.5px;
+            color: var(--text-muted);
+            margin-bottom: 14px;
             font-weight: 600;
         }
 
         select, textarea, input {
             width: 100%;
-            background: #faf9f6;
-            border: 1px solid var(--border-color);
-            padding: 14px 16px;
-            border-radius: 8px;
-            color: var(--brand-primary);
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--glass-border);
+            padding: 16px 20px;
+            border-radius: 14px;
+            color: var(--text-main);
             font-size: 14px;
-            font-family: var(--font-global);
+            font-family: var(--font);
             outline: none;
-            transition: all 0.2s ease;
-            margin-bottom: 30px;
+            transition: all 0.25s ease;
+            margin-bottom: 35px;
         }
-        select:focus, input:focus { 
-            border-color: var(--brand-primary);
-            background: #ffffff;
+        select:focus, input:focus, textarea:focus { 
+            border-color: var(--accent-glow);
+            box-shadow: 0 0 15px rgba(163, 184, 150, 0.15);
         }
 
-        /* Grid Organizador de Personal */
-        .directory-grid {
+        /* Cuadrícula Líquida de Agentes */
+        .liquid-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-            gap: 12px;
-            max-height: 290px;
+            grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+            gap: 14px;
+            max-height: 320px;
             overflow-y: auto;
             margin-bottom: 40px;
-            padding-right: 5px;
+            padding-right: 8px;
         }
-        .directory-item {
-            background: #faf9f6;
-            border: 1px solid var(--border-color);
-            padding: 15px 18px;
-            font-size: 13px;
+        .liquid-item {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--glass-border);
+            padding: 18px;
+            font-size: 14px;
             font-weight: 500;
-            border-radius: 8px;
-            color: var(--brand-primary);
+            border-radius: 14px;
+            color: var(--text-main);
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
-        .directory-item:hover {
-            border-color: var(--brand-neutral);
-            background: #f4f3ee;
+        .liquid-item:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: scale(1.02);
         }
-        .directory-item.selected {
-            background: var(--brand-primary);
-            border-color: var(--brand-primary);
+        .liquid-item.selected {
+            background: rgba(163, 184, 150, 0.15);
+            border-color: var(--accent-glow);
             color: #ffffff;
+            box-shadow: inset 0 0 15px rgba(163, 184, 150, 0.2);
         }
 
-        /* Contenedor e Interfaz de Tabla */
-        .table-responsive {
+        /* Matriz de Turnos Cinematográfica */
+        .table-wrap {
             width: 100%;
             overflow-x: auto;
-            margin-bottom: 35px;
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
+            margin-bottom: 40px;
+            border-radius: 16px;
+            border: 1px solid var(--glass-border);
+            background: rgba(0, 0, 0, 0.1);
         }
-        .roster-table {
+        .liquid-table {
             width: 100%;
             border-collapse: collapse;
             min-width: 900px;
         }
-        .roster-table th {
-            background: #faf9f6;
-            padding: 16px;
+        .liquid-table th {
+            background: rgba(255, 255, 255, 0.01);
+            padding: 18px;
             font-size: 11px;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: var(--brand-neutral);
-            border-bottom: 1px solid var(--border-color);
+            letter-spacing: 1.5px;
+            color: var(--text-muted);
+            border-bottom: 1px solid var(--glass-border);
             text-align: left;
-            font-weight: 600;
         }
-        .roster-table td {
-            padding: 12px;
-            border-bottom: 1px solid var(--border-color);
-            background: #ffffff;
+        .liquid-table td {
+            padding: 14px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
         }
 
-        /* Estilo Interno de la Matriz */
-        .cell-selector {
+        /* Selectores de Celda Inteligentes */
+        .matrix-select {
             width: 100%;
-            padding: 10px 12px;
+            padding: 12px 14px;
             font-size: 13px;
-            font-weight: 500;
-            border-radius: 6px;
+            font-weight: 600;
+            border-radius: 10px;
             margin-bottom: 0;
-            background: #faf9f6;
-            border: 1px solid transparent;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            color: var(--text-main);
             cursor: pointer;
             transition: all 0.2s ease;
         }
-        .cell-selector.st-active { 
-            color: var(--brand-primary);
-            border-color: var(--border-color);
-            background: #ffffff;
+        .matrix-select:focus {
+            box-shadow: none;
         }
-        .cell-selector.st-off { 
-            color: var(--text-off); 
-            background: var(--bg-off);
+        .matrix-select.st-active { 
+            color: var(--text-main);
+            background: rgba(255, 255, 255, 0.05);
         }
-        .cell-selector.st-vacation { 
-            color: var(--text-vacation); 
-            background: var(--bg-vacation);
+        .matrix-select.st-off { 
+            color: var(--st-off-text); 
+            background: var(--st-off-bg);
+            border-color: var(--st-off-border);
         }
-        .cell-selector.st-open { 
-            color: var(--text-open); 
-            background: var(--bg-open);
+        .matrix-select.st-vacation { 
+            color: var(--st-vac-text); 
+            background: var(--st-vac-bg);
+            border-color: var(--st-vac-border);
+        }
+        .matrix-select.st-open { 
+            color: var(--st-open-text); 
+            background: var(--st-open-bg);
+            border-color: var(--st-open-border);
         }
 
-        /* Panel Administrativo */
-        .admin-card {
+        /* Consola de Control de Grupos (Admin) */
+        .panel-admin {
             width: 100%;
-            max-width: 1100px;
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 35px 45px;
+            max-width: 1150px;
+            background: var(--glass-card);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 40px 50px;
         }
-        .admin-grid {
+        .admin-flex-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
             gap: 30px;
-            margin-top: 25px;
+            margin-top: 35px;
         }
-        .panel-box {
-            background: #faf9f6;
-            padding: 24px;
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
+        .admin-box {
+            background: rgba(0, 0, 0, 0.15);
+            padding: 26px;
+            border-radius: 16px;
+            border: 1px solid var(--glass-border);
         }
-        .panel-title {
+        .admin-box-title {
             font-size: 13px;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 18px;
-            color: var(--brand-primary);
+            letter-spacing: 1px;
+            margin-bottom: 22px;
+            color: var(--accent-glow);
         }
 
+        /* Scroll Custom */
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: var(--glass-border); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
     </style>
 </head>
 <body>
 
-<div class="workspace-card">
-    <div class="app-header">
-        <div class="app-title">WFM System Directory</div>
-        <button class="action-button" onclick="triggerExcelExport()">Export Dataset</button>
+<div class="glass-container">
+    <div class="header-workspace">
+        <div class="brand-logo">WFM // Streamline.io</div>
+        <button class="btn-fluid" onclick="triggerExcelExport()">Export Matrix</button>
     </div>
 
-    <!-- PASO 1: SELECCIÓN DE SQUAD -->
-    <div id="step-1" class="view-step active">
-        <label>Operational Group</label>
+    <!-- NAVEGACIÓN PASO 1: SELECCIÓN -->
+    <div id="step-1" class="step-layer active">
+        <label>Operational Cluster</label>
         <select id="department" onchange="loadStaffMesh()">
-            <option value="">Select Group...</option>
+            <option value="">Select Target Cluster...</option>
             <option value="Calculo Phones">Calculo Phones</option>
             <option value="Calculo Chats">Calculo Chats</option>
             <option value="Calculo Processing Squad">Calculo Processing Squad</option>
         </select>
 
         <div id="mesh-wrapper" style="display:none;">
-            <label>Squad Roster</label>
-            <div class="directory-grid" id="staff-mesh"></div>
+            <label>Cluster Directory</label>
+            <div class="liquid-grid" id="staff-mesh"></div>
         </div>
 
         <div style="text-align: right; margin-top: 10px;">
-            <button class="action-button btn-callout" onclick="goToMatrix()">Open Matrix</button>
+            <button class="btn-fluid btn-glow" onclick="goToMatrix()">Initialize Editor</button>
         </div>
     </div>
 
-    <!-- PASO 2: ASIGNACIÓN DE TURNOS -->
-    <div id="step-2" class="view-step">
-        <div style="margin-bottom: 30px;">
-            <span style="font-size: 11px; color: var(--brand-neutral); text-transform: uppercase; letter-spacing: 0.5px;">Active Profile</span>
-            <div id="active-agent-title" style="font-size: 24px; font-weight: 700; margin-top: 2px;">---</div>
+    <!-- NAVEGACIÓN PASO 2: ASIGNACIONES -->
+    <div id="step-2" class="step-layer">
+        <div style="margin-bottom: 35px;">
+            <span style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;">Target Node</span>
+            <div id="active-agent-title" style="font-size: 26px; font-weight: 700; margin-top: 4px;">---</div>
         </div>
 
-        <div class="table-responsive">
-            <table class="roster-table">
+        <div class="table-wrap">
+            <table class="liquid-table">
                 <thead>
                     <tr>
                         <th>Monday</th>
@@ -305,77 +346,78 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td><select class="cell-selector day-input" data-day="Monday" onchange="refreshCellClass(this)"></select></td>
-                        <td><select class="cell-selector day-input" data-day="Tuesday" onchange="refreshCellClass(this)"></select></td>
-                        <td><select class="cell-selector day-input" data-day="Wednesday" onchange="refreshCellClass(this)"></select></td>
-                        <td><select class="cell-selector day-input" data-day="Thursday" onchange="refreshCellClass(this)"></select></td>
-                        <td><select class="cell-selector day-input" data-day="Friday" onchange="refreshCellClass(this)"></select></td>
-                        <td><select class="cell-selector day-input" data-day="Saturday" onchange="refreshCellClass(this)"></select></td>
-                        <td><select class="cell-selector day-input" data-day="Sunday" onchange="refreshCellClass(this)"></select></td>
+                        <td><select class="matrix-select day-input" data-day="Monday" onchange="refreshCellClass(this)"></select></td>
+                        <td><select class="matrix-select day-input" data-day="Tuesday" onchange="refreshCellClass(this)"></select></td>
+                        <td><select class="matrix-select day-input" data-day="Wednesday" onchange="refreshCellClass(this)"></select></td>
+                        <td><select class="matrix-select day-input" data-day="Thursday" onchange="refreshCellClass(this)"></select></td>
+                        <td><select class="matrix-select day-input" data-day="Friday" onchange="refreshCellClass(this)"></select></td>
+                        <td><select class="matrix-select day-input" data-day="Saturday" onchange="refreshCellClass(this)"></select></td>
+                        <td><select class="matrix-select day-input" data-day="Sunday" onchange="refreshCellClass(this)"></select></td>
                     </tr>
                 </tbody>
             </table>
         </div>
 
-        <label>System Comments / Audit Notes</label>
-        <textarea id="matrix-notes" rows="2" placeholder="Describe exceptions or updates..."></textarea>
+        <label>Node Remarks</label>
+        <textarea id="matrix-notes" rows="2" placeholder="Input operational anomalies..."></textarea>
 
         <div style="display:flex; justify-content: space-between;">
-            <button class="action-button" onclick="backToStep1()">Back</button>
-            <button class="action-button btn-callout" onclick="commitSchedule()">Save Schedule</button>
+            <button class="btn-fluid" onclick="backToStep1()">Return</button>
+            <button class="btn-fluid btn-glow" onclick="commitSchedule()">Commit Matrix</button>
         </div>
     </div>
 
-    <!-- PASO 3: CONFIRMACIÓN -->
-    <div id="step-3" class="view-step" style="text-align:center; padding: 30px 0;">
-        <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 8px;">Schedule Committed</h3>
-        <p style="color: var(--brand-neutral); font-size: 13px; margin-bottom: 25px;">Changes have been cached cleanly in system local tables.</p>
-        <button class="action-button btn-callout" onclick="resetFlow()">Process Next</button>
+    <!-- NAVEGACIÓN PASO 3: ARCHIVADO -->
+    <div id="step-3" class="step-layer" style="text-align:center; padding: 40px 0;">
+        <h3 style="font-size: 20px; font-weight: 700; margin-bottom: 10px;">Pipeline Synced</h3>
+        <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 30px;">The localized parameters have integrated with the active session block.</p>
+        <button class="btn-fluid btn-glow" onclick="resetFlow()">Next Node</button>
     </div>
 </div>
 
-<!-- GESTIÓN INTEGRAL DE GRUPOS -->
-<div class="admin-card">
+<!-- CONSOLA DE GESTIÓN DE ROSTER -->
+<div class="panel-admin">
     <div style="display:flex; justify-content:space-between; align-items:center;">
-        <div style="font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Squad Registry Console</div>
-        <button class="action-button" style="padding: 6px 16px; font-size: 11px;" onclick="toggleMgmtPanel()">Unlock Access</button>
+        <div style="font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">Roster Core Registry</div>
+        <button class="btn-fluid" style="padding: 8px 20px; font-size: 11px;" onclick="toggleMgmtPanel()">Unlock Registry</button>
     </div>
 
-    <div id="mgmt-panel-content" class="admin-grid" style="display:none;">
-        <!-- INSERTAR ELEMENTO -->
-        <div class="panel-box">
-            <div class="panel-title">Add To Group</div>
-            <input type="text" id="add-name" placeholder="Full Name">
+    <div id="mgmt-panel-content" class="admin-flex-grid" style="display:none;">
+        <!-- AGREGAR -->
+        <div class="admin-box">
+            <div class="admin-box-title">Deploy New Asset</div>
+            <input type="text" id="add-name" placeholder="Full Legal Name">
             <select id="add-dept">
                 <option value="Calculo Phones">Calculo Phones</option>
                 <option value="Calculo Chats">Calculo Chats</option>
                 <option value="Calculo Processing Squad">Calculo Processing Squad</option>
             </select>
-            <button class="action-button btn-callout" style="width:100%;" onclick="executeAddMember()">Add Member</button>
+            <button class="btn-fluid btn-glow" style="width:100%;" onclick="executeAddMember()">Deploy Asset</button>
         </div>
 
-        <!-- TRANSLADAR ELEMENTO -->
-        <div class="panel-box">
-            <div class="panel-title">Shift Group Allocation</div>
-            <select id="transfer-agent-select"><option value="">Select Member...</option></select>
+        <!-- TRANSLADAR -->
+        <div class="admin-box">
+            <div class="admin-box-title">Cluster Re-Allocation</div>
+            <select id="transfer-agent-select"><option value="">Select Asset...</option></select>
             <select id="transfer-new-dept">
                 <option value="Calculo Phones">Calculo Phones</option>
                 <option value="Calculo Chats">Calculo Chats</option>
                 <option value="Calculo Processing Squad">Calculo Processing Squad</option>
             </select>
-            <button class="action-button" style="width:100%;" onclick="executeTransfer()">Transfer Member</button>
+            <button class="btn-fluid" style="width:100%;" onclick="executeTransfer()">Transfer Asset</button>
         </div>
 
-        <!-- REMOVER ELEMENTO -->
-        <div class="panel-box">
-            <div class="panel-title" style="color: var(--text-off);">Remove From Database</div>
-            <select id="delete-agent-select"><option value="">Select Member...</option></select>
-            <button class="action-button" style="width:100%; border-color: var(--text-off); color: var(--text-off);" onclick="executeDeleteMember()">Remove Member</button>
+        <!-- QUITAR -->
+        <div class="admin-box">
+            <div class="admin-box-title" style="color: var(--st-off-text);">Purge Core Log</div>
+            <select id="delete-agent-select"><option value="">Select Asset...</option></select>
+            <button class="btn-fluid" style="width:100%; border-color: var(--st-off-border); color: var(--st-off-text);" onclick="executeDeleteMember()">Purge Asset</button>
         </div>
     </div>
 </div>
 
 <script>
+    // LISTAS EXTRAÍDAS COMPLETAMENTE DE "Schedule Draft - CS (1).xlsx"
     const defaultTeam = {
         "Calculo Phones": [
             "Emerson Hernandez", "Stephannie Cunningham", "Thimy Gonzalez", "Yasser Quiros", 
@@ -412,8 +454,8 @@
 
     function toggleMgmtPanel() {
         if (!mgmtUnlocked) {
-            const pass = prompt("Enter Supervisor Password:");
-            if (pass !== "Sups2019") { alert("Access Denied."); return; }
+            const pass = prompt("Credentials Check:");
+            if (pass !== "Sups2019") { alert("Failed Security Protocol."); return; }
             mgmtUnlocked = true;
         }
         const panel = document.getElementById('mgmt-panel-content');
@@ -433,10 +475,10 @@
 
         getStaffData()[dept].forEach(name => {
             const item = document.createElement('div');
-            item.className = 'directory-item';
+            item.className = 'liquid-item';
             item.textContent = name;
             item.onclick = () => {
-                document.querySelectorAll('.directory-item').forEach(i => i.classList.remove('selected'));
+                document.querySelectorAll('.liquid-item').forEach(i => i.classList.remove('selected'));
                 item.classList.add('selected');
                 currentAgent = name;
             };
@@ -445,7 +487,7 @@
     }
 
     function goToMatrix() {
-        if (!currentAgent) { alert("Please pick an agent first."); return; }
+        if (!currentAgent) { alert("An operational unit must be selected."); return; }
         document.getElementById('step-1').classList.remove('active');
         document.getElementById('step-2').classList.add('active');
         document.getElementById('active-agent-title').textContent = currentAgent;
@@ -549,8 +591,8 @@
         const transSel = document.getElementById('transfer-agent-select');
         const delSel = document.getElementById('delete-agent-select');
 
-        transSel.innerHTML = '<option value="">Select Member...</option>';
-        delSel.innerHTML = '<option value="">Select Member...</option>';
+        transSel.innerHTML = '<option value="">Select Asset...</option>';
+        delSel.innerHTML = '<option value="">Select Asset...</option>';
 
         Object.keys(db).forEach(dept => {
             db[dept].forEach(name => {
@@ -566,51 +608,51 @@
     function executeAddMember() {
         const name = document.getElementById('add-name').value.trim();
         const dept = document.getElementById('add-dept').value;
-        if(!name) return alert("Please specify a name.");
+        if(!name) return alert("Identify nomenclature.");
         
         const db = getStaffData();
-        if(db[dept].includes(name)) return alert("Member already exists in this group.");
+        if(db[dept].includes(name)) return alert("Duplicate active asset.");
 
         db[dept].push(name); db[dept].sort();
         saveStaffData(db);
         document.getElementById('add-name').value = "";
-        alert("Member registered successfully.");
+        alert("Unit matrix generated.");
     }
 
     function executeTransfer() {
         const targetRaw = document.getElementById('transfer-agent-select').value;
         const newDept = document.getElementById('transfer-new-dept').value;
-        if(!targetRaw) return alert("Select a member first.");
+        if(!targetRaw) return alert("Identify element node.");
 
         const target = JSON.parse(targetRaw);
-        if(target.dept === newDept) return alert("Member is already in that group.");
+        if(target.dept === newDept) return alert("Node already belongs to target cluster.");
 
         const db = getStaffData();
         db[target.dept] = db[target.dept].filter(n => n !== target.name);
         db[newDept].push(target.name); db[newDept].sort();
         saveStaffData(db);
-        alert("Group membership transferred.");
+        alert("Cluster updated successfully.");
     }
 
     function executeDeleteMember() {
         const targetRaw = document.getElementById('delete-agent-select').value;
-        if(!targetRaw) return alert("Select a member first.");
+        if(!targetRaw) return alert("Identify target node.");
         
         const target = JSON.parse(targetRaw);
-        if(!confirm(`Are you sure you want to remove ${target.name}?`)) return;
+        if(!confirm(`Authorize terminal deletion of ${target.name}?`)) return;
 
         const db = getStaffData();
         db[target.dept] = db[target.dept].filter(n => n !== target.name);
         saveStaffData(db);
-        alert("Member deleted.");
+        alert("Node purged from register.");
     }
 
     async function triggerExcelExport() {
-        const auth = prompt("Admin Security Verification:");
-        if (auth !== "Sups2019") return alert("Access Denied.");
+        const auth = prompt("Identity Challenge:");
+        if (auth !== "Sups2019") return alert("Unauthorized execution.");
 
         const master = JSON.parse(localStorage.getItem('panda_master_roster')) || [];
-        if(!master.length) return alert("No active data entries to export.");
+        if(!master.length) return alert("Pipeline database empty.");
 
         const wb = new ExcelJS.Workbook();
         ["Calculo Phones", "Calculo Chats", "Calculo Processing Squad"].forEach(dKey => {
@@ -632,7 +674,7 @@
 
             const hr = ws.getRow(1); hr.height = 28;
             hr.font = { bold: true, color: { argb: 'FFFFFF' }, name: 'Segoe UI' };
-            hr.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '2B2E2A' } };
+            hr.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '1E221B' } };
             hr.alignment = { vertical: 'middle', horizontal: 'center' };
 
             list.forEach(entry => {
@@ -646,10 +688,10 @@
                     cell.alignment = { horizontal: 'center', vertical: 'middle' };
                     cell.font = { name: 'Segoe UI', bold: false, size: 10 };
 
-                    let bg = "FFFFFF"; let fg = "2B2E2A";
-                    if(dataRow[day] === "Day Off") { bg = "F2ECEB"; fg = "9E5346"; }
-                    else if(dataRow[day] === "Vacaciones") { bg = "F6EFE2"; fg = "B88630"; }
-                    else if(dataRow[day] === "OPEN") { bg = "EDF2EC"; fg = "54734b"; }
+                    let bg = "1E221B"; let fg = "F0F2ee";
+                    if(dataRow[day] === "Day Off") { bg = "3a2222"; fg = "ff8888"; }
+                    else if(dataRow[day] === "Vacaciones") { bg = "3a321c"; fg = "ffd075"; }
+                    else if(dataRow[day] === "OPEN") { bg = "1c3a26"; fg = "8bf0b2"; }
 
                     cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF' + bg } };
                     cell.font.color = { argb: 'FF' + fg };
@@ -661,7 +703,7 @@
         const b = new Blob([buf], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
         const a = document.createElement("a");
         a.href = URL.createObjectURL(b);
-        a.download = `WFM_Studio_Roster.xlsx`;
+        a.download = `WFM_Dynamic_Roster.xlsx`;
         a.click();
     }
 </script>

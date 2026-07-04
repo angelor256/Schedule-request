@@ -9,7 +9,7 @@
     <style>
         :root { --bg-main: #f8fafc; --bg-surface: #ffffff; --border-subtle: #e2e8f0; --border-focus: #94a3b8; --text-primary: #0f172a; --text-secondary: #475569; --accent-color: #2563eb; --sh-am-bg: #eff6ff; --sh-am-txt: #1e40af; --sh-am-border: #bfdbfe; --sh-pm-bg: #faf5ff; --sh-pm-txt: #6b21a8; --sh-pm-border: #e9d5ff; --sh-off-bg: #fef2f2; --sh-off-txt: #991b1b; --sh-off-border: #fecaca; --sh-vac-bg: #fffbeb; --sh-vac-txt: #92400e; --sh-vac-border: #fef3c7; --sh-op-bg: #f0fdf4; --sh-op-txt: #166534; --sh-op-border: #bbf7d0; }
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { background-color: var(--bg-main); color: var(--text-primary); font-family: 'Inter', sans-serif; padding: 40px 24px; line-height: 1.5; }
+        body { background-color: var(--bg-main); color: var(--text-primary); font-family: 'Inter', sans-serif; padding: 40px 24px; }
         .container { max-width: 1680px; margin: 0 auto; }
         header { display: flex; justify-content: space-between; align-items: center; background: var(--bg-surface); border: 1px solid var(--border-subtle); padding: 24px 32px; border-radius: 12px; margin-bottom: 32px; }
         .navigation-dock { display: flex; gap: 8px; margin-bottom: 24px; border-bottom: 1px solid var(--border-subtle); }
@@ -22,12 +22,13 @@
         .dept-btn { background: transparent; border: none; color: var(--text-secondary); padding: 6px 14px; font-size: 12px; font-weight: 600; cursor: pointer; border-radius: 6px; }
         .dept-btn.active-dept { background: var(--bg-surface); color: var(--text-primary); }
         .interactive-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-        .interactive-table th { background: #f8fafc; padding: 14px 16px; border-bottom: 1px solid var(--border-subtle); }
-        .interactive-table td { padding: 10px 16px; border-bottom: 1px solid #f1f5f9; }
+        .interactive-table th, .interactive-table td { padding: 10px 16px; border-bottom: 1px solid #f1f5f9; text-align: left; }
+        .row-squad-header { background: #fafafa; font-weight: 600; font-size: 11px; text-transform: uppercase; }
+        .custom-dropdown { padding: 7px; border-radius: 6px; font-family: 'JetBrains Mono'; width: 120px; cursor: pointer; }
         .analytics-matrix { width: 100%; border-collapse: collapse; font-family: 'JetBrains Mono'; font-size: 12px; }
         .analytics-matrix th, .analytics-matrix td { border: 1px solid var(--border-subtle); padding: 10px 12px; text-align: center; }
         .total-row { background: #eff6ff; font-weight: 700; color: var(--accent-color); }
-        .custom-dropdown { padding: 7px; border-radius: 6px; font-family: 'JetBrains Mono'; cursor: pointer; }
+        .action-btn { background: var(--accent-color); color: white; padding: 10px 18px; border-radius: 8px; cursor: pointer; border: none; }
     </style>
 </head>
 <body>
@@ -39,46 +40,100 @@
     </div>
     <div id="view-request" class="panel-view active-view">
         <div class="panel-card">
-            <button onclick="compileRosterPipeline()">Generate Balanced Schedule ⚙️</button>
-            <div id="reqBodyPhones"></div>
+            <button class="action-btn" onclick="compileRosterPipeline()">Generate Balanced Schedule ⚙️</button>
+            <div id="reqBodyPhones"></div><div id="reqBodyChats"></div>
         </div>
     </div>
     <div id="view-engine" class="panel-view">
         <div class="panel-card">
             <div class="dept-switcher">
-                <button class="dept-btn active-dept" onclick="changeMetricsFilter('all')">Global View</button>
-                <button class="dept-btn" onclick="changeMetricsFilter('Calculo Phones')">Phones Analytics</button>
-                <button class="dept-btn" onclick="changeMetricsFilter('Calculo Chats')">Chats Analytics</button>
+                <button class="dept-btn active-dept" id="an-btn-all" onclick="changeMetricsFilter('all')">Global View</button>
+                <button class="dept-btn" id="an-btn-phones" onclick="changeMetricsFilter('Calculo Phones')">Phones Analytics</button>
+                <button class="dept-btn" id="an-btn-chats" onclick="changeMetricsFilter('Calculo Chats')">Chats Analytics</button>
             </div>
             <table class="analytics-matrix">
                 <thead><tr><th>Window</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th><th>Sun</th></tr></thead>
                 <tbody id="analyticsDataBody"></tbody>
             </table>
         </div>
+        <div class="panel-card"><div id="outBodyPhones"></div><div id="outBodyChats"></div></div>
     </div>
 </div>
 <script>
-    const coreRosterMap = {
-        "Calculo Phones": {
-            "VIP": ["Emerson Hernandez", "Stephannie Cunningham", "Thimy Gonzalez", "Yasser Quiros"],
-            "Senior": ["Andrey Castillo", "Rory Bulgarelli", "Phillip Desanti", "Eddison Prendas"],
-            "Tier 2": ["Carlos Alejandro Amador Luna", "Carlos Ortiz", "David Vogler", "Valerie Alfaro", "Jose Maria Cartin Peralta", "Samuel Carballo"],
-            "Tier 1": ["Luis Fernando Ruiz"]
-        },
-        "Calculo Chats": {
-            "VIP": ["Elena Rojas", "Elliot Navarro", "Julian Mena", "Sebastian Puerta", "Maria Jose Quiros Quiros"],
-            "Senior": ["Naomy Sanchez", "Adrian Navarro", "Diego Matamoros"],
-            "Tier 2": ["Carolina Castro", "Isaac Barrantes Alvarado", "Pablo Guzman", "Anilu Guzman Villalobos", "Sheydron Clark"],
-            "Tier 1": ["Keisha Cross Brown", "Marlon Wright"]
-        }
-    };
+    const coreRosterMap = { "Calculo Phones": { "VIP": ["Emerson Hernandez", "Stephannie Cunningham", "Thimy Gonzalez", "Yasser Quiros"], "Senior": ["Andrey Castillo", "Rory Bulgarelli", "Phillip Desanti", "Eddison Prendas"], "Tier 2": ["Carlos Alejandro Amador Luna", "Carlos Ortiz", "David Vogler", "Valerie Alfaro", "Jose Maria Cartin Peralta", "Samuel Carballo"], "Tier 1": ["Luis Fernando Ruiz"] }, "Calculo Chats": { "VIP": ["Elena Rojas", "Elliot Navarro", "Julian Mena", "Sebastian Puerta", "Maria Jose Quiros Quiros"], "Senior": ["Naomy Sanchez", "Adrian Navarro", "Diego Matamoros"], "Tier 2": ["Carolina Castro", "Isaac Barrantes Alvarado", "Pablo Guzman", "Anilu Guzman Villalobos", "Sheydron Clark"], "Tier 1": ["Keisha Cross Brown", "Marlon Wright"] } };
     const middleShiftRules = ["Luis Fernando Ruiz", "Marlon Wright", "Anilu Guzman Villalobos"];
     const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
     const hoursPriority = ["06:00 AM", "07:00 AM", "09:00 AM", "10:00 AM", "11:00 AM", "01:00 PM", "02:00 PM", "03:00 PM"];
     let selectedMetricsFilter = "all";
 
+    window.onload = () => { if(!localStorage.getItem('wfm_v15_request_cache')) initDatabaseStructure(); renderInputGrid(); renderEngineGrid(); processAnalyticsRefresh(); };
+
+    function initDatabaseStructure() {
+        const cache = []; let indexer = 0;
+        Object.keys(coreRosterMap).forEach(dept => { Object.keys(coreRosterMap[dept]).forEach(squad => { coreRosterMap[dept][squad].forEach(name => { let defaultShifts = {}; daysOfWeek.forEach((d, idx) => defaultShifts[d] = (idx % 7 === 0 || idx % 7 === 6) ? "Day Off" : "OPEN"); cache.push({ name, dept, squad, shifts: defaultShifts }); }); }); });
+        localStorage.setItem('wfm_v15_request_cache', JSON.stringify(cache));
+        localStorage.setItem('wfm_v15_output_cache', JSON.stringify(cache));
+    }
+
+    function toggleViewSegment(view) {
+        document.querySelectorAll('.panel-view').forEach(p => p.classList.remove('active-view'));
+        document.querySelectorAll('.dock-tab').forEach(t => t.classList.remove('active-tab'));
+        document.getElementById(`view-${view}`).classList.add('active-view');
+        document.getElementById(`tab-${view}`).classList.add('active-tab');
+    }
+
+    function renderInputGrid() {
+        const data = JSON.parse(localStorage.getItem('wfm_v15_request_cache'));
+        ["reqBodyPhones", "reqBodyChats"].forEach(id => {
+            const el = document.getElementById(id); el.innerHTML = `<table class="interactive-table"><thead><tr><th>Name</th>${daysOfWeek.map(d=>`<th>${d.substring(0,3)}</th>`).join('')}</tr></thead><tbody></tbody></table>`;
+            const tbody = el.querySelector('tbody');
+            Object.keys(coreRosterMap[id.includes('Phones') ? "Calculo Phones" : "Calculo Chats"]).forEach(squad => {
+                tbody.innerHTML += `<tr><td colspan="8" class="row-squad-header">${squad}</td></tr>`;
+                coreRosterMap[id.includes('Phones') ? "Calculo Phones" : "Calculo Chats"][squad].forEach(name => {
+                    const agent = data.find(r => r.name === name);
+                    tbody.innerHTML += `<tr><td>${name}</td>${daysOfWeek.map(d=>`<td><select class="custom-dropdown" onchange="updateShift('${id}', '${name}', '${d}', this.value)">${["OPEN","Day Off","Vacaciones"].map(opt=>`<option ${agent.shifts[d]===opt?'selected':''}>${opt}</option>`).join('')}</select></td>`).join('')}</tr>`;
+                });
+            });
+        });
+    }
+
+    function updateShift(id, name, day, val) {
+        let data = JSON.parse(localStorage.getItem('wfm_v15_request_cache'));
+        data.find(r => r.name === name).shifts[day] = val;
+        localStorage.setItem('wfm_v15_request_cache', JSON.stringify(data));
+    }
+
+    function compileRosterPipeline() {
+        let output = JSON.parse(localStorage.getItem('wfm_v15_request_cache'));
+        ["Calculo Phones", "Calculo Chats"].forEach(dept => {
+            let supportTiers = output.filter(r => r.dept === dept && r.squad !== "VIP");
+            daysOfWeek.forEach(day => {
+                let activeSupport = supportTiers.filter(s => s.shifts[day] === "OPEN");
+                let standardSupport = activeSupport.filter(s => !middleShiftRules.includes(s.name));
+                let amCount = Math.floor(standardSupport.length / 2);
+                let pmCount = standardSupport.length - amCount;
+                let masterSlotsPool = [];
+                for (let i = 0; i < Math.floor(amCount/4); i++) masterSlotsPool.push("06:00 AM", "06:00 AM", "07:00 AM", "07:00 AM");
+                let rem = amCount % 4;
+                if (rem === 1) masterSlotsPool.push("06:00 AM");
+                else if (rem === 2) masterSlotsPool.push("06:00 AM", "07:00 AM");
+                else if (rem === 3) masterSlotsPool.push("06:00 AM", "06:00 AM", "07:00 AM");
+                for (let i = 0; i < pmCount; i++) masterSlotsPool.push(i % 2 === 0 ? "02:00 PM" : "03:00 PM");
+                standardSupport.forEach((agent, index) => agent.shifts[day] = masterSlotsPool[index] || "02:00 PM");
+            });
+        });
+        localStorage.setItem('wfm_v15_output_cache', JSON.stringify(output));
+        renderEngineGrid();
+        processAnalyticsRefresh();
+    }
+
+    function renderEngineGrid() {
+        // Lógica de renderizado de salida aquí...
+    }
+
     function changeMetricsFilter(filter) {
         selectedMetricsFilter = filter;
+        document.querySelectorAll('.dept-btn').forEach(b => b.classList.toggle('active-dept', b.innerText.includes(filter) || (filter==='all' && b.id==='an-btn-all')));
         processAnalyticsRefresh();
     }
 
@@ -94,36 +149,9 @@
             });
         });
         const tbody = document.getElementById('analyticsDataBody'); tbody.innerHTML = "";
-        hoursPriority.forEach(h => {
-            tbody.innerHTML += `<tr><td style="text-align:left;">${h}</td>` + daysOfWeek.map(d => `<td>${matrix[h][d]}</td>`).join('') + `</tr>`;
-        });
+        hoursPriority.forEach(h => { tbody.innerHTML += `<tr><td style="text-align:left;">${h}</td>` + daysOfWeek.map(d => `<td>${matrix[h][d]}</td>`).join('') + `</tr>`; });
         tbody.innerHTML += `<tr class="total-row"><td style="text-align:left;">TOTAL</td>` + daysOfWeek.map(d => `<td>${totals[d]}</td>`).join('') + `</tr>`;
     }
-
-    function compileRosterPipeline() {
-        let output = JSON.parse(localStorage.getItem('wfm_v15_request_cache'));
-        ["Calculo Phones", "Calculo Chats"].forEach(dept => {
-            let supportTiers = output.filter(r => r.dept === dept && r.squad !== "VIP");
-            daysOfWeek.forEach(day => {
-                let activeSupport = supportTiers.filter(s => s.shifts[day] === "OPEN");
-                let standardSupport = activeSupport.filter(s => !middleShiftRules.includes(s.name));
-                let amCount = Math.floor(standardSupport.length / 2);
-                let pmCount = standardSupport.length - amCount;
-                let masterSlotsPool = [];
-                let fullBlocks = Math.floor(amCount / 4);
-                let remainder = amCount % 4;
-                for (let i = 0; i < fullBlocks; i++) masterSlotsPool.push("06:00 AM", "06:00 AM", "07:00 AM", "07:00 AM");
-                if (remainder === 1) masterSlotsPool.push("06:00 AM");
-                else if (remainder === 2) masterSlotsPool.push("06:00 AM", "07:00 AM");
-                else if (remainder === 3) masterSlotsPool.push("06:00 AM", "06:00 AM", "07:00 AM");
-                for (let i = 0; i < pmCount; i++) masterSlotsPool.push(i % 2 === 0 ? "02:00 PM" : "03:00 PM");
-                standardSupport.forEach((agent, index) => agent.shifts[day] = masterSlotsPool[index] || "02:00 PM");
-            });
-        });
-        localStorage.setItem('wfm_v15_output_cache', JSON.stringify(output));
-        processAnalyticsRefresh();
-    }
-    // Mantén tus funciones toggleViewSegment, renderInputGrid, etc. aquí debajo.
 </script>
 </body>
 </html>

@@ -580,3 +580,8 @@
 </script>
 </body>
 </html>
+function toggleView(target) {
+    document.getElementById('view-home').classList.remove('active-view');
+    document.getElementById('view-app').classList.remove('active-view');
+    document.getElementById('view-' + target).classList.add('active-view');
+}

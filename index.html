@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WFM Tactical Enterprise // v12.5 Strict Balance Engine</title>
+    <title>WFM Tactical Enterprise // v13.0 VIP-Shielded Engine</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -79,33 +79,13 @@
             position: relative;
         }
         .dock-tab:hover { color: var(--text-primary); }
-        .dock-tab.active-tab {
-            color: var(--neon-blue);
-        }
+        .dock-tab.active-tab { color: var(--neon-blue); }
         .dock-tab.active-tab::after {
-            content: '';
-            position: absolute;
-            bottom: -13px;
-            left: 0;
-            width: 100%;
-            height: 3px;
-            background: var(--neon-blue);
-            box-shadow: 0 0 12px var(--neon-blue);
+            content: ''; position: absolute; bottom: -13px; left: 0; width: 100%; height: 3px; background: var(--neon-blue); box-shadow: 0 0 12px var(--neon-blue);
         }
 
         .action-btn {
-            background: #171a2b;
-            border: 1px solid #2d3454;
-            color: var(--text-primary);
-            padding: 12px 24px;
-            font-size: 13px;
-            font-weight: 600;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
+            background: #171a2b; border: 1px solid #2d3454; color: var(--text-primary); padding: 12px 24px; font-size: 13px; font-weight: 600; border-radius: 10px; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px;
         }
         .action-btn:hover { background: #1e223b; border-color: var(--neon-blue); }
         .btn-accent { background: var(--neon-blue); color: #000; font-weight: 700; border: none; }
@@ -116,105 +96,24 @@
         .panel-view { display: none; }
         .panel-view.active-view { display: block; }
 
-        .panel-card {
-            background: var(--bg-surface);
-            border: 1px solid var(--border-subtle);
-            border-radius: 16px;
-            padding: 24px;
-            margin-bottom: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        }
-        .card-title-bar {
-            font-size: 16px;
-            color: var(--text-primary);
-            font-weight: 700;
-            margin-bottom: 22px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+        .panel-card { background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: 16px; padding: 24px; margin-bottom: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        .card-title-bar { font-size: 16px; color: var(--text-primary); font-weight: 700; margin-bottom: 22px; display: flex; justify-content: space-between; align-items: center; }
 
-        .segmented-control {
-            display: inline-flex;
-            background: #090a10;
-            padding: 4px;
-            border-radius: 8px;
-            border: 1px solid var(--border-subtle);
-        }
-        .segment-btn {
-            background: transparent;
-            border: none;
-            color: var(--text-secondary);
-            padding: 8px 16px;
-            font-size: 12px;
-            font-weight: 600;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .segment-btn.active-segment {
-            background: var(--bg-surface-elevated);
-            color: var(--neon-blue);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.4);
-        }
+        .segmented-control { display: inline-flex; background: #090a10; padding: 4px; border-radius: 8px; border: 1px solid var(--border-subtle); }
+        .segment-btn { background: transparent; border: none; color: var(--text-secondary); padding: 8px 16px; font-size: 12px; font-weight: 600; border-radius: 6px; cursor: pointer; transition: all 0.2s; }
+        .segment-btn.active-segment { background: var(--bg-surface-elevated); color: var(--neon-blue); box-shadow: 0 2px 8px rgba(0,0,0,0.4); }
 
         .interactive-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-        .interactive-table th {
-            background: #090a10;
-            color: var(--text-secondary);
-            text-align: left;
-            padding: 16px 14px;
-            font-weight: 600;
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            border-bottom: 1px solid var(--border-subtle);
-        }
+        .interactive-table th { background: #090a10; color: var(--text-secondary); text-align: left; padding: 16px 14px; font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid var(--border-subtle); }
         .interactive-table td { padding: 10px 14px; border-bottom: 1px solid #0d0f18; color: var(--text-primary); }
         
-        .row-dept-header {
-            background: linear-gradient(90deg, #0d0f18 0%, transparent 100%);
-            color: var(--neon-blue) !important;
-            font-weight: 700;
-            font-size: 13px;
-            padding: 14px 14px !important;
-            border-bottom: 1px solid var(--border-glow) !important;
-        }
-        .row-squad-header {
-            background: transparent;
-            color: #e2e8f0 !important;
-            font-weight: 600;
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            padding: 12px 14px !important;
-        }
+        .row-dept-header { background: linear-gradient(90deg, #0d0f18 0%, transparent 100%); color: var(--neon-blue) !important; font-weight: 700; font-size: 13px; padding: 14px 14px !important; border-bottom: 1px solid var(--border-glow) !important; }
+        .row-squad-header { background: transparent; color: #e2e8f0 !important; font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; padding: 12px 14px !important; }
 
-        .badge-pill {
-            font-size: 10px;
-            font-family: 'JetBrains Mono', monospace;
-            background: #1a1d30;
-            color: #94a3b8;
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-weight: 500;
-            border: 1px solid #22273f;
-        }
+        .badge-pill { font-size: 10px; font-family: 'JetBrains Mono', monospace; background: #1a1d30; color: #94a3b8; padding: 4px 10px; border-radius: 20px; font-weight: 500; border: 1px solid #22273f; }
+        .badge-vip { background: rgba(239, 68, 68, 0.15); color: #f87171; border-color: rgba(239, 68, 68, 0.3); font-weight: 700; }
 
-        .custom-dropdown {
-            background: #090a10;
-            border: 1px solid var(--border-subtle);
-            color: var(--text-primary);
-            padding: 8px;
-            border-radius: 8px;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 11px;
-            width: 125px;
-            outline: none;
-            cursor: pointer;
-            text-align: center;
-            transition: all 0.2s;
-        }
+        .custom-dropdown { background: #090a10; border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 8px; border-radius: 8px; font-family: 'JetBrains Mono', monospace; font-size: 11px; width: 125px; outline: none; cursor: pointer; text-align: center; transition: all 0.2s; }
         .custom-dropdown:focus { border-color: var(--neon-blue); }
         .custom-dropdown.s-am { background: var(--sh-am-bg); color: var(--sh-am-txt); border-color: var(--sh-am-border); }
         .custom-dropdown.s-pm { background: var(--sh-pm-bg); color: var(--sh-pm-txt); border-color: var(--sh-pm-border); }
@@ -235,33 +134,26 @@
 
 <div class="container">
 
-    <!-- Brand Header -->
     <div class="glass-header">
         <div class="app-title">
             <h1>Tactical Workforce Management Panel</h1>
-            <p>// CORE SYSTEM ENG v12.5 // PERFECTLY BALANCED HEADCOUNT ENGINE</p>
+            <p>// CORE SYSTEM ENG v13.0 // VIP-SHIELDED AUTOMATION PIPELINE</p>
         </div>
         <div>
             <button class="action-btn btn-download" onclick="exportDataToExcel()">📥 Export Master Copy</button>
         </div>
     </div>
 
-    <!-- Navigation Tab Dock -->
     <div class="navigation-dock">
-        <button class="dock-tab active-tab" id="tab-request" onclick="toggleViewSegment('request')">
-            01 / Agent Preference Deck (Requests)
-        </button>
-        <button class="dock-tab" id="tab-engine" onclick="toggleViewSegment('engine')">
-            02 / Tactical Production Roster (Final Schedule)
-        </button>
+        <button class="dock-tab active-tab" id="tab-request" onclick="toggleViewSegment('request')">01 / Agent Preference Deck (Requests)</button>
+        <button class="dock-tab" id="tab-engine" onclick="toggleViewSegment('engine')">02 / Tactical Production Roster (Final Schedule)</button>
     </div>
 
-    <!-- SCREEN 1: PREFERENCES -->
     <div id="view-request" class="panel-view active-view">
         <div class="panel-card" style="border-top: 3px solid var(--neon-purple);">
             <div class="card-title-bar">
-                <span>📊 Entrada de Agentes (Requests Libres)</span>
-                <button class="action-btn btn-accent" onclick="compileRosterPipeline()">Execute Balanced Optimizer ⚙️</button>
+                <span>📊 Entrada de Agentes (Pre-asignaciones de Roster)</span>
+                <button class="action-btn btn-accent" onclick="compileRosterPipeline()">Execute Hierarchical Engine ⚙️</button>
             </div>
             <div style="overflow-x: auto;">
                 <table class="interactive-table">
@@ -278,12 +170,11 @@
         </div>
     </div>
 
-    <!-- SCREEN 2: PRODUCTION MODEL (TOTALMENTE BALANCEADO Y CORREGIDO) -->
     <div id="view-engine" class="panel-view">
         <div class="panel-card" style="border-top: 3px solid var(--neon-blue);">
             <div class="card-title-bar">
-                <span>⚡ Cuadrante Maestro Optimizado (50/50 Balance & Δ-1 Control Enforced)</span>
-                <span style="font-size: 11px; color: var(--neon-green); font-family: 'JetBrains Mono', monospace;">STATUS: MATHEMATICALLY BALANCED</span>
+                <span>⚡ Cuadrante Maestro Jerárquico (VIPs Protegidos + Balanceo Secundario Enforced)</span>
+                <span style="font-size: 11px; color: var(--neon-green); font-family: 'JetBrains Mono', monospace;">STATUS: HIERARCHICAL SUCCESS</span>
             </div>
             <div style="overflow-x: auto;">
                 <table class="interactive-table">
@@ -299,7 +190,6 @@
             </div>
         </div>
 
-        <!-- Real-time Metrics Dashboard -->
         <div class="panel-card">
             <div class="card-title-bar">
                 <span>📊 Matriz Analytics Integrada</span>
@@ -352,12 +242,8 @@
     let selectedMetricsFilter = "all";
 
     window.onload = function() {
-        if (!localStorage.getItem('wfm_v12_request_cache')) {
-            initDatabaseStructure();
-        }
-        if (!localStorage.getItem('wfm_v12_output_cache')) {
-            localStorage.setItem('wfm_v12_output_cache', localStorage.getItem('wfm_v12_request_cache'));
-        }
+        if (!localStorage.getItem('wfm_v13_request_cache')) initDatabaseStructure();
+        if (!localStorage.getItem('wfm_v13_output_cache')) localStorage.setItem('wfm_v13_output_cache', localStorage.getItem('wfm_v13_request_cache'));
         renderInputGrid();
         renderEngineGrid();
         processAnalyticsRefresh();
@@ -366,89 +252,66 @@
     function initDatabaseStructure() {
         const cache = [];
         let indexer = 0;
-
         Object.keys(coreRosterMap).forEach(dept => {
             Object.keys(coreRosterMap[dept]).forEach(squad => {
                 coreRosterMap[dept][squad].forEach(name => {
                     let defaultShifts = {};
-                    const blockWE = weekendOffBlocklist.includes(name);
-
-                    let off1, off2;
-                    if (blockWE) {
-                        off1 = (indexer % 3);
-                        off2 = off1 + 2;
-                        if(off1 === off2) off2 = 4;
-                    } else {
-                        off1 = (indexer * 3) % 7;
-                        off2 = (indexer * 3 + 4) % 7;
-                        if (off1 === off2) off2 = (off2 + 1) % 7;
-                    }
-
+                    let off1 = (indexer * 2) % 7;
+                    let off2 = (indexer * 2 + 3) % 7;
+                    if(off1 === off2) off2 = (off2 + 1) % 7;
                     daysOfWeek.forEach((d, idx) => {
                         defaultShifts[d] = (idx === off1 || idx === off2) ? "Day Off" : "OPEN";
                     });
-
                     cache.push({ name, dept, squad, shifts: defaultShifts });
                     indexer++;
                 });
             });
         });
-        localStorage.setItem('wfm_v12_request_cache', JSON.stringify(cache));
+        localStorage.setItem('wfm_v13_request_cache', JSON.stringify(cache));
     }
 
     function toggleViewSegment(view) {
         document.querySelectorAll('.panel-view').forEach(p => p.classList.remove('active-view'));
         document.querySelectorAll('.dock-tab').forEach(t => t.classList.remove('active-tab'));
-        
         document.getElementById(`view-${view}`).classList.add('active-view');
         document.getElementById(`tab-${view}`).classList.add('active-tab');
     }
 
     function renderInputGrid() {
-        const data = JSON.parse(localStorage.getItem('wfm_v12_request_cache'));
-        const tbody = document.getElementById('requestDeckBody');
-        tbody.innerHTML = "";
-
+        const data = JSON.parse(localStorage.getItem('wfm_v13_request_cache'));
+        const tbody = document.getElementById('requestDeckBody'); tbody.innerHTML = "";
         Object.keys(coreRosterMap).forEach(dept => {
             tbody.innerHTML += `<tr><td colspan="9" class="row-dept-header">// DEPT: ${dept.toUpperCase()}</td></tr>`;
             Object.keys(coreRosterMap[dept]).forEach(squad => {
-                tbody.innerHTML += `<tr><td colspan="9" class="row-squad-header">✦ ${squad} Tier Group</td></tr>`;
+                tbody.innerHTML += `<tr><td colspan="9" class="row-squad-header">✦ ${squad} Group</td></tr>`;
                 coreRosterMap[dept][squad].forEach(name => {
-                    const agent = data.find(r => r.name === name);
-                    if(!agent) return;
+                    const agent = data.find(r => r.name === name); if(!agent) return;
                     const tr = document.createElement('tr');
-                    let cells = `<td><span style="font-weight:600; padding-left: 10px;">${name}</span></td>`;
-                    cells += `<td><span class="badge-pill">${squad}</span></td>`;
-                    daysOfWeek.forEach(day => {
-                        cells += `<td>${buildSelectOptions(name, day, agent.shifts[day], 'request')}</td>`;
-                    });
-                    tr.innerHTML = cells;
-                    tbody.appendChild(tr);
+                    let isVip = squad === "VIP";
+                    let cells = `<td><span style="font-weight:600; padding-left:10px;">${name}</span></td>`;
+                    cells += `<td><span class="badge-pill ${isVip ? 'badge-vip' : ''}">${squad}</span></td>`;
+                    daysOfWeek.forEach(day => { cells += `<td>${buildSelectOptions(name, day, agent.shifts[day], 'request')}</td>`; });
+                    tr.innerHTML = cells; tbody.appendChild(tr);
                 });
             });
         });
     }
 
     function renderEngineGrid() {
-        const data = JSON.parse(localStorage.getItem('wfm_v12_output_cache'));
-        const tbody = document.getElementById('engineDeckBody');
-        tbody.innerHTML = "";
-
+        const data = JSON.parse(localStorage.getItem('wfm_v13_output_cache'));
+        const tbody = document.getElementById('engineDeckBody'); tbody.innerHTML = "";
         Object.keys(coreRosterMap).forEach(dept => {
             tbody.innerHTML += `<tr><td colspan="9" class="row-dept-header">// DEPT: ${dept.toUpperCase()}</td></tr>`;
             Object.keys(coreRosterMap[dept]).forEach(squad => {
-                tbody.innerHTML += `<tr><td colspan="9" class="row-squad-header">✦ ${squad} Tier Group</td></tr>`;
+                tbody.innerHTML += `<tr><td colspan="9" class="row-squad-header">✦ ${squad} Group</td></tr>`;
                 coreRosterMap[dept][squad].forEach(name => {
-                    const agent = data.find(r => r.name === name);
-                    if(!agent) return;
+                    const agent = data.find(r => r.name === name); if(!agent) return;
                     const tr = document.createElement('tr');
-                    let cells = `<td><span style="font-weight:600; padding-left: 10px;">${name}</span></td>`;
-                    cells += `<td><span class="badge-pill">${squad}</span></td>`;
-                    daysOfWeek.forEach(day => {
-                        cells += `<td>${buildSelectOptions(name, day, agent.shifts[day], 'output')}</td>`;
-                    });
-                    tr.innerHTML = cells;
-                    tbody.appendChild(tr);
+                    let isVip = squad === "VIP";
+                    let cells = `<td><span style="font-weight:600; padding-left:10px;">${name}</span></td>`;
+                    cells += `<td><span class="badge-pill ${isVip ? 'badge-vip' : ''}">${squad}</span></td>`;
+                    daysOfWeek.forEach(day => { cells += `<td>${buildSelectOptions(name, day, agent.shifts[day], 'output')}</td>`; });
+                    tr.innerHTML = cells; tbody.appendChild(tr);
                 });
             });
         });
@@ -456,42 +319,31 @@
 
     function buildSelectOptions(name, day, currentVal, type) {
         let pools = ["06:00 AM", "07:00 AM", "09:00 AM", "10:00 AM", "11:00 AM", "01:00 PM", "02:00 PM", "03:00 PM", "OPEN", "Vacaciones", "Day Off"];
-
         let styleClass = "s-am";
         if (pmWindows.includes(currentVal)) styleClass = "s-pm";
         if (currentVal === "Day Off") styleClass = "s-off";
         if (currentVal === "Vacaciones") styleClass = "s-vac";
         if (currentVal === "OPEN") styleClass = "s-op";
-
         let callback = type === 'request' ? 'syncLiveRequest(this)' : 'syncLiveOutput(this)';
-        
         let html = `<select class="custom-dropdown ${styleClass}" data-name="${name}" data-day="${day}" onchange="${callback}">`;
-        pools.forEach(p => {
-            html += `<option value="${p}" ${currentVal === p ? 'selected' : ''}>${p}</option>`;
-        });
-        html += `</select>`;
-        return html;
+        pools.forEach(p => { html += `<option value="${p}" ${currentVal === p ? 'selected' : ''}>${p}</option>`; });
+        return html + `</select>`;
     }
 
     function syncLiveRequest(el) {
-        const name = el.getAttribute('data-name');
-        const day = el.getAttribute('data-day');
-        let data = JSON.parse(localStorage.getItem('wfm_v12_request_cache'));
-        let target = data.find(r => r.name === name);
-        if(target) target.shifts[day] = el.value;
-        localStorage.setItem('wfm_v12_request_cache', JSON.stringify(data));
+        const name = el.getAttribute('data-name'); const day = el.getAttribute('data-day');
+        let data = JSON.parse(localStorage.getItem('wfm_v13_request_cache'));
+        let target = data.find(r => r.name === name); if(target) target.shifts[day] = el.value;
+        localStorage.setItem('wfm_v13_request_cache', JSON.stringify(data));
         repaintDropdown(el);
     }
 
     function syncLiveOutput(el) {
-        const name = el.getAttribute('data-name');
-        const day = el.getAttribute('data-day');
-        let data = JSON.parse(localStorage.getItem('wfm_v12_output_cache'));
-        let target = data.find(r => r.name === name);
-        if(target) target.shifts[day] = el.value;
-        localStorage.setItem('wfm_v12_output_cache', JSON.stringify(data));
-        repaintDropdown(el);
-        processAnalyticsRefresh();
+        const name = el.getAttribute('data-name'); const day = el.getAttribute('data-day');
+        let data = JSON.parse(localStorage.getItem('wfm_v13_output_cache'));
+        let target = data.find(r => r.name === name); if(target) target.shifts[day] = el.value;
+        localStorage.setItem('wfm_v13_output_cache', JSON.stringify(data));
+        repaintDropdown(el); processAnalyticsRefresh();
     }
 
     function repaintDropdown(el) {
@@ -513,130 +365,148 @@
         processAnalyticsRefresh();
     }
 
-    // CONTROL INTELIGENTE DE DISTRIBUCIÓN MATEMÁTICA ENFORCED
+    // PIPELINE DE OPTIMIZACIÓN EN DOS FASES ESTRICTAS
     function compileRosterPipeline() {
-        let requests = JSON.parse(localStorage.getItem('wfm_v12_request_cache'));
+        let requests = JSON.parse(localStorage.getItem('wfm_v13_request_cache'));
         let output = JSON.parse(JSON.stringify(requests)); 
-
-        // PASO 1: Forzar Estrictamente los 2 días de descanso mínimos por agente
-        output.forEach(agent => {
-            let offDaysCount = daysOfWeek.filter(d => agent.shifts[d] === "Day Off" || agent.shifts[d] === "Vacaciones").length;
-            if (offDaysCount < 2) {
-                let blockWE = weekendOffBlocklist.includes(agent.name);
-                let evaluationOrder = blockWE 
-                    ? ["Wednesday", "Thursday", "Tuesday", "Monday", "Friday"]
-                    : ["Sunday", "Saturday", "Wednesday", "Thursday", "Tuesday", "Monday", "Friday"];
-
-                for (let d of evaluationOrder) {
-                    if (agent.shifts[d] !== "Day Off" && agent.shifts[d] !== "Vacaciones") {
-                        agent.shifts[d] = "Day Off"; 
-                        break;
-                    }
-                }
-            }
-        });
-
-        // PASO 2: Balance Perfecto por Departamento y Distribución Delta-1 en Apertura/Cierre
         const departments = ["Calculo Phones", "Calculo Chats"];
-        
-        departments.forEach(dept => {
-            daysOfWeek.forEach(day => {
-                // Obtener los agentes de este departamento activos hoy (No libres, No vacaciones)
-                let activeAgents = output.filter(r => r.dept === dept && r.shifts[day] !== "Day Off" && r.shifts[day] !== "Vacaciones");
-                
-                // Separar agentes intermedios fijos (Middle Shifts)
-                let middleAgents = activeAgents.filter(r => middleShiftRules.includes(r.name));
-                let standardAgents = activeAgents.filter(r => !middleShiftRules.includes(r.name));
 
-                // 1. Asignar los Middle Shifts de forma equitativa entre sus bandas (09:00 AM / 10:00 AM / 11:00 AM / 01:00 PM)
-                middleAgents.forEach((agent, mIdx) => {
-                    let midPool = ["09:00 AM", "10:00 AM", "11:00 AM", "01:00 PM"];
-                    agent.shifts[day] = midPool[mIdx % midPool.length];
+        departments.forEach(dept => {
+            // Separar Universo VIP del resto de ramas
+            let vips = output.filter(r => r.dept === dept && r.squad === "VIP");
+            let supportTiers = output.filter(r => r.dept === dept && r.squad !== "VIP");
+
+            daysOfWeek.forEach((day, dIdx) => {
+                // ==========================================
+                // FASE 1: HORARIO BLINDADO VIP
+                // ==========================================
+                // Forzar distribución de Días Libres en VIP para que no queden descubiertos
+                vips.forEach((v, vIdx) => {
+                    // Distribución controlada de descansos para VIP (mínimo 1 libre por día, máximo 2)
+                    let forcedOffDay = daysOfWeek[(vIdx * 2 + 5) % 7];
+                    let forcedOffDay2 = daysOfWeek[(vIdx * 2 + 1) % 7];
+                    
+                    if (v.shifts[day] === "Day Off" || v.shifts[day] === "Vacaciones") {
+                        // Dejar pasar si es un request explícito
+                    } else {
+                        if (day === forcedOffDay || day === forcedOffDay2) {
+                            v.shifts[day] = "Day Off";
+                        }
+                    }
                 });
 
-                // 2. Ejecutar división exacta 50/50 en Standard Agents (AM vs PM)
-                let halfCount = Math.floor(standardAgents.length / 2);
-                let remainder = standardAgents.length % 2; 
+                // Contar VIPs activos finales hoy
+                let activeVips = vips.filter(v => v.shifts[day] !== "Day Off" && v.shifts[day] !== "Vacaciones");
+                let countActiveVips = activeVips.length;
 
-                // Si hay remanente impar, se lo damos a AM por defecto operativo
-                let targetAMCount = halfCount + remainder;
-                let targetPMCount = halfCount;
+                // Aplicar matriz inquebrantable de asignación VIP según volumen disponible
+                if (countActiveVips === 4) {
+                    activeVips[0].shifts[day] = "06:00 AM";
+                    activeVips[1].shifts[day] = "07:00 AM";
+                    activeVips[2].shifts[day] = "02:00 PM";
+                    activeVips[3].shifts[day] = "03:00 PM";
+                } else if (countActiveVips === 3) {
+                    activeVips[0].shifts[day] = "06:00 AM";
+                    activeVips[1].shifts[day] = "09:00 AM"; // Middle
+                    activeVips[2].shifts[day] = "03:00 PM";
+                } else if (countActiveVips === 2) {
+                    activeVips[0].shifts[day] = "06:00 AM";
+                    activeVips[1].shifts[day] = "02:00 PM";
+                } else if (countActiveVips === 1) {
+                    activeVips[0].shifts[day] = "06:00 AM";
+                }
 
-                // Sub-distribución interna AM: Diferencia Máxima de 1 (Mayor volumen a las 06:00 AM)
-                let base6AM = Math.floor(targetAMCount / 2);
-                let rem6AM = targetAMCount % 2;
-                let final6AMTarget = base6AM + rem6AM;
-                let final7AMTarget = base6AM;
-
-                // Sub-distribución interna PM: Diferencia Máxima de 1 (Mayor volumen a las 02:00 PM)
-                let base2PM = Math.floor(targetPMCount / 2);
-                let rem2PM = targetPMCount % 2;
-                let final2PMTarget = base2PM + rem2PM;
-                let final3PMTarget = base2PM;
-
-                let tracker6AM = 0; let tracker7AM = 0;
-                let tracker2PM = 0; let tracker3PM = 0;
-
-                standardAgents.forEach((agent) => {
-                    // Si el agente tenía un request predefinido válido dentro de su banda lo intentamos respetar, 
-                    // si no, el motor balancea basándose en los targets perfectos:
-                    if (tracker6AM < final6AMTarget) {
-                        agent.shifts[day] = "06:00 AM";
-                        tracker6AM++;
-                    } else if (tracker7AM < final7AMTarget) {
-                        agent.shifts[day] = "07:00 AM";
-                        tracker7AM++;
-                    } else if (tracker2PM < final2PMTarget) {
-                        agent.shifts[day] = "02:00 PM";
-                        tracker2PM++;
-                    } else {
-                        agent.shifts[day] = "03:00 PM";
-                        tracker3PM++;
+                // ==========================================
+                // FASE 2: HORARIO RESTO DE TIERS (Ajustable)
+                // ==========================================
+                // Forzar 2 días libres mínimos a los support tiers
+                supportTiers.forEach(agent => {
+                    let offDaysCount = daysOfWeek.filter(d => agent.shifts[d] === "Day Off" || agent.shifts[d] === "Vacaciones").length;
+                    if (offDaysCount < 2) {
+                        let blockWE = weekendOffBlocklist.includes(agent.name);
+                        let evaluationOrder = blockWE 
+                            ? ["Wednesday", "Thursday", "Tuesday", "Monday", "Friday"]
+                            : ["Sunday", "Saturday", "Wednesday", "Thursday", "Tuesday", "Monday", "Friday"];
+                        for (let d of evaluationOrder) {
+                            if (agent.shifts[d] !== "Day Off" && agent.shifts[d] !== "Vacaciones") {
+                                agent.shifts[d] = "Day Off"; 
+                                break;
+                            }
+                        }
                     }
+                });
+
+                // Calcular cuántos VIPs ya ocuparon los bloques horariales hoy
+                let vip6AM = activeVips.filter(v => v.shifts[day] === "06:00 AM").length;
+                let vip7AM = activeVips.filter(v => v.shifts[day] === "07:00 AM").length;
+                let vip2PM = activeVips.filter(v => v.shifts[day] === "02:00 PM").length;
+                let vip3PM = activeVips.filter(v => v.shifts[day] === "03:00 PM").length;
+                let vipMid = activeVips.filter(v => ["09:00 AM", "10:00 AM", "11:00 AM", "01:00 PM"].includes(v.shifts[day])).length;
+
+                // Filtrar el staff secundario activo de hoy
+                let activeSupport = supportTiers.filter(s => s.shifts[day] !== "Day Off" && s.shifts[day] !== "Vacaciones");
+                let middleSupport = activeSupport.filter(s => middleShiftRules.includes(s.name));
+                let standardSupport = activeSupport.filter(s => !middleShiftRules.includes(s.name));
+
+                // Asignar Middle Shifts secundarios
+                middleSupport.forEach((s, sIdx) => {
+                    let midPool = ["09:00 AM", "10:00 AM", "11:00 AM"];
+                    s.shifts[day] = midPool[sIdx % midPool.length];
+                });
+
+                // Balancear Standard Support basándose en la base ya inyectada por los VIPs
+                let totalStandardAvailable = standardSupport.length;
+                let halfSupport = Math.floor(totalStandardAvailable / 2);
+                let remSupport = totalStandardAvailable % 2;
+
+                let targetAM = halfSupport + remSupport;
+                let targetPM = halfSupport;
+
+                // Sub-distribución interna AM (Garantizar Delta de 1 prioritario para las 06:00 AM)
+                let target6AM = Math.floor(targetAM / 2) + (targetAM % 2);
+                let target7AM = Math.floor(targetAM / 2);
+
+                // Sub-distribución interna PM (Garantizar Delta de 1 prioritario para las 02:00 PM)
+                let target2PM = Math.floor(targetPM / 2) + (targetPM % 2);
+                let target3PM = Math.floor(targetPM / 2);
+
+                let track6 = 0; let track7 = 0; let track2 = 0; let track3 = 0;
+
+                standardSupport.forEach(s => {
+                    if (track6 < target6AM) { s.shifts[day] = "06:00 AM"; track6++; }
+                    else if (track7 < target7AM) { s.shifts[day] = "07:00 AM"; track7++; }
+                    else if (track2 < target2PM) { s.shifts[day] = "02:00 PM"; track2++; }
+                    else { s.shifts[day] = "03:00 PM"; track3++; }
                 });
             });
         });
 
-        // PASO 3: Re-Validación Ergonómica de Descanso de 12 Horas
+        // RE-VALIDACIÓN FINAL: Control Ergonómico de 12 horas de descanso
         output.forEach(agent => {
             for (let i = 0; i < daysOfWeek.length - 1; i++) {
-                let currentDay = daysOfWeek[i];
-                let nextDay = daysOfWeek[i + 1];
-                
-                let currentShift = agent.shifts[currentDay];
-                let nextShift = agent.shifts[nextDay];
-
-                // Si sale en el bloque de la tarde (PM Windows)
-                if (pmWindows.includes(currentShift)) {
-                    // Y al día siguiente el balance lo asignó a apertura extrema temprana
-                    if (nextShift === "06:00 AM" || nextShift === "07:00 AM") {
-                        // Lo movemos de forma segura a un bloque intermedio o PM tardío alterno
-                        const isMiddle = middleShiftRules.includes(agent.name);
-                        agent.shifts[nextDay] = isMiddle ? "11:00 AM" : "02:00 PM";
+                let currentDay = daysOfWeek[i]; let nextDay = daysOfWeek[i + 1];
+                if (pmWindows.includes(agent.shifts[currentDay])) {
+                    if (agent.shifts[nextDay] === "06:00 AM" || agent.shifts[nextDay] === "07:00 AM") {
+                        if (agent.squad !== "VIP") { // Solo reajustar si no es VIP blindado
+                            agent.shifts[nextDay] = middleShiftRules.includes(agent.name) ? "11:00 AM" : "02:00 PM";
+                        }
                     }
                 }
             }
         });
 
-        localStorage.setItem('wfm_v12_output_cache', JSON.stringify(output));
+        localStorage.setItem('wfm_v13_output_cache', JSON.stringify(output));
         renderEngineGrid();
         processAnalyticsRefresh();
         toggleViewSegment('engine');
     }
 
     function processAnalyticsRefresh() {
-        const rawData = JSON.parse(localStorage.getItem('wfm_v12_output_cache')) || [];
+        const rawData = JSON.parse(localStorage.getItem('wfm_v13_output_cache')) || [];
         let filteredData = rawData;
-        if (selectedMetricsFilter !== "all") {
-            filteredData = rawData.filter(agent => agent.dept === selectedMetricsFilter);
-        }
+        if (selectedMetricsFilter !== "all") filteredData = rawData.filter(agent => agent.dept === selectedMetricsFilter);
 
-        const calculatedMatrix = {};
-        hoursPriority.forEach(h => {
-            calculatedMatrix[h] = {};
-            daysOfWeek.forEach(d => calculatedMatrix[h][d] = 0);
-        });
-
+        const calculatedMatrix = {}; hoursPriority.forEach(h => { calculatedMatrix[h] = {}; daysOfWeek.forEach(d => calculatedMatrix[h][d] = 0); });
         const totalizerAM = {}; const totalizerPM = {}; const totalizerShrink = {};
         daysOfWeek.forEach(d => { totalizerAM[d] = 0; totalizerPM[d] = 0; totalizerShrink[d] = 0; });
 
@@ -644,45 +514,41 @@
             daysOfWeek.forEach(day => {
                 const activeShift = agent.shifts[day] || "Day Off";
                 if (calculatedMatrix[activeShift]) calculatedMatrix[activeShift][day]++;
-                
                 if (amWindows.includes(activeShift)) totalizerAM[day]++;
                 if (pmWindows.includes(activeShift)) totalizerPM[day]++;
                 if (activeShift === "Day Off" || activeShift === "Vacaciones") totalizerShrink[day]++;
             });
         });
 
-        const targetTbody = document.getElementById('analyticsDataBody');
-        targetTbody.innerHTML = "";
-
-        targetTbody.innerHTML += `<tr><td colspan="8" class="analytics-section-title" style="color:var(--neon-blue);">▲ AM PRODUCTION WINDOWS (Δ-1 DELTA ENFORCED)</td></tr>`;
+        const targetTbody = document.getElementById('analyticsDataBody'); targetTbody.innerHTML = "";
+        targetTbody.innerHTML += `<tr><td colspan="8" class="analytics-section-title" style="color:var(--neon-blue);">▲ AM PRODUCTION WINDOWS (VIP DECK SHIELDED)</td></tr>`;
         amWindows.forEach(windowBlock => {
             let tr = `<tr><td style="text-align:left; font-weight:600; color: #cbd5e1;">${windowBlock}</td>`;
             daysOfWeek.forEach(d => tr += `<td>${calculatedMatrix[windowBlock][d]}</td>`);
             targetTbody.innerHTML += tr + `</tr>`;
         });
-        let sumAMRow = `<tr class="total-row-am"><td>Total Active AM Volume</td>`;
+        let sumAMRow = `<tr class="total-row-am"><td>Total AM Capacity</td>`;
         daysOfWeek.forEach(d => sumAMRow += `<td>${totalizerAM[d]}</td>`);
         targetTbody.innerHTML += sumAMRow + `</tr>`;
 
-        targetTbody.innerHTML += `<tr><td colspan="8" class="analytics-section-title" style="color:var(--neon-purple);">▼ PM PRODUCTION WINDOWS (Δ-1 DELTA ENFORCED)</td></tr>`;
+        targetTbody.innerHTML += `<tr><td colspan="8" class="analytics-section-title" style="color:var(--neon-purple);">▼ PM PRODUCTION WINDOWS (VIP DECK SHIELDED)</td></tr>`;
         pmWindows.forEach(windowBlock => {
             let tr = `<tr><td style="text-align:left; font-weight:600; color: #cbd5e1;">${windowBlock}</td>`;
             daysOfWeek.forEach(d => tr += `<td>${calculatedMatrix[windowBlock][d]}</td>`);
             targetTbody.innerHTML += tr + `</tr>`;
         });
-        let sumPMRow = `<tr class="total-row-pm"><td>Total Active PM Volume</td>`;
+        let sumPMRow = `<tr class="total-row-pm"><td>Total PM Capacity</td>`;
         daysOfWeek.forEach(d => sumPMRow += `<td>${totalizerPM[d]}</td>`);
         targetTbody.innerHTML += sumPMRow + `</tr>`;
 
-        let shrinkRow = `<tr class="total-row-shrinkage"><td>Shrinkage / Total Off Vol.</td>`;
-        daysOfWeek.forEach(d => shrinkRow += `<td>${totalizerShrink[d]} Ags</td>`);
+        let shrinkRow = `<tr class="total-row-shrinkage"><td>Total Off Volume (Shrinkage)</td>`;
+        daysOfWeek.forEach(d => shrinkRow += `<td>${totalizerShrink[d]} Agents</td>`);
         targetTbody.innerHTML += shrinkRow + `</tr>`;
     }
 
     async function exportDataToExcel() {
-        const log = JSON.parse(localStorage.getItem('wfm_v12_output_cache'));
+        const log = JSON.parse(localStorage.getItem('wfm_v13_output_cache'));
         const workbook = new ExcelJS.Workbook();
-        
         ["Calculo Phones", "Calculo Chats"].forEach(deptName => {
             const sheet = workbook.addWorksheet(deptName);
             sheet.columns = [
@@ -690,17 +556,15 @@
                 { header: 'Squad Level', key: 'squad', width: 15 },
                 ...daysOfWeek.map(d => ({ header: d, key: d, width: 15 }))
             ];
-            const deptEntries = log.filter(e => e.dept === deptName);
-            deptEntries.forEach(entry => {
+            log.filter(e => e.dept === deptName).forEach(entry => {
                 sheet.addRow({ name: entry.name, squad: entry.squad, ...entry.shifts });
             });
         });
-
         const buffer = await workbook.xlsx.writeBuffer();
         const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
         const trigger = document.createElement("a");
         trigger.href = URL.createObjectURL(blob);
-        trigger.download = `WFM_v12.5_Perfect_Balance_Master.xlsx`;
+        trigger.download = `WFM_v13_VIP_Shielded_Master.xlsx`;
         trigger.click();
     }
 </script>

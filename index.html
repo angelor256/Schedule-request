@@ -140,7 +140,9 @@
     </style>
 </head>
 <body>
+
 <div class="container">
+
     <header>
         <div class="app-title">
             <h1>Tactical Workforce Management</h1>
@@ -162,91 +164,511 @@
                 <span>📋 Input Deck (Agent Preferences & Leaves)</span>
                 <button class="action-btn btn-accent" onclick="compileRosterPipeline()">Generate Balanced Schedule ⚙️</button>
             </div>
+            
             <div class="dept-switcher">
                 <button class="dept-btn active-dept" id="req-btn-phones" onclick="switchDeptView('Phones', 'request')">Calculo Phones</button>
                 <button class="dept-btn" id="req-btn-chats" onclick="switchDeptView('Chats', 'request')">Calculo Chats</button>
             </div>
-            <div id="req-container-Phones" class="dept-table-container"><table class="interactive-table"><thead><tr><th style="width: 280px;">Agent Name</th><th style="width: 140px;">Tier Level</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th><th>Sun</th></tr></thead><tbody id="reqBodyPhones"></tbody></table></div>
-            <div id="req-container-Chats" class="dept-table-container" style="display: none;"><table class="interactive-table"><thead><tr><th style="width: 280px;">Agent Name</th><th style="width: 140px;">Tier Level</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th><th>Sun</th></tr></thead><tbody id="reqBodyChats"></tbody></table></div>
+
+            <div id="req-container-Phones" class="dept-table-container">
+                <table class="interactive-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 280px;">Agent Name</th>
+                            <th style="width: 140px;">Tier Level</th>
+                            <th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th><th>Sun</th>
+                        </tr>
+                    </thead>
+                    <tbody id="reqBodyPhones"></tbody>
+                </table>
+            </div>
+
+            <div id="req-container-Chats" class="dept-table-container" style="display: none;">
+                <table class="interactive-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 280px;">Agent Name</th>
+                            <th style="width: 140px;">Tier Level</th>
+                            <th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th><th>Sun</th>
+                        </tr>
+                    </thead>
+                    <tbody id="reqBodyChats"></tbody>
+                </table>
+            </div>
         </div>
     </div>
 
     <div id="view-engine" class="panel-view">
         <div class="panel-card">
-            <div class="card-title-bar"><span>📅 Production Schedule (Enforced Perfect Block Balancing)</span></div>
-            <div class="dept-switcher"><button class="dept-btn active-dept" id="out-btn-phones" onclick="switchDeptView('Phones', 'output')">Calculo Phones</button><button class="dept-btn" id="out-btn-chats" onclick="switchDeptView('Chats', 'output')">Calculo Chats</button></div>
-            <div id="out-container-Phones" class="dept-table-container"><table class="interactive-table"><thead><tr><th style="width: 280px;">Agent Name</th><th style="width: 140px;">Tier Level</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th><th>Sun</th></tr></thead><tbody id="outBodyPhones"></tbody></table></div>
-            <div id="out-container-Chats" class="dept-table-container" style="display: none;"><table class="interactive-table"><thead><tr><th style="width: 280px;">Agent Name</th><th style="width: 140px;">Tier Level</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th><th>Sun</th></tr></thead><tbody id="outBodyChats"></tbody></table></div>
+            <div class="card-title-bar">
+                <span>📅 Production Schedule (Enforced Perfect Block Balancing)</span>
+            </div>
+
+            <div class="dept-switcher">
+                <button class="dept-btn active-dept" id="out-btn-phones" onclick="switchDeptView('Phones', 'output')">Calculo Phones</button>
+                <button class="dept-btn" id="out-btn-chats" onclick="switchDeptView('Chats', 'output')">Calculo Chats</button>
+            </div>
+
+            <div id="out-container-Phones" class="dept-table-container">
+                <table class="interactive-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 280px;">Agent Name</th>
+                            <th style="width: 140px;">Tier Level</th>
+                            <th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th><th>Sun</th>
+                        </tr>
+                    </thead>
+                    <tbody id="outBodyPhones"></tbody>
+                </table>
+            </div>
+
+            <div id="out-container-Chats" class="dept-table-container" style="display: none;">
+                <table class="interactive-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 280px;">Agent Name</th>
+                            <th style="width: 140px;">Tier Level</th>
+                            <th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th><th>Sun</th>
+                        </tr>
+                    </thead>
+                    <tbody id="outBodyChats"></tbody>
+                </table>
+            </div>
         </div>
+
         <div class="panel-card">
             <div class="card-title-bar">
                 <span>📈 Real-time Supply Statistics</span>
-                <div class="dept-switcher" style="margin-bottom: 0;"><button class="dept-btn active-dept" id="an-btn-all" onclick="changeMetricsFilter('all')">Global View</button><button class="dept-btn" id="an-btn-phones" onclick="changeMetricsFilter('Calculo Phones')">Phones Analytics</button><button class="dept-btn" id="an-btn-chats" onclick="changeMetricsFilter('Calculo Chats')">Chats Analytics</button></div>
+                <div class="dept-switcher" style="margin-bottom: 0;">
+                    <button class="dept-btn active-dept" id="an-btn-all" onclick="changeMetricsFilter('all')">Global View</button>
+                    <button class="dept-btn" id="an-btn-phones" onclick="changeMetricsFilter('Calculo Phones')">Phones Analytics</button>
+                    <button class="dept-btn" id="an-btn-chats" onclick="changeMetricsFilter('Calculo Chats')">Chats Analytics</button>
+                </div>
             </div>
-            <div style="overflow-x: auto;"><table class="analytics-matrix"><thead><tr><th style="width: 260px; text-align: left;">Roster Block Window</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th><th>Sun</th></tr></thead><tbody id="analyticsDataBody"></tbody></table></div>
+            <div style="overflow-x: auto;">
+                <table class="analytics-matrix">
+                    <thead>
+                        <tr>
+                            <th style="width: 260px; text-align: left;">Roster Block Window</th>
+                            <th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th><th>Sun</th>
+                        </tr>
+                    </thead>
+                    <tbody id="analyticsDataBody"></tbody>
+                </table>
+            </div>
         </div>
     </div>
+
 </div>
 
 <script>
-    const coreRosterMap = { "Calculo Phones": { "VIP": ["Emerson Hernandez", "Stephannie Cunningham", "Thimy Gonzalez", "Yasser Quiros"], "Senior": ["Andrey Castillo", "Rory Bulgarelli", "Phillip Desanti", "Eddison Prendas"], "Tier 2": ["Carlos Alejandro Amador Luna", "Carlos Ortiz", "David Vogler", "Valerie Alfaro", "Jose Maria Cartin Peralta", "Samuel Carballo"], "Tier 1": ["Luis Fernando Ruiz"] }, "Calculo Chats": { "VIP": ["Elena Rojas", "Elliot Navarro", "Julian Mena", "Sebastian Puerta", "Maria Jose Quiros Quiros"], "Senior": ["Naomy Sanchez", "Adrian Navarro", "Diego Matamoros"], "Tier 2": ["Carolina Castro", "Isaac Barrantes Alvarado", "Pablo Guzman", "Anilu Guzman Villalobos", "Sheydron Clark"], "Tier 1": ["Keisha Cross Brown", "Marlon Wright"] } };
+    const coreRosterMap = {
+        "Calculo Phones": {
+            "VIP": ["Emerson Hernandez", "Stephannie Cunningham", "Thimy Gonzalez", "Yasser Quiros"],
+            "Senior": ["Andrey Castillo", "Rory Bulgarelli", "Phillip Desanti", "Eddison Prendas"],
+            "Tier 2": ["Carlos Alejandro Amador Luna", "Carlos Ortiz", "David Vogler", "Valerie Alfaro", "Jose Maria Cartin Peralta", "Samuel Carballo"],
+            "Tier 1": ["Luis Fernando Ruiz"]
+        },
+        "Calculo Chats": {
+            "VIP": ["Elena Rojas", "Elliot Navarro", "Julian Mena", "Sebastian Puerta", "Maria Jose Quiros Quiros"],
+            "Senior": ["Naomy Sanchez", "Adrian Navarro", "Diego Matamoros"],
+            "Tier 2": ["Carolina Castro", "Isaac Barrantes Alvarado", "Pablo Guzman", "Anilu Guzman Villalobos", "Sheydron Clark"],
+            "Tier 1": ["Keisha Cross Brown", "Marlon Wright"]
+        }
+    };
+
     const middleShiftRules = ["Luis Fernando Ruiz", "Marlon Wright", "Anilu Guzman Villalobos"];
     const weekendOffBlocklist = ["Luis Fernando Ruiz", "Marlon Wright", "Anilu Guzman Villalobos", "Keisha Cross Brown"];
+
     const amWindows = ["06:00 AM", "07:00 AM", "09:00 AM", "10:00 AM"];
     const pmWindows = ["11:00 AM", "01:00 PM", "02:00 PM", "03:00 PM"];
     const hoursPriority = ["06:00 AM", "07:00 AM", "09:00 AM", "10:00 AM", "11:00 AM", "01:00 PM", "02:00 PM", "03:00 PM"];
     const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+
     let selectedMetricsFilter = "all";
+    let activeReqDept = "Phones";
+    let activeOutDept = "Phones";
 
     window.onload = function() {
         if (!localStorage.getItem('wfm_v15_request_cache')) initDatabaseStructure();
         if (!localStorage.getItem('wfm_v15_output_cache')) localStorage.setItem('wfm_v15_output_cache', localStorage.getItem('wfm_v15_request_cache'));
-        renderInputGrid(); renderEngineGrid(); processAnalyticsRefresh();
+        renderInputGrid();
+        renderEngineGrid();
+        processAnalyticsRefresh();
     };
+
+    function initDatabaseStructure() {
+        const cache = [];
+        let indexer = 0;
+        Object.keys(coreRosterMap).forEach(dept => {
+            Object.keys(coreRosterMap[dept]).forEach(squad => {
+                coreRosterMap[dept][squad].forEach(name => {
+                    let defaultShifts = {};
+                    let off1 = (indexer * 2) % 7;
+                    let off2 = (indexer * 2 + 3) % 7;
+                    if(off1 === off2) off2 = (off2 + 1) % 7;
+                    daysOfWeek.forEach((d, idx) => {
+                        defaultShifts[d] = (idx === off1 || idx === off2) ? "Day Off" : "OPEN";
+                    });
+                    cache.push({ name, dept, squad, shifts: defaultShifts });
+                    indexer++;
+                });
+            });
+        });
+        localStorage.setItem('wfm_v15_request_cache', JSON.stringify(cache));
+    }
+
+    function toggleViewSegment(view) {
+        document.querySelectorAll('.panel-view').forEach(p => p.classList.remove('active-view'));
+        document.querySelectorAll('.dock-tab').forEach(t => t.classList.remove('active-tab'));
+        document.getElementById(`view-${view}`).classList.add('active-view');
+        document.getElementById(`tab-${view}`).classList.add('active-tab');
+    }
+
+    function switchDeptView(dept, type) {
+        if (type === 'request') {
+            activeReqDept = dept;
+            document.querySelectorAll('#view-request .dept-btn').forEach(b => b.classList.remove('active-dept'));
+            document.getElementById(`req-btn-${dept.toLowerCase()}`).classList.add('active-dept');
+            document.querySelectorAll('#view-request .dept-table-container').forEach(c => c.style.display = 'none');
+            document.getElementById(`req-container-${dept}`).style.display = 'block';
+        } else {
+            activeOutDept = dept;
+            document.querySelectorAll('#view-engine .dept-btn').forEach(b => b.classList.remove('active-dept'));
+            document.getElementById(`out-btn-${dept.toLowerCase()}`).classList.add('active-dept');
+            document.querySelectorAll('#view-engine .dept-table-container').forEach(c => c.style.display = 'none');
+            document.getElementById(`out-container-${dept}`).style.display = 'block';
+        }
+    }
+
+    function renderInputGrid() {
+        const data = JSON.parse(localStorage.getItem('wfm_v15_request_cache'));
+        const tbodyPhones = document.getElementById('reqBodyPhones'); tbodyPhones.innerHTML = "";
+        const tbodyChats = document.getElementById('reqBodyChats'); tbodyChats.innerHTML = "";
+
+        Object.keys(coreRosterMap).forEach(dept => {
+            const currentTbody = (dept === "Calculo Phones") ? tbodyPhones : tbodyChats;
+            Object.keys(coreRosterMap[dept]).forEach(squad => {
+                currentTbody.innerHTML += `<tr><td colspan="9" class="row-squad-header">✦ ${squad} Group</td></tr>`;
+                coreRosterMap[dept][squad].forEach(name => {
+                    const agent = data.find(r => r.name === name); if(!agent) return;
+                    const tr = document.createElement('tr');
+                    let isVip = squad === "VIP";
+                    let cells = `<td><span style="font-weight:600;">${name}</span></td>`;
+                    cells += `<td><span class="badge-pill ${isVip ? 'badge-vip' : ''}">${squad}</span></td>`;
+                    daysOfWeek.forEach(day => { cells += `<td>${buildSelectOptions(name, day, agent.shifts[day], 'request')}</td>`; });
+                    tr.innerHTML = cells; currentTbody.appendChild(tr);
+                });
+            });
+        });
+    }
+
+    function renderEngineGrid() {
+        const data = JSON.parse(localStorage.getItem('wfm_v15_output_cache'));
+        const tbodyPhones = document.getElementById('outBodyPhones'); tbodyPhones.innerHTML = "";
+        const tbodyChats = document.getElementById('outBodyChats'); tbodyChats.innerHTML = "";
+
+        Object.keys(coreRosterMap).forEach(dept => {
+            const currentTbody = (dept === "Calculo Phones") ? tbodyPhones : tbodyChats;
+            Object.keys(coreRosterMap[dept]).forEach(squad => {
+                currentTbody.innerHTML += `<tr><td colspan="9" class="row-squad-header">✦ ${squad} Group</td></tr>`;
+                coreRosterMap[dept][squad].forEach(name => {
+                    const agent = data.find(r => r.name === name); if(!agent) return;
+                    const tr = document.createElement('tr');
+                    let isVip = squad === "VIP";
+                    let cells = `<td><span style="font-weight:600;">${name}</span></td>`;
+                    cells += `<td><span class="badge-pill ${isVip ? 'badge-vip' : ''}">${squad}</span></td>`;
+                    daysOfWeek.forEach(day => { cells += `<td>${buildSelectOptions(name, day, agent.shifts[day], 'output')}</td>`; });
+                    tr.innerHTML = cells; currentTbody.appendChild(tr);
+                });
+            });
+        });
+    }
+
+    function buildSelectOptions(name, day, currentVal, type) {
+        let pools = ["06:00 AM", "07:00 AM", "09:00 AM", "10:00 AM", "11:00 AM", "01:00 PM", "02:00 PM", "03:00 PM", "OPEN", "Vacaciones", "Day Off"];
+        let styleClass = "s-am";
+        if (pmWindows.includes(currentVal)) styleClass = "s-pm";
+        if (currentVal === "Day Off") styleClass = "s-off";
+        if (currentVal === "Vacaciones") styleClass = "s-vac";
+        if (currentVal === "OPEN") styleClass = "s-op";
+        let callback = type === 'request' ? 'syncLiveRequest(this)' : 'syncLiveOutput(this)';
+        let html = `<select class="custom-dropdown ${styleClass}" data-name="${name}" data-day="${day}" onchange="${callback}">`;
+        pools.forEach(p => { html += `<option value="${p}" ${currentVal === p ? 'selected' : ''}>${p}</option>`; });
+        return html + `</select>`;
+    }
+
+    function syncLiveRequest(el) {
+        const name = el.getAttribute('data-name'); const day = el.getAttribute('data-day');
+        let data = JSON.parse(localStorage.getItem('wfm_v15_request_cache'));
+        let target = data.find(r => r.name === name); if(target) target.shifts[day] = el.value;
+        localStorage.setItem('wfm_v15_request_cache', JSON.stringify(data));
+        repaintDropdown(el);
+    }
+
+    function syncLiveOutput(el) {
+        const name = el.getAttribute('data-name'); const day = el.getAttribute('data-day');
+        let data = JSON.parse(localStorage.getItem('wfm_v15_output_cache'));
+        let target = data.find(r => r.name === name); if(target) target.shifts[day] = el.value;
+        localStorage.setItem('wfm_v15_output_cache', JSON.stringify(data));
+        repaintDropdown(el); processAnalyticsRefresh();
+    }
+
+    function repaintDropdown(el) {
+        el.classList.remove('s-am', 's-pm', 's-off', 's-vac', 's-op');
+        let val = el.value;
+        if (amWindows.includes(val)) el.classList.add('s-am');
+        if (pmWindows.includes(val)) el.classList.add('s-pm');
+        if (val === "Day Off") el.classList.add('s-off');
+        if (val === "Vacaciones") el.classList.add('s-vac');
+        if (val === "OPEN") el.classList.add('s-op');
+    }
+
+    function changeMetricsFilter(filterMode) {
+        selectedMetricsFilter = filterMode;
+        document.querySelectorAll('#view-engine .dept-switcher .dept-btn').forEach(b => b.classList.remove('active-dept'));
+        if (filterMode === 'all') document.getElementById('an-btn-all').classList.add('active-dept');
+        if (filterMode === 'Calculo Phones') document.getElementById('an-btn-phones').classList.add('active-dept');
+        if (filterMode === 'Calculo Chats') document.getElementById('an-btn-chats').classList.add('active-dept');
+        processAnalyticsRefresh();
+    }
 
     function compileRosterPipeline() {
         let requests = JSON.parse(localStorage.getItem('wfm_v15_request_cache'));
-        let output = JSON.parse(JSON.stringify(requests));
-        ["Calculo Phones", "Calculo Chats"].forEach(dept => {
+        let output = JSON.parse(JSON.stringify(requests)); 
+        const departments = ["Calculo Phones", "Calculo Chats"];
+
+        departments.forEach(dept => {
+            let vips = output.filter(r => r.dept === dept && r.squad === "VIP");
+            let supportTiers = output.filter(r => r.dept === dept && r.squad !== "VIP");
+
+            // 1. REGLA VIP - DISTRIBUCIÓN SIMÉTRICA BASE
+            vips.forEach(v => {
+                daysOfWeek.forEach(day => {
+                    if (v.shifts[day] !== "Vacaciones") v.shifts[day] = "OPEN";
+                });
+            });
+
+            if (dept === "Calculo Phones" && vips.length === 4) {
+                const perfectPhonesMatrix = {
+                    0: ["Day Off", "OPEN", "OPEN", "OPEN", "Day Off", "OPEN", "OPEN"], 
+                    1: ["OPEN", "Day Off", "OPEN", "OPEN", "OPEN", "Day Off", "OPEN"], 
+                    2: ["OPEN", "OPEN", "Day Off", "OPEN", "OPEN", "OPEN", "Day Off"], 
+                    3: ["OPEN", "OPEN", "OPEN", "Day Off", "Day Off", "OPEN", "OPEN"]  
+                };
+                vips.forEach((v, idx) => {
+                    daysOfWeek.forEach((day, dIdx) => {
+                        if (v.shifts[day] !== "Vacaciones") v.shifts[day] = perfectPhonesMatrix[idx][dIdx];
+                    });
+                });
+            } else {
+                let currentOffPointers = {}; 
+                daysOfWeek.forEach(d => currentOffPointers[d] = vips.filter(v => v.shifts[d] === "Vacaciones").length);
+
+                vips.forEach(v => {
+                    let totalOffs = daysOfWeek.filter(d => v.shifts[d] === "Vacaciones" || v.shifts[d] === "Day Off").length;
+                    if (totalOffs < 2) {
+                        let sortedDays = [...daysOfWeek].sort((a, b) => currentOffPointers[a] - currentOffPointers[b]);
+                        for (let day of sortedDays) {
+                            if (v.shifts[day] === "OPEN") {
+                                v.shifts[day] = "Day Off";
+                                currentOffPointers[day]++;
+                                totalOffs++;
+                                if (totalOffs === 2) break;
+                            }
+                        }
+                    }
+                });
+            }
+
             daysOfWeek.forEach(day => {
-                let activeSupport = output.filter(s => s.dept === dept && s.squad !== "VIP" && s.shifts[day] === "OPEN");
+                let activeVips = vips.filter(v => v.shifts[day] !== "Day Off" && v.shifts[day] !== "Vacaciones");
+                let countActiveVips = activeVips.length;
+
+                if (countActiveVips >= 4) {
+                    activeVips[0].shifts[day] = "06:00 AM"; activeVips[1].shifts[day] = "07:00 AM";
+                    activeVips[2].shifts[day] = "02:00 PM"; activeVips[3].shifts[day] = "03:00 PM";
+                    for(let i=4; i<countActiveVips; i++) activeVips[i].shifts[day] = i % 2 === 0 ? "07:00 AM" : "02:00 PM";
+                } else if (countActiveVips === 3) {
+                    activeVips[0].shifts[day] = "06:00 AM"; activeVips[1].shifts[day] = "09:00 AM"; activeVips[2].shifts[day] = "03:00 PM";
+                } else if (countActiveVips === 2) {
+                    activeVips[0].shifts[day] = "06:00 AM"; activeVips[1].shifts[day] = "02:00 PM";
+                } else if (countActiveVips === 1) {
+                    activeVips[0].shifts[day] = "06:00 AM";
+                }
+            });
+
+            // 2. LOGÍSTICA SOPORTE: REESTRUCTURACIÓN DE CONTENEDORES INMUTABLES
+            supportTiers.forEach(agent => {
+                daysOfWeek.forEach(day => {
+                    if (agent.shifts[day] !== "Day Off" && agent.shifts[day] !== "Vacaciones") {
+                        agent.shifts[day] = "OPEN";
+                    }
+                });
+            });
+
+            let supportOffCounters = {};
+            daysOfWeek.forEach(d => supportOffCounters[d] = 0);
+
+            supportTiers.forEach(agent => {
+                let currentOffs = daysOfWeek.filter(d => agent.shifts[d] === "Day Off" || agent.shifts[d] === "Vacaciones").length;
+                if (currentOffs < 2) {
+                    let blockWE = weekendOffBlocklist.includes(agent.name);
+                    let allowedDays = blockWE 
+                        ? ["Wednesday", "Thursday", "Tuesday", "Monday", "Friday"]
+                        : ["Sunday", "Saturday", "Wednesday", "Thursday", "Tuesday", "Monday", "Friday"];
+                    
+                    allowedDays.sort((a, b) => supportOffCounters[a] - supportOffCounters[b]);
+
+                    for (let d of allowedDays) {
+                        if (agent.shifts[d] === "OPEN") {
+                            agent.shifts[d] = "Day Off";
+                            supportOffCounters[d]++;
+                            currentOffs++;
+                            if (currentOffs === 2) break;
+                        }
+                    }
+                }
+            });
+
+            // CONTROL ESTRICTO DE LLEGADA HORARIA - BLINDAJE ANTI-DESFASE
+            daysOfWeek.forEach(day => {
+                let activeSupport = supportTiers.filter(s => s.shifts[day] === "OPEN");
+                
                 let middleSupport = activeSupport.filter(s => middleShiftRules.includes(s.name));
                 let standardSupport = activeSupport.filter(s => !middleShiftRules.includes(s.name));
-                middleSupport.forEach((s, sIdx) => { s.shifts[day] = ["09:00 AM", "10:00 AM", "11:00 AM"][sIdx % 3]; });
-                let amCount = Math.floor(standardSupport.length / 2);
-                let pmCount = standardSupport.length - amCount;
-                let masterSlotsPool = [];
-                for (let i = 0; i < amCount; i++) masterSlotsPool.push(i % 2 === 0 ? "06:00 AM" : "07:00 AM");
-                for (let i = 0; i < pmCount; i++) masterSlotsPool.push(i % 2 === 0 ? "02:00 PM" : "03:00 PM");
-                standardSupport.forEach((agent, index) => agent.shifts[day] = masterSlotsPool[index] || "02:00 PM");
+
+                // Turnos medios (fijos)
+                middleSupport.forEach((s, sIdx) => {
+                    let midPool = ["09:00 AM", "10:00 AM", "11:00 AM"];
+                    s.shifts[day] = midPool[sIdx % midPool.length];
+                });
+
+                let totalStandard = standardSupport.length;
+                if (totalStandard > 0) {
+                    let amCount = Math.floor(totalStandard / 2);
+                    let pmCount = totalStandard - amCount; 
+
+                    // Forzar alternancia estricta uno por uno en la mañana para paridad 6am y 7am
+                    let masterSlotsPool = [];
+                    for (let i = 0; i < amCount; i++) {
+                        masterSlotsPool.push(i % 2 === 0 ? "06:00 AM" : "07:00 AM");
+                    }
+                    // Forzar alternancia estricta uno por uno en la tarde
+                    for (let i = 0; i < pmCount; i++) {
+                        masterSlotsPool.push(i % 2 === 0 ? "02:00 PM" : "03:00 PM");
+                    }
+
+                    // Inyectar sin alterar el orden
+                    standardSupport.forEach((agent, index) => {
+                        agent.shifts[day] = masterSlotsPool[index] || "02:00 PM";
+                    });
+                }
             });
         });
+
+        // CONTROL ERGONÓMICO INTERJORNADA POR INTERCAMBIO SIMÉTRICO ESTRICTO (ZERO-SUM SWAP)
+        for (let i = 0; i < daysOfWeek.length - 1; i++) {
+            let currentDay = daysOfWeek[i]; 
+            let nextDay = daysOfWeek[i + 1];
+
+            departments.forEach(dept => {
+                let deptAgents = output.filter(p => p.dept === dept && p.squad !== "VIP");
+
+                deptAgents.forEach(agent => {
+                    // Si trabaja tarde hoy, y mañana entra temprano (06:00 AM o 07:00 AM)...
+                    if (pmWindows.includes(agent.shifts[currentDay]) && (agent.shifts[nextDay] === "06:00 AM" || agent.shifts[nextDay] === "07:00 AM")) {
+                        
+                        // Buscamos un compañero espejo perfecto: que MAÑANA trabaje de tarde, y HOY trabaje de mañana.
+                        // Esto garantiza que al intercambiar los turnos del 'nextDay', la mañana y la tarde se mantienen intactas numéricamente.
+                        let perfectPeer = deptAgents.find(p => 
+                            p.name !== agent.name && 
+                            pmWindows.includes(p.shifts[nextDay]) && 
+                            (p.shifts[currentDay] === "06:00 AM" || p.shifts[currentDay] === "07:00 AM" || p.shifts[currentDay] === "09:00 AM" || p.shifts[currentDay] === "10:00 AM")
+                        );
+
+                        if (perfectPeer) {
+                            let tempShift = agent.shifts[nextDay];
+                            agent.shifts[nextDay] = perfectPeer.shifts[nextDay];
+                            perfectPeer.shifts[nextDay] = tempShift;
+                        }
+                    }
+                });
+            });
+        }
+
         localStorage.setItem('wfm_v15_output_cache', JSON.stringify(output));
-        renderEngineGrid(); processAnalyticsRefresh();
+        renderEngineGrid();
+        processAnalyticsRefresh();
+        toggleViewSegment('engine');
     }
 
     function processAnalyticsRefresh() {
         const rawData = JSON.parse(localStorage.getItem('wfm_v15_output_cache')) || [];
-        const data = (selectedMetricsFilter === "all") ? rawData : rawData.filter(a => a.dept === selectedMetricsFilter);
-        const matrix = {}; hoursPriority.forEach(h => { matrix[h] = {}; daysOfWeek.forEach(d => matrix[h][d] = 0); });
-        const totAM = {}, totPM = {}, totGlobal = {};
-        daysOfWeek.forEach(d => { totAM[d] = 0; totPM[d] = 0; totGlobal[d] = 0; });
-        data.forEach(a => {
-            daysOfWeek.forEach(d => {
-                const s = a.shifts[d];
-                if (matrix[s]) { matrix[s][d]++; totGlobal[d]++; }
-                if (amWindows.includes(s)) totAM[d]++;
-                if (pmWindows.includes(s)) totPM[d]++;
+        let filteredData = rawData;
+        if (selectedMetricsFilter !== "all") filteredData = rawData.filter(agent => agent.dept === selectedMetricsFilter);
+
+        const calculatedMatrix = {}; hoursPriority.forEach(h => { calculatedMatrix[h] = {}; daysOfWeek.forEach(d => calculatedMatrix[h][d] = 0); });
+        const totalizerAM = {}; const totalizerPM = {}; const totalizerShrink = {};
+        daysOfWeek.forEach(d => { totalizerAM[d] = 0; totalizerPM[d] = 0; totalizerShrink[d] = 0; });
+
+        filteredData.forEach(agent => {
+            daysOfWeek.forEach(day => {
+                const activeShift = agent.shifts[day] || "Day Off";
+                if (calculatedMatrix[activeShift]) calculatedMatrix[activeShift][day]++;
+                if (amWindows.includes(activeShift)) totalizerAM[day]++;
+                if (pmWindows.includes(activeShift)) totalizerPM[day]++;
+                if (activeShift === "Day Off" || activeShift === "Vacaciones") totalizerShrink[day]++;
             });
         });
-        const tbody = document.getElementById('analyticsDataBody'); tbody.innerHTML = "";
-        hoursPriority.forEach(h => { tbody.innerHTML += `<tr><td style="text-align:left;">${h}</td>` + daysOfWeek.map(d => `<td>${matrix[h][d]}</td>`).join('') + `</tr>`; });
-        tbody.innerHTML += `<tr class="total-row-am"><td>NET AM</td>` + daysOfWeek.map(d => `<td>${totAM[d]}</td>`).join('') + `</tr>`;
-        tbody.innerHTML += `<tr class="total-row-pm"><td>NET PM</td>` + daysOfWeek.map(d => `<td>${totPM[d]}</td>`).join('') + `</tr>`;
-        tbody.innerHTML += `<tr style="background:#f1f5f9; font-weight:800;"><td>TOTAL</td>` + daysOfWeek.map(d => `<td>${totGlobal[d]}</td>`).join('') + `</tr>`;
+
+        const targetTbody = document.getElementById('analyticsDataBody'); targetTbody.innerHTML = "";
+        targetTbody.innerHTML += `<tr><td colspan="8" class="analytics-section-title">▲ AM Capacity Blocks</td></tr>`;
+        amWindows.forEach(windowBlock => {
+            let tr = `<tr><td style="text-align:left; font-weight:500; color: var(--text-secondary);">${windowBlock}</td>`;
+            daysOfWeek.forEach(d => tr += `<td>${calculatedMatrix[windowBlock][d]}</td>`);
+            targetTbody.innerHTML += tr + `</tr>`;
+        });
+        let sumAMRow = `<tr class="total-row-am"><td style="text-align:left;">Net Capacity AM</td>`;
+        daysOfWeek.forEach(d => sumAMRow += `<td>${totalizerAM[d]}</td>`);
+        targetTbody.innerHTML += sumAMRow + `</tr>`;
+
+        targetTbody.innerHTML += `<tr><td colspan="8" class="analytics-section-title">▼ PM Capacity Blocks</td></tr>`;
+        pmWindows.forEach(windowBlock => {
+            let tr = `<tr><td style="text-align:left; font-weight:500; color: var(--text-secondary);">${windowBlock}</td>`;
+            daysOfWeek.forEach(d => tr += `<td>${calculatedMatrix[windowBlock][d]}</td>`);
+            targetTbody.innerHTML += tr + `</tr>`;
+        });
+        let sumPMRow = `<tr class="total-row-pm"><td style="text-align:left;">Net Capacity PM</td>`;
+        daysOfWeek.forEach(d => sumPMRow += `<td>${totalizerPM[d]}</td>`);
+        targetTbody.innerHTML += sumPMRow + `</tr>`;
+
+        let shrinkRow = `<tr class="total-row-shrinkage"><td style="text-align:left;">Total Off / Volume Loss</td>`;
+        daysOfWeek.forEach(d => shrinkRow += `<td>${totalizerShrink[d]} Ag.</td>`);
+        targetTbody.innerHTML += shrinkRow + `</tr>`;
     }
 
-    /* ... [Añade el resto de funciones auxiliares originales de tu archivo: renderGrid, etc] ... */
+    async function exportDataToExcel() {
+        const log = JSON.parse(localStorage.getItem('wfm_v15_output_cache'));
+        const workbook = new ExcelJS.Workbook();
+        ["Calculo Phones", "Calculo Chats"].forEach(deptName => {
+            const sheet = workbook.addWorksheet(deptName);
+            sheet.columns = [
+                { header: 'Agent Full Name', key: 'name', width: 28 },
+                { header: 'Squad Level', key: 'squad', width: 15 },
+                ...daysOfWeek.map(d => ({ header: d, key: d, width: 15 }))
+            ];
+            log.filter(e => e.dept === deptName).forEach(entry => {
+                sheet.addRow({ name: entry.name, squad: entry.squad, ...entry.shifts });
+            });
+        });
+        const buffer = await workbook.xlsx.writeBuffer();
+        const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+        const trigger = document.createElement("a");
+        trigger.href = URL.createObjectURL(blob);
+        trigger.download = `WFM_v15_6_HardBalanced_Roster.xlsx`;
+        trigger.click();
+    }
 </script>
 </body>
 </html>

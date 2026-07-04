@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WFM Tactical Enterprise // v15.4 Zero-Gap Matrix</title>
+    <title>WFM Tactical Enterprise // v15.5 Hard-Locked Balance Engine</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -146,7 +146,7 @@
     <header>
         <div class="app-title">
             <h1>Tactical Workforce Management</h1>
-            <p>// ENGINE VERSION 15.4 // ZERO-GAP STRATIFIED DISTRIBUTION</p>
+            <p>// ENGINE VERSION 15.5 // HARD-LOCKED PERFECT COVERS</p>
         </div>
         <div>
             <button class="action-btn" onclick="exportDataToExcel()">📥 Export Matrix to Excel</button>
@@ -158,7 +158,6 @@
         <button class="dock-tab" id="tab-engine" onclick="toggleViewSegment('engine')">02 / Master Shift Roster</button>
     </div>
 
-    <!-- WINDOW 1: REQUEST PRE-DECK -->
     <div id="view-request" class="panel-view active-view">
         <div class="panel-card">
             <div class="card-title-bar">
@@ -199,7 +198,6 @@
         </div>
     </div>
 
-    <!-- WINDOW 2: OUTPUT PROVISION ROSTER -->
     <div id="view-engine" class="panel-view">
         <div class="panel-card">
             <div class="card-title-bar">
@@ -238,7 +236,6 @@
             </div>
         </div>
 
-        <!-- Integrated Corporate Metrics Panel -->
         <div class="panel-card">
             <div class="card-title-bar">
                 <span>📈 Real-time Supply Statistics</span>
@@ -445,7 +442,7 @@
             let vips = output.filter(r => r.dept === dept && r.squad === "VIP");
             let supportTiers = output.filter(r => r.dept === dept && r.squad !== "VIP");
 
-            // 1. REGLA DE FILTRADO VIP (SKELETON BASE)
+            // 1. REGLA VIP - DISTRIBUCIÓN SIMÉTRICA BASE
             vips.forEach(v => {
                 daysOfWeek.forEach(day => {
                     if (v.shifts[day] !== "Vacaciones") v.shifts[day] = "OPEN";
@@ -501,7 +498,7 @@
                 }
             });
 
-            // 2. LOGÍSTICA DE SOPORTE ESTÁNDAR (ALGORITMO DE EQUILIBRIO ABSOLUTO V15.4)
+            // 2. LOGÍSTICA SOPORTE: REESTRUCTURACIÓN DE CONTENEDORES INMUTABLES
             supportTiers.forEach(agent => {
                 daysOfWeek.forEach(day => {
                     if (agent.shifts[day] !== "Day Off" && agent.shifts[day] !== "Vacaciones") {
@@ -534,51 +531,61 @@
                 }
             });
 
-            // DISTRIBUCIÓN HORARIA SECUENCIAL PARA LOGRAR PARIDAD 2-2 Y ELIMINAR EL GAP
+            // CONTROL ESTRICTO DE LLEGADA HORARIA - BLINDAJE V15.5
             daysOfWeek.forEach(day => {
                 let activeSupport = supportTiers.filter(s => s.shifts[day] === "OPEN");
                 
                 let middleSupport = activeSupport.filter(s => middleShiftRules.includes(s.name));
                 let standardSupport = activeSupport.filter(s => !middleShiftRules.includes(s.name));
 
-                // Configurar primero los turnos intermedios obligatorios
+                // Turnos medios (fijos)
                 middleSupport.forEach((s, sIdx) => {
                     let midPool = ["09:00 AM", "10:00 AM", "11:00 AM"];
                     s.shifts[day] = midPool[sIdx % midPool.length];
                 });
 
-                let totalStandardAvailable = standardSupport.length;
-                if (totalStandardAvailable > 0) {
-                    // Para eliminar el gap, obligamos al orden secuencial a iniciar o priorizar la tarde (PM)
-                    // si detectamos que estructuralmente hay menos cobertura en la tarde.
-                    // Secuencia balanceada cíclica para lograr paridad exacta:
-                    let patternSequence = ["06:00 AM", "07:00 AM", "02:00 PM", "03:00 PM"];
-                    
-                    // Si el volumen total disponible es par e igual a 4, forzará exactamente un agente en cada slot del patrón (2 AM y 2 PM)
-                    // Si es un número impar, el residuo se asigna a la tarde ("02:00 PM" o "03:00 PM") para pulverizar la brecha.
-                    standardSupport.forEach((s, index) => {
-                        let targetShiftIndex = index % patternSequence.length;
-                        
-                        // Modificación de ordenación para mitigar gaps impares (Agente extra va a la tarde)
-                        if (totalStandardAvailable % 2 !== 0 && index === totalStandardAvailable - 1) {
-                            s.shifts[day] = "02:00 PM";
-                        } else {
-                            s.shifts[day] = patternSequence[targetShiftIndex];
-                        }
+                let totalStandard = standardSupport.length;
+                if (totalStandard > 0) {
+                    // Cálculo de ranuras bloqueadas matemáticamente para evitar asimetrías de 3 y 1
+                    // Y forzar diferencia máxima global de 1 persona entre bloques
+                    let amCount = Math.floor(totalStandard / 2);
+                    let pmCount = totalStandard - amCount; 
+
+                    // Dentro de AM, partimos a la mitad exacta para forzar paridad de 6am y 7am
+                    let slots6am = Math.floor(amCount / 2);
+                    let slots7am = amCount - slots6am;
+
+                    // Dentro de PM, partimos a la mitad exacta para turnos de la tarde
+                    let slots2pm = Math.floor(pmCount / 2);
+                    let slots3pm = pmCount - slots2pm;
+
+                    // Creamos el arreglo definitivo de slots duros para el día
+                    let masterSlotsPool = [];
+                    for(let i=0; i<slots6am; i++) masterSlotsPool.push("06:00 AM");
+                    for(let i=0; i<slots7am; i++) masterSlotsPool.push("07:00 AM");
+                    for(let i=0; i<slots2pm; i++) masterSlotsPool.push("02:00 PM");
+                    for(let i=0; i<slots3pm; i++) masterSlotsPool.push("03:00 PM");
+
+                    // Inyectamos de forma uno a uno sin excepciones corporales
+                    standardSupport.forEach((agent, index) => {
+                        agent.shifts[day] = masterSlotsPool[index] || "02:00 PM";
                     });
                 }
             });
         });
 
-        // CONTROL ERGONÓMICO INTERJORNADA
-        output.forEach(agent => {
+        // CONTROL ERGONÓMICO INTERJORNADA INTELIGENTE POR INTERCAMBIO (No altera totales)
+        output.forEach((agent, aIdx) => {
+            if (agent.squad === "VIP") return;
             for (let i = 0; i < daysOfWeek.length - 1; i++) {
                 let currentDay = daysOfWeek[i]; let nextDay = daysOfWeek[i + 1];
-                if (pmWindows.includes(agent.shifts[currentDay])) {
-                    if (agent.shifts[nextDay] === "06:00 AM" || agent.shifts[nextDay] === "07:00 AM") {
-                        if (agent.squad !== "VIP") { 
-                            agent.shifts[nextDay] = middleShiftRules.includes(agent.name) ? "11:00 AM" : "02:00 PM";
-                        }
+                if (pmWindows.includes(agent.shifts[currentDay]) && (agent.shifts[nextDay] === "06:00 AM" || agent.shifts[nextDay] === "07:00 AM")) {
+                    // Buscamos un compañero del mismo departamento que trabaje tarde al día siguiente para intercambiar el slot
+                    let peer = output.find(p => p.dept === agent.dept && p.squad !== "VIP" && p.name !== agent.name && pmWindows.includes(p.shifts[nextDay]) && !pmWindows.includes(p.shifts[currentDay]));
+                    if (peer) {
+                        let temp = agent.shifts[nextDay];
+                        agent.shifts[nextDay] = peer.shifts[nextDay];
+                        peer.shifts[nextDay] = temp;
                     }
                 }
             }
@@ -653,7 +660,7 @@
         const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
         const trigger = document.createElement("a");
         trigger.href = URL.createObjectURL(blob);
-        trigger.download = `WFM_v15_4_ZeroGap_Roster.xlsx`;
+        trigger.download = `WFM_v15_5_HardBalanced_Roster.xlsx`;
         trigger.click();
     }
 </script>

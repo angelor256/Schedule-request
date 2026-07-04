@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WFM Tactical Enterprise // v13.0 VIP-Shielded Engine</title>
+    <title>WFM Tactical Enterprise // v14.0 Strict VIP Engine</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -137,7 +137,7 @@
     <div class="glass-header">
         <div class="app-title">
             <h1>Tactical Workforce Management Panel</h1>
-            <p>// CORE SYSTEM ENG v13.0 // VIP-SHIELDED AUTOMATION PIPELINE</p>
+            <p>// CORE SYSTEM ENG v14.0 // STRICT TWO-PHASE PIPELINE</p>
         </div>
         <div>
             <button class="action-btn btn-download" onclick="exportDataToExcel()">📥 Export Master Copy</button>
@@ -149,6 +149,7 @@
         <button class="dock-tab" id="tab-engine" onclick="toggleViewSegment('engine')">02 / Tactical Production Roster (Final Schedule)</button>
     </div>
 
+    <!-- SCREEN 1 -->
     <div id="view-request" class="panel-view active-view">
         <div class="panel-card" style="border-top: 3px solid var(--neon-purple);">
             <div class="card-title-bar">
@@ -170,11 +171,12 @@
         </div>
     </div>
 
+    <!-- SCREEN 2 -->
     <div id="view-engine" class="panel-view">
         <div class="panel-card" style="border-top: 3px solid var(--neon-blue);">
             <div class="card-title-bar">
-                <span>⚡ Cuadrante Maestro Jerárquico (VIPs Protegidos + Balanceo Secundario Enforced)</span>
-                <span style="font-size: 11px; color: var(--neon-green); font-family: 'JetBrains Mono', monospace;">STATUS: HIERARCHICAL SUCCESS</span>
+                <span>⚡ Cuadrante Maestro Jerárquico (VIPs Protegidos con 2 Offs Max)</span>
+                <span style="font-size: 11px; color: var(--neon-green); font-family: 'JetBrains Mono', monospace;">STATUS: STRICT HIERARCHICAL ENFORCED</span>
             </div>
             <div style="overflow-x: auto;">
                 <table class="interactive-table">
@@ -242,8 +244,8 @@
     let selectedMetricsFilter = "all";
 
     window.onload = function() {
-        if (!localStorage.getItem('wfm_v13_request_cache')) initDatabaseStructure();
-        if (!localStorage.getItem('wfm_v13_output_cache')) localStorage.setItem('wfm_v13_output_cache', localStorage.getItem('wfm_v13_request_cache'));
+        if (!localStorage.getItem('wfm_v14_request_cache')) initDatabaseStructure();
+        if (!localStorage.getItem('wfm_v14_output_cache')) localStorage.setItem('wfm_v14_output_cache', localStorage.getItem('wfm_v14_request_cache'));
         renderInputGrid();
         renderEngineGrid();
         processAnalyticsRefresh();
@@ -267,7 +269,7 @@
                 });
             });
         });
-        localStorage.setItem('wfm_v13_request_cache', JSON.stringify(cache));
+        localStorage.setItem('wfm_v14_request_cache', JSON.stringify(cache));
     }
 
     function toggleViewSegment(view) {
@@ -278,7 +280,7 @@
     }
 
     function renderInputGrid() {
-        const data = JSON.parse(localStorage.getItem('wfm_v13_request_cache'));
+        const data = JSON.parse(localStorage.getItem('wfm_v14_request_cache'));
         const tbody = document.getElementById('requestDeckBody'); tbody.innerHTML = "";
         Object.keys(coreRosterMap).forEach(dept => {
             tbody.innerHTML += `<tr><td colspan="9" class="row-dept-header">// DEPT: ${dept.toUpperCase()}</td></tr>`;
@@ -298,7 +300,7 @@
     }
 
     function renderEngineGrid() {
-        const data = JSON.parse(localStorage.getItem('wfm_v13_output_cache'));
+        const data = JSON.parse(localStorage.getItem('wfm_v14_output_cache'));
         const tbody = document.getElementById('engineDeckBody'); tbody.innerHTML = "";
         Object.keys(coreRosterMap).forEach(dept => {
             tbody.innerHTML += `<tr><td colspan="9" class="row-dept-header">// DEPT: ${dept.toUpperCase()}</td></tr>`;
@@ -332,17 +334,17 @@
 
     function syncLiveRequest(el) {
         const name = el.getAttribute('data-name'); const day = el.getAttribute('data-day');
-        let data = JSON.parse(localStorage.getItem('wfm_v13_request_cache'));
+        let data = JSON.parse(localStorage.getItem('wfm_v14_request_cache'));
         let target = data.find(r => r.name === name); if(target) target.shifts[day] = el.value;
-        localStorage.setItem('wfm_v13_request_cache', JSON.stringify(data));
+        localStorage.setItem('wfm_v14_request_cache', JSON.stringify(data));
         repaintDropdown(el);
     }
 
     function syncLiveOutput(el) {
         const name = el.getAttribute('data-name'); const day = el.getAttribute('data-day');
-        let data = JSON.parse(localStorage.getItem('wfm_v13_output_cache'));
+        let data = JSON.parse(localStorage.getItem('wfm_v14_output_cache'));
         let target = data.find(r => r.name === name); if(target) target.shifts[day] = el.value;
-        localStorage.setItem('wfm_v13_output_cache', JSON.stringify(data));
+        localStorage.setItem('wfm_v14_output_cache', JSON.stringify(data));
         repaintDropdown(el); processAnalyticsRefresh();
     }
 
@@ -359,52 +361,79 @@
     function changeMetricsFilter(filterMode) {
         selectedMetricsFilter = filterMode;
         document.querySelectorAll('.segment-btn').forEach(b => b.classList.remove('active-segment'));
-        if (filterMode === 'all') document.getElementById('seg-all').classList.add('active-segment');
+        if (filterMode === 'all') document.getElementById('seg-all').append('active-segment');
         if (filterMode === 'Calculo Phones') document.getElementById('seg-phones').classList.add('active-segment');
         if (filterMode === 'Calculo Chats') document.getElementById('seg-chats').classList.add('active-segment');
         processAnalyticsRefresh();
     }
 
-    // PIPELINE DE OPTIMIZACIÓN EN DOS FASES ESTRICTAS
+    // INTERFAZ DE PROCESAMIENTO CORREGIDA CON TOPES DE DESCANSO
     function compileRosterPipeline() {
-        let requests = JSON.parse(localStorage.getItem('wfm_v13_request_cache'));
+        let requests = JSON.parse(localStorage.getItem('wfm_v14_request_cache'));
         let output = JSON.parse(JSON.stringify(requests)); 
         const departments = ["Calculo Phones", "Calculo Chats"];
 
         departments.forEach(dept => {
-            // Separar Universo VIP del resto de ramas
             let vips = output.filter(r => r.dept === dept && r.squad === "VIP");
             let supportTiers = output.filter(r => r.dept === dept && r.squad !== "VIP");
 
-            daysOfWeek.forEach((day, dIdx) => {
-                // ==========================================
-                // FASE 1: HORARIO BLINDADO VIP
-                // ==========================================
-                // Forzar distribución de Días Libres en VIP para que no queden descubiertos
-                vips.forEach((v, vIdx) => {
-                    // Distribución controlada de descansos para VIP (mínimo 1 libre por día, máximo 2)
-                    let forcedOffDay = daysOfWeek[(vIdx * 2 + 5) % 7];
-                    let forcedOffDay2 = daysOfWeek[(vIdx * 2 + 1) % 7];
-                    
-                    if (v.shifts[day] === "Day Off" || v.shifts[day] === "Vacaciones") {
-                        // Dejar pasar si es un request explícito
-                    } else {
-                        if (day === forcedOffDay || day === forcedOffDay2) {
-                            v.shifts[day] = "Day Off";
-                        }
+            // 1. Inicializar estructura base de VIPs limpia (remover auto-offs basura de versiones previas)
+            vips.forEach(v => {
+                daysOfWeek.forEach(day => {
+                    if (v.shifts[day] !== "Vacaciones" && v.shifts[day] !== "Day Off") {
+                        v.shifts[day] = "OPEN";
                     }
                 });
+            });
 
-                // Contar VIPs activos finales hoy
+            // 2. Controladores de días libres distribuidos estrictos (Máximo 2 libres por VIP)
+            daysOfWeek.forEach((day, dIdx) => {
+                let currentOffsOnDay = vips.filter(v => v.shifts[day] === "Day Off" || v.shifts[day] === "Vacaciones").length;
+                
+                // Si nadie está libre este día, forzamos un libre estratégico cuidando el límite semanal
+                if (currentOffsOnDay === 0) {
+                    let candidate = vips.find(v => {
+                        let totalWeeklyOffs = daysOfWeek.filter(d => v.shifts[d] === "Day Off" || v.shifts[d] === "Vacaciones").length;
+                        return totalWeeklyOffs < 2 && v.shifts[day] === "OPEN";
+                    });
+                    if (candidate) {
+                        candidate.shifts[day] = "Day Off";
+                    }
+                }
+            });
+
+            // Forzar balance final de días libres semanales para los VIPs (Debe ser exactamente 2 por persona)
+            vips.forEach(v => {
+                let currentOffs = daysOfWeek.filter(d => v.shifts[d] === "Day Off" || v.shifts[d] === "Vacaciones").length;
+                if (currentOffs < 2) {
+                    for (let day of daysOfWeek) {
+                        // Buscar días donde no rompamos el mínimo de cobertura
+                        let VIPsLaboralesHoy = vips.filter(other => other.shifts[day] !== "Day Off" && other.shifts[day] !== "Vacaciones").length;
+                        if (v.shifts[day] === "OPEN" && VIPsLaboralesHoy > 1) {
+                            v.shifts[day] = "Day Off";
+                            currentOffs++;
+                            if (currentOffs === 2) break;
+                        }
+                    }
+                }
+            });
+
+            // ==========================================
+            // ASIGNACIÓN DE HORARIOS MATRICIALES VIP
+            // ==========================================
+            daysOfWeek.forEach(day => {
                 let activeVips = vips.filter(v => v.shifts[day] !== "Day Off" && v.shifts[day] !== "Vacaciones");
                 let countActiveVips = activeVips.length;
 
-                // Aplicar matriz inquebrantable de asignación VIP según volumen disponible
-                if (countActiveVips === 4) {
+                if (countActiveVips >= 4) {
                     activeVips[0].shifts[day] = "06:00 AM";
                     activeVips[1].shifts[day] = "07:00 AM";
                     activeVips[2].shifts[day] = "02:00 PM";
                     activeVips[3].shifts[day] = "03:00 PM";
+                    // Si sobran vips por alta densidad, se distribuyen en ventanas complementarias
+                    for(let i=4; i<countActiveVips; i++) {
+                        activeVips[i].shifts[day] = i % 2 === 0 ? "07:00 AM" : "02:00 PM";
+                    }
                 } else if (countActiveVips === 3) {
                     activeVips[0].shifts[day] = "06:00 AM";
                     activeVips[1].shifts[day] = "09:00 AM"; // Middle
@@ -417,9 +446,8 @@
                 }
 
                 // ==========================================
-                // FASE 2: HORARIO RESTO DE TIERS (Ajustable)
+                // FASE 2: BALANCEO DEL RESTO DE LA OPERACIÓN
                 // ==========================================
-                // Forzar 2 días libres mínimos a los support tiers
                 supportTiers.forEach(agent => {
                     let offDaysCount = daysOfWeek.filter(d => agent.shifts[d] === "Day Off" || agent.shifts[d] === "Vacaciones").length;
                     if (offDaysCount < 2) {
@@ -436,25 +464,15 @@
                     }
                 });
 
-                // Calcular cuántos VIPs ya ocuparon los bloques horariales hoy
-                let vip6AM = activeVips.filter(v => v.shifts[day] === "06:00 AM").length;
-                let vip7AM = activeVips.filter(v => v.shifts[day] === "07:00 AM").length;
-                let vip2PM = activeVips.filter(v => v.shifts[day] === "02:00 PM").length;
-                let vip3PM = activeVips.filter(v => v.shifts[day] === "03:00 PM").length;
-                let vipMid = activeVips.filter(v => ["09:00 AM", "10:00 AM", "11:00 AM", "01:00 PM"].includes(v.shifts[day])).length;
-
-                // Filtrar el staff secundario activo de hoy
                 let activeSupport = supportTiers.filter(s => s.shifts[day] !== "Day Off" && s.shifts[day] !== "Vacaciones");
                 let middleSupport = activeSupport.filter(s => middleShiftRules.includes(s.name));
                 let standardSupport = activeSupport.filter(s => !middleShiftRules.includes(s.name));
 
-                // Asignar Middle Shifts secundarios
                 middleSupport.forEach((s, sIdx) => {
                     let midPool = ["09:00 AM", "10:00 AM", "11:00 AM"];
                     s.shifts[day] = midPool[sIdx % midPool.length];
                 });
 
-                // Balancear Standard Support basándose en la base ya inyectada por los VIPs
                 let totalStandardAvailable = standardSupport.length;
                 let halfSupport = Math.floor(totalStandardAvailable / 2);
                 let remSupport = totalStandardAvailable % 2;
@@ -462,11 +480,8 @@
                 let targetAM = halfSupport + remSupport;
                 let targetPM = halfSupport;
 
-                // Sub-distribución interna AM (Garantizar Delta de 1 prioritario para las 06:00 AM)
                 let target6AM = Math.floor(targetAM / 2) + (targetAM % 2);
                 let target7AM = Math.floor(targetAM / 2);
-
-                // Sub-distribución interna PM (Garantizar Delta de 1 prioritario para las 02:00 PM)
                 let target2PM = Math.floor(targetPM / 2) + (targetPM % 2);
                 let target3PM = Math.floor(targetPM / 2);
 
@@ -481,13 +496,13 @@
             });
         });
 
-        // RE-VALIDACIÓN FINAL: Control Ergonómico de 12 horas de descanso
+        // CONTROL FINAL DE CONCORDANCIA ERGONÓMICA (12 Horas de descanso entre jornadas)
         output.forEach(agent => {
             for (let i = 0; i < daysOfWeek.length - 1; i++) {
                 let currentDay = daysOfWeek[i]; let nextDay = daysOfWeek[i + 1];
                 if (pmWindows.includes(agent.shifts[currentDay])) {
                     if (agent.shifts[nextDay] === "06:00 AM" || agent.shifts[nextDay] === "07:00 AM") {
-                        if (agent.squad !== "VIP") { // Solo reajustar si no es VIP blindado
+                        if (agent.squad !== "VIP") { 
                             agent.shifts[nextDay] = middleShiftRules.includes(agent.name) ? "11:00 AM" : "02:00 PM";
                         }
                     }
@@ -495,14 +510,14 @@
             }
         });
 
-        localStorage.setItem('wfm_v13_output_cache', JSON.stringify(output));
+        localStorage.setItem('wfm_v14_output_cache', JSON.stringify(output));
         renderEngineGrid();
         processAnalyticsRefresh();
         toggleViewSegment('engine');
     }
 
     function processAnalyticsRefresh() {
-        const rawData = JSON.parse(localStorage.getItem('wfm_v13_output_cache')) || [];
+        const rawData = JSON.parse(localStorage.getItem('wfm_v14_output_cache')) || [];
         let filteredData = rawData;
         if (selectedMetricsFilter !== "all") filteredData = rawData.filter(agent => agent.dept === selectedMetricsFilter);
 
@@ -521,7 +536,7 @@
         });
 
         const targetTbody = document.getElementById('analyticsDataBody'); targetTbody.innerHTML = "";
-        targetTbody.innerHTML += `<tr><td colspan="8" class="analytics-section-title" style="color:var(--neon-blue);">▲ AM PRODUCTION WINDOWS (VIP DECK SHIELDED)</td></tr>`;
+        targetTbody.innerHTML += `<tr><td colspan="8" class="analytics-section-title" style="color:var(--neon-blue);">▲ AM PRODUCTION WINDOWS</td></tr>`;
         amWindows.forEach(windowBlock => {
             let tr = `<tr><td style="text-align:left; font-weight:600; color: #cbd5e1;">${windowBlock}</td>`;
             daysOfWeek.forEach(d => tr += `<td>${calculatedMatrix[windowBlock][d]}</td>`);
@@ -531,7 +546,7 @@
         daysOfWeek.forEach(d => sumAMRow += `<td>${totalizerAM[d]}</td>`);
         targetTbody.innerHTML += sumAMRow + `</tr>`;
 
-        targetTbody.innerHTML += `<tr><td colspan="8" class="analytics-section-title" style="color:var(--neon-purple);">▼ PM PRODUCTION WINDOWS (VIP DECK SHIELDED)</td></tr>`;
+        targetTbody.innerHTML += `<tr><td colspan="8" class="analytics-section-title" style="color:var(--neon-purple);">▼ PM PRODUCTION WINDOWS</td></tr>`;
         pmWindows.forEach(windowBlock => {
             let tr = `<tr><td style="text-align:left; font-weight:600; color: #cbd5e1;">${windowBlock}</td>`;
             daysOfWeek.forEach(d => tr += `<td>${calculatedMatrix[windowBlock][d]}</td>`);
@@ -547,7 +562,7 @@
     }
 
     async function exportDataToExcel() {
-        const log = JSON.parse(localStorage.getItem('wfm_v13_output_cache'));
+        const log = JSON.parse(localStorage.getItem('wfm_v14_output_cache'));
         const workbook = new ExcelJS.Workbook();
         ["Calculo Phones", "Calculo Chats"].forEach(deptName => {
             const sheet = workbook.addWorksheet(deptName);
@@ -564,7 +579,7 @@
         const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
         const trigger = document.createElement("a");
         trigger.href = URL.createObjectURL(blob);
-        trigger.download = `WFM_v13_VIP_Shielded_Master.xlsx`;
+        trigger.download = `WFM_v14_Strict_VIP_Master.xlsx`;
         trigger.click();
     }
 </script>

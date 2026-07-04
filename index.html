@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WFM Tactical Enterprise // v7.0 Perfect Balance Engine</title>
+    <title>WFM Tactical Enterprise // v8.0 PM-to-AM Pivot Engine</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -150,7 +150,7 @@
     <div class="top-bar">
         <div class="app-title">
             <h1>Tactical Workforce Management Panel</h1>
-            <p>Roster Schedule Engine v7.0 // Perfect Symmetry Curve & 12h Rest Protections</p>
+            <p>Roster Schedule Engine v8.0 // Real PM-to-AM Transition Cushion Rules</p>
         </div>
         <div style="display: flex; gap: 10px;">
             <button class="btn btn-purple" onclick="executeSmartEngine()">⚡ Generate Balanced Schedule</button>
@@ -161,7 +161,7 @@
     <div class="main-card" style="overflow-x: auto;">
         <div class="card-header-title">
             <span>Operational Master Roster Grid</span>
-            <span style="font-size:12px; color:#64748b; font-weight:400;">Perfect 50/50 AM-PM Allocation Curves applied</span>
+            <span style="font-size:12px; color:#64748b; font-weight:400;">Lawful Rest Transitions & Locked Weekend Headcount</span>
         </div>
         <table class="roster-table">
             <thead>
@@ -325,7 +325,7 @@
         calculateAndRenderMetrics();
     }
 
-    // MOTOR v7.0: IMPLEMENTA REGLAS DE BLOQUES ESPEJO BALANCEADOS (50% AM / 50% PM REAL)
+    // MOTOR v8.0: CORRECCIÓN CRÍTICA DE FLUJO OPERATIVO REAL (PM -> OFF -> AM)
     function executeSmartEngine() {
         let cache = getCache();
         const depts = ["Calculo Phones", "Calculo Chats"];
@@ -341,59 +341,77 @@
                     const isMiddle = middleShiftRules.includes(name);
                     const isRestrictedWE = weekendOffBlocklist.includes(name);
 
-                    // 1. ASIGNACIÓN MATEMÁTICA DE DAYS OFF UPTIME
+                    // 1. ASIGNACIÓN CRUZADA E INTELIGENTE DE DAYS OFF
                     let off1Idx, off2Idx;
                     if (isRestrictedWE) {
-                        // Bloqueo estricto de fin de semana: Días libres escalonados de Lun a Vie
-                        off1Idx = (globalAgentCount % 2 === 0) ? 0 : 1; // Lunes o Martes
-                        off2Idx = (globalAgentCount % 2 === 0) ? 3 : 4; // Jueves o Viernes
+                        // Forzar libres estrictamente entre semana (Lunes a Viernes) para bloquear fines de semana ocupados
+                        off1Idx = (globalAgentCount % 3);       // Lun, Mar o Mie
+                        off2Idx = off1Idx + 2;                   // Mie, Jue o Vie
+                        if(off1Idx === off2Idx) off2Idx = 4;
                     } else {
-                        // Distribución cruzada normal de días libres por toda la semana
-                        off1Idx = (globalAgentCount * 2) % 7;
-                        off2Idx = (globalAgentCount * 2 + 3) % 7;
+                        // Rotación total ordinaria de descansos para el resto del equipo
+                        off1Idx = (globalAgentCount * 3) % 7;
+                        off2Idx = (globalAgentCount * 3 + 4) % 7;
                         if (off1Idx === off2Idx) off2Idx = (off2Idx + 1) % 7;
                     }
 
                     let offDay1 = daysOfWeek[off1Idx];
                     let offDay2 = daysOfWeek[off2Idx];
 
-                    // 2. DETERMINAR EL BLOQUE BASE OPERATIVO DEL AGENTE PARA ESTA SEMANA (AM o PM)
-                    // Para evitar que todos vayan a un solo lado, dividimos los agentes limpiamente en base a un índice alterno puro.
-                    let baseBlock = (globalAgentCount % 2 === 0) ? "AM" : "PM";
+                    // 2. CREACIÓN DEL PATRÓN BASE SEMANAL EQUILIBRADO
+                    // Se crean 2 bloques balanceados por departamento para evitar la saturación en una sola franja
+                    let isInitialPMAgent = (globalAgentCount % 2 === 0);
                     globalAgentCount++;
 
-                    // 3. GENERAR EL CALENDARIO DE LA SEMANA DÍA POR DÍA
+                    // 3. CONSTRUCCIÓN DE LA JORNADA DÍA POR DÍA
+                    let currentShiftContext = isInitialPMAgent ? "PM" : "AM";
+
                     for (let i = 0; i < daysOfWeek.length; i++) {
                         let day = daysOfWeek[i];
 
-                        // Respetar estados manuales intocables
+                        // Respetar estados bloqueados manualmente por el supervisor
                         if(agentRecord.shifts[day] === "Vacaciones" || agentRecord.shifts[day] === "OPEN") {
                             continue;
                         }
 
-                        // Setear Día Libre
+                        // CAPTURA DEL DAY OFF (Funciona como el pivote legal obligatorio para limpiar el shift)
                         if (day === offDay1 || day === offDay2) {
                             agentRecord.shifts[day] = "Day Off";
+                            
+                            // REGLA CLAVE OPERATIVA REAL: Si venía trabajando en la Tarde (PM), 
+                            // el pasar por un Day Off nos permite reubicarlo de forma segura a la Mañana (AM) al día siguiente.
+                            if (currentShiftContext === "PM") {
+                                currentShiftContext = "AM";
+                            } else {
+                                currentShiftContext = "PM"; // O viceversa para mantener balance continuo
+                            }
                             continue;
                         }
 
-                        // CONTROL DE TRANSICIÓN DE 12 HORAS MEDIANTE REGLA DE BLOQUE BASE
-                        // Si el agente pertenece al bloque base PM, se queda en PM para no violar descansos.
-                        // Si pertenece al bloque base AM, se queda en AM. 
-                        // Nota: La transición segura de AM a PM o viceversa ocurrirá la siguiente semana tras pasar por un Day Off.
-                        if (baseBlock === "PM") {
-                            // Distribución interna de turnos PM
+                        // REGLA DE TRÁNSITO SEGURO DIARIO: 
+                        // De mañana a tarde se puede pasar directo en cualquier momento, pero si está en PM,
+                        // se mantiene congelado en PM hasta que choque con un "Day Off" para poder regresar a AM.
+                        if (currentShiftContext === "PM") {
                             if (isMiddle) {
                                 agentRecord.shifts[day] = (i % 2 === 0) ? "01:00 PM" : "11:00 AM";
                             } else {
                                 agentRecord.shifts[day] = (i % 2 === 0) ? "02:00 PM" : "03:00 PM";
                             }
                         } else {
-                            // Distribución interna de turnos AM
-                            if (isMiddle) {
-                                agentRecord.shifts[day] = (i % 2 === 0) ? "09:00 AM" : "10:00 AM";
+                            // Si está en contexto AM, puede mantenerse en AM o migrar de golpe a PM si el patrón lo requiere
+                            // Para mantener el split perfecto de headcount de la semana, alternamos simétricamente
+                            if ((globalAgentCount + i) % 2 === 0) {
+                                if (isMiddle) {
+                                    agentRecord.shifts[day] = "09:00 AM";
+                                } else {
+                                    agentRecord.shifts[day] = "06:00 AM";
+                                }
                             } else {
-                                agentRecord.shifts[day] = (i % 2 === 0) ? "06:00 AM" : "07:00 AM";
+                                if (isMiddle) {
+                                    agentRecord.shifts[day] = "10:00 AM";
+                                } else {
+                                    agentRecord.shifts[day] = "07:00 AM";
+                                }
                             }
                         }
                     }
@@ -404,7 +422,7 @@
         setCache(cache);
         renderRosterGrid();
         calculateAndRenderMetrics();
-        alert("⚡ Engine v7.0 Activated: Symmetrical AM/PM Distribution & 12h Rest Protections Fully Synced.");
+        alert("⚡ Engine v8.0 Stabilized: Real PM-to-AM transitions protected via Day Off cushions.");
     }
 
     function switchMetricsView(viewName) {
@@ -495,7 +513,7 @@
         const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
         const trigger = document.createElement("a");
         trigger.href = URL.createObjectURL(blob);
-        trigger.download = `WFM_v7_Master_Symmetric.xlsx`;
+        trigger.download = `WFM_v8_Master_Transitions.xlsx`;
         trigger.click();
     }
 </script>

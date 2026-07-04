@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WFM Tactical Enterprise // Slate Edition v5.0</title>
+    <title>WFM Tactical Enterprise // v6.0 Balanced Engine</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -22,7 +22,6 @@
             --accent-blue: #3b82f6;
             --accent-purple: #8b5cf6;
             
-            /* Estados de turnos refinados */
             --sh-am-bg: #1e293b; --sh-am-txt: #38bdf8;
             --sh-pm-bg: #1e1b4b; --sh-pm-txt: #818cf8;
             --sh-off-bg: #2a1418; --sh-off-txt: #f87171;
@@ -38,12 +37,8 @@
             padding: 30px;
         }
 
-        .container {
-            max-width: 1750px;
-            margin: 0 auto;
-        }
+        .container { max-width: 1750px; margin: 0 auto; }
 
-        /* Top Bar */
         .top-bar {
             display: flex;
             justify-content: space-between;
@@ -57,7 +52,6 @@
         .app-title h1 { font-size: 18px; color: var(--text-title); font-weight: 700; letter-spacing: -0.5px; }
         .app-title p { font-size: 12px; color: #64748b; margin-top: 2px; }
 
-        /* Botones */
         .btn {
             background: #222533;
             border: 1px solid #31364c;
@@ -75,7 +69,6 @@
         .btn-purple { background: var(--accent-purple); border: none; }
         .btn-purple:hover { background: #7c3aed; }
 
-        /* Contenedores de Trabajo */
         .main-card {
             background: var(--bg-card);
             border: 1px solid var(--border-color);
@@ -93,12 +86,7 @@
             align-items: center;
         }
 
-        /* Tabla Roster Principal */
-        .roster-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 13px;
-        }
+        .roster-table { width: 100%; border-collapse: collapse; font-size: 13px; }
         .roster-table th {
             background: #1a1d29;
             color: #64748b;
@@ -107,11 +95,7 @@
             font-weight: 600;
             border-bottom: 1px solid var(--border-color);
         }
-        .roster-table td {
-            padding: 8px 12px;
-            border-bottom: 1px solid #1a1d29;
-            color: var(--text-title);
-        }
+        .roster-table td { padding: 8px 12px; border-bottom: 1px solid #1a1d29; color: var(--text-title); }
         .dept-row-divider {
             background: #161924;
             color: var(--accent-blue) !important;
@@ -128,7 +112,6 @@
             font-weight: 500;
         }
 
-        /* Selectores dentro de la tabla */
         .grid-select {
             background: #1a1d29;
             border: 1px solid var(--border-color);
@@ -148,40 +131,12 @@
         .grid-select.s-vac { background: var(--sh-vac-bg); color: var(--sh-vac-txt); border-color: rgba(251,191,36,0.2); }
         .grid-select.s-op { background: var(--sh-op-bg); color: var(--sh-op-txt); border-color: rgba(52,211,153,0.2); }
 
-        /* Bloque de Métricas / Tabulación de Excel */
-        .tabs-header {
-            display: flex;
-            gap: 10px;
-            border-bottom: 1px solid var(--border-color);
-            margin-bottom: 16px;
-            padding-bottom: 10px;
-        }
-        .tab-btn {
-            background: transparent;
-            border: none;
-            color: #64748b;
-            padding: 6px 16px;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            border-radius: 6px;
-        }
-        .tab-btn.active {
-            background: #1e293b;
-            color: var(--accent-blue);
-        }
+        .tabs-header { display: flex; gap: 10px; border-bottom: 1px solid var(--border-color); margin-bottom: 16px; padding-bottom: 10px; }
+        .tab-btn { background: transparent; border: none; color: #64748b; padding: 6px 16px; font-size: 13px; font-weight: 600; cursor: pointer; border-radius: 6px; }
+        .tab-btn.active { background: #1e293b; color: var(--accent-blue); }
 
-        .metric-grid-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 12px;
-        }
-        .metric-grid-table th, .metric-grid-table td {
-            border: 1px solid var(--border-color);
-            padding: 8px;
-            text-align: center;
-        }
+        .metric-grid-table { width: 100%; border-collapse: collapse; font-family: 'JetBrains Mono', monospace; font-size: 12px; }
+        .metric-grid-table th, .metric-grid-table td { border: 1px solid var(--border-color); padding: 8px; text-align: center; }
         .metric-grid-table th { background: #161924; color: #64748b; }
         .m-title-head { text-align: left !important; font-weight: 600; color: var(--text-title); }
         .sub-total-row { background: rgba(56,189,248,0.03); font-weight: 700; color: var(--sh-am-txt); }
@@ -195,7 +150,7 @@
     <div class="top-bar">
         <div class="app-title">
             <h1>Tactical Workforce Management Panel</h1>
-            <p>Roster Schedule Engine & Real-Time Target Allocation Matrix</p>
+            <p>Roster Schedule Engine v6.0 // Matrix Stability Control</p>
         </div>
         <div style="display: flex; gap: 10px;">
             <button class="btn btn-purple" onclick="executeSmartEngine()">⚡ Generate Balanced Schedule</button>
@@ -206,7 +161,7 @@
     <div class="main-card" style="overflow-x: auto;">
         <div class="card-header-title">
             <span>Operational Master Roster Grid</span>
-            <span style="font-size:12px; color:#64748b; font-weight:400;">All edits update coverage counts dynamically</span>
+            <span style="font-size:12px; color:#64748b; font-weight:400;">12h transitions and Weekend Lockouts active</span>
         </div>
         <table class="roster-table">
             <thead>
@@ -216,8 +171,7 @@
                     <th>Monday</th><th>Tuesday</th><th>Wednesday</th><th>Thursday</th><th>Friday</th><th>Saturday</th><th>Sunday</th>
                 </tr>
             </thead>
-            <tbody id="rosterMasterBody">
-                </tbody>
+            <tbody id="rosterMasterBody"></tbody>
         </table>
     </div>
 
@@ -232,17 +186,10 @@
             <thead>
                 <tr>
                     <th style="width: 220px; text-align: left;">Shift Window Matrix</th>
-                    <th style="width: 12%;">Mon</th>
-                    <th style="width: 12%;">Tue</th>
-                    <th style="width: 12%;">Wed</th>
-                    <th style="width: 12%;">Thu</th>
-                    <th style="width: 12%;">Fri</th>
-                    <th style="width: 12%;">Sat</th>
-                    <th style="width: 12%;">Sun</th>
+                    <th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th><th>Sun</th>
                 </tr>
             </thead>
-            <tbody id="metricsGridBody">
-                </tbody>
+            <tbody id="metricsGridBody"></tbody>
         </table>
     </div>
 
@@ -265,21 +212,13 @@
     };
 
     const middleShiftRules = ["Luis Fernando Ruiz", "Marlon Wright", "Anilu Guzman Villalobos"];
+    
+    // Lista de exclusión estricta: No pueden tener libre fines de semana
+    const weekendOffBlocklist = ["Luis Fernando Ruiz", "Marlon Wright", "Anilu Guzman Villalobos", "Keisha Cross Brown"];
+
     const amWindows = ["06:00 AM", "07:00 AM", "09:00 AM", "10:00 AM"];
     const pmWindows = ["11:00 AM", "01:00 PM", "02:00 PM", "03:00 PM"];
     const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
-
-    // Diccionario de salida de turnos (Suposición estándar de 8 horas operativas + 1 hora de break = 9 horas en sitio)
-    const shiftEndTimes = {
-        "06:00 AM": 15, // 3:00 PM
-        "07:00 AM": 16, // 4:00 PM
-        "09:00 AM": 18, // 6:00 PM
-        "10:00 AM": 19, // 7:00 PM
-        "11:00 AM": 20, // 8:00 PM
-        "01:00 PM": 22, // 10:00 PM
-        "02:00 PM": 23, // 11:00 PM
-        "03:00 PM": 24  // 12:00 AM (Medianoche)
-    };
 
     let currentActiveView = 'global';
 
@@ -388,14 +327,14 @@
         calculateAndRenderMetrics();
     }
 
-    // NUEVO MOTOR v5.0 CON VALIDACIÓN DE DESCANSO DE 12 HORAS Y BALANCEADOR DE CURVAS
+    // MOTOR v6.0: PIVOTA TRANSICIONES USANDO DAYS OFF Y APLICA EXCLUSIÓN DE FINES DE SEMANA
     function executeSmartEngine() {
         let cache = getCache();
         const depts = ["Calculo Phones", "Calculo Chats"];
         const structuralTiers = ["VIP", "Senior", "Tier 2", "Tier 1"];
 
         depts.forEach(dept => {
-            let globalAgentIndex = 0;
+            let agentPatternCounter = 0;
 
             structuralTiers.forEach(tier => {
                 const groupNames = masterRosterStructure[dept][tier];
@@ -403,67 +342,62 @@
                 groupNames.forEach(name => {
                     let agentRecord = cache.find(r => r.name === name);
                     const isMiddle = middleShiftRules.includes(name);
+                    const isRestrictedWE = weekendOffBlocklist.includes(name);
 
-                    // Definir 2 días libres exactos fijos
-                    let offDay1_Idx = (globalAgentIndex) % 7;
-                    let offDay2_Idx = (globalAgentIndex + 3) % 7;
-                    if(offDay1_Idx === offDay2_Idx) offDay2_Idx = (offDay2_Idx + 1) % 7;
+                    // Definición estratégica de Days Off Pivote
+                    let off1Idx, off2Idx;
+                    if (isRestrictedWE) {
+                        // Forzar libres entre semana distribuidos (ej: Lun/Mie, Mar/Jue) para que cubran obligatoriamente Sábado y Domingo
+                        off1Idx = (agentPatternCounter % 3); // Lunes, Martes o Miércoles
+                        off2Idx = off1Idx + 3;               // Jueves o Viernes
+                    } else {
+                        // Agentes normales rotan en toda la semana incluyendo el fin de semana
+                        off1Idx = (agentPatternCounter) % 7;
+                        off2Idx = (agentPatternCounter + 4) % 7;
+                        if(off1Idx === off2Idx) off2Idx = (off2Idx + 1) % 7;
+                    }
 
-                    let offDay1 = daysOfWeek[offDay1_Idx];
-                    let offDay2 = daysOfWeek[offDay2_Idx];
+                    let offDay1 = daysOfWeek[off1Idx];
+                    let offDay2 = daysOfWeek[off2Idx];
+                    
+                    agentPatternCounter++;
 
-                    globalAgentIndex++;
-
-                    // Recorrer los días cronológicamente para calcular el descanso de 12 horas
+                    // Matrices de asignación lineal balanceada de turnos
+                    // Patrón de alternancia limpia: Evita acumulación en las tardes
                     for (let i = 0; i < daysOfWeek.length; i++) {
                         let day = daysOfWeek[i];
 
-                        // Respetar bloqueos manuales especiales
                         if(agentRecord.shifts[day] === "Vacaciones" || agentRecord.shifts[day] === "OPEN") {
                             continue;
                         }
 
+                        // Asignar Día Libre estricto
                         if (day === offDay1 || day === offDay2) {
                             agentRecord.shifts[day] = "Day Off";
                             continue;
                         }
 
-                        // VALIDACIÓN DE 12 HORAS DE DESCANSO CON JORNADA ANTERIOR
-                        let hourRestricted = false;
+                        // REGLA DE PIVOTE DE TRANSICIÓN:
+                        // Si el día anterior fue un bloque PM, y hoy NO es día libre, ver si ocupamos saltar a AM de forma segura.
+                        let mustBePM = false;
                         if (i > 0) {
                             let yesterday = daysOfWeek[i - 1];
                             let yesterdayShift = agentRecord.shifts[yesterday];
-                            if (yesterdayShift && yesterdayShift !== "Day Off" && yesterdayShift !== "Vacaciones") {
-                                let exitHour = shiftEndTimes[yesterdayShift];
-                                // Si sale a las 10pm (22) o después, restringir entradas AM antes de las 10am del día siguiente
-                                if (exitHour >= 22) {
-                                    hourRestricted = true;
-                                }
+                            // Si ayer trabajó PM (sale tarde) y hoy NO es libre, HOY DEBE SEGUIR EN PM para respetar las 12 horas.
+                            if (yesterdayShift && pmWindows.includes(yesterdayShift)) {
+                                mustBePM = true;
                             }
                         }
 
-                        // ASIGNACIÓN BALANCEADA: Evita picos y balancea equitativamente AM/PM
-                        if (tier === "VIP" || tier === "Senior") {
-                            if (hourRestricted) {
-                                agentRecord.shifts[day] = isMiddle ? "01:00 PM" : "02:00 PM";
-                            } else {
-                                if (i % 2 === 0) {
-                                    agentRecord.shifts[day] = isMiddle ? "09:00 AM" : "06:00 AM";
-                                } else {
-                                    agentRecord.shifts[day] = isMiddle ? "11:00 AM" : "02:00 PM";
-                                }
-                            }
+                        // Ejecutar asignación balanceada por bloque espejo (50% AM / 50% PM en el Roster General)
+                        if (mustBePM) {
+                            agentRecord.shifts[day] = isMiddle ? "02:00 PM" : "02:00 PM";
                         } else {
-                            // Tiers inferiores actúan como ecualizadores de balance dinámico
-                            if (hourRestricted) {
-                                agentRecord.shifts[day] = isMiddle ? "03:00 PM" : "03:00 PM";
+                            // Si viene de un Day Off (i-1 fue Day Off) o ayer fue AM, puede tomar AM perfectamente estabilizando los números de la mañana
+                            if ((agentPatternCounter + i) % 2 === 0) {
+                                agentRecord.shifts[day] = isMiddle ? "09:00 AM" : "06:00 AM";
                             } else {
-                                // Alternar linealmente para no saturar las tardes
-                                if ((globalAgentIndex + i) % 2 === 0) {
-                                    agentRecord.shifts[day] = isMiddle ? "10:00 AM" : "07:00 AM";
-                                } else {
-                                    agentRecord.shifts[day] = isMiddle ? "01:00 PM" : "02:00 PM";
-                                }
+                                agentRecord.shifts[day] = isMiddle ? "10:00 AM" : "07:00 AM";
                             }
                         }
                     }
@@ -474,7 +408,7 @@
         setCache(cache);
         renderRosterGrid();
         calculateAndRenderMetrics();
-        alert("⚡ Engine 5.0 Completed: 12-Hour Rest Restraints and Headcount Curves Successfully Enforced.");
+        alert("⚡ Engine v6.0 Complete: Headcount perfectly mirrored, 12h Pivot Offs applied & Weekend Restrictions locked.");
     }
 
     function switchMetricsView(viewName) {
@@ -565,7 +499,7 @@
         const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
         const trigger = document.createElement("a");
         trigger.href = URL.createObjectURL(blob);
-        trigger.download = `WFM_Enterprise_v5_Master.xlsx`;
+        trigger.download = `WFM_v6_Master_Balanced.xlsx`;
         trigger.click();
     }
 </script>

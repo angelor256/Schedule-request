@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WFM Tactical Enterprise // v15.5 Hard-Locked Balance Engine</title>
+    <title>WFM Tactical Enterprise // v15.6 Hard-Locked Balance Engine</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -146,7 +146,7 @@
     <header>
         <div class="app-title">
             <h1>Tactical Workforce Management</h1>
-            <p>// ENGINE VERSION 15.5 // HARD-LOCKED PERFECT COVERS</p>
+            <p>// ENGINE VERSION 15.6 // ANTI-ASYMMETRY LOCKED</p>
         </div>
         <div>
             <button class="action-btn" onclick="exportDataToExcel()">📥 Export Matrix to Excel</button>
@@ -531,7 +531,7 @@
                 }
             });
 
-            // CONTROL ESTRICTO DE LLEGADA HORARIA - BLINDAJE V15.5
+            // CONTROL ESTRICTO DE LLEGADA HORARIA - BLINDAJE ANTI-DESFASE
             daysOfWeek.forEach(day => {
                 let activeSupport = supportTiers.filter(s => s.shifts[day] === "OPEN");
                 
@@ -546,27 +546,20 @@
 
                 let totalStandard = standardSupport.length;
                 if (totalStandard > 0) {
-                    // Cálculo de ranuras bloqueadas matemáticamente para evitar asimetrías de 3 y 1
-                    // Y forzar diferencia máxima global de 1 persona entre bloques
                     let amCount = Math.floor(totalStandard / 2);
                     let pmCount = totalStandard - amCount; 
 
-                    // Dentro de AM, partimos a la mitad exacta para forzar paridad de 6am y 7am
-                    let slots6am = Math.floor(amCount / 2);
-                    let slots7am = amCount - slots6am;
-
-                    // Dentro de PM, partimos a la mitad exacta para turnos de la tarde
-                    let slots2pm = Math.floor(pmCount / 2);
-                    let slots3pm = pmCount - slots2pm;
-
-                    // Creamos el arreglo definitivo de slots duros para el día
+                    // Forzar alternancia estricta uno por uno en la mañana para paridad 6am y 7am
                     let masterSlotsPool = [];
-                    for(let i=0; i<slots6am; i++) masterSlotsPool.push("06:00 AM");
-                    for(let i=0; i<slots7am; i++) masterSlotsPool.push("07:00 AM");
-                    for(let i=0; i<slots2pm; i++) masterSlotsPool.push("02:00 PM");
-                    for(let i=0; i<slots3pm; i++) masterSlotsPool.push("03:00 PM");
+                    for (let i = 0; i < amCount; i++) {
+                        masterSlotsPool.push(i % 2 === 0 ? "06:00 AM" : "07:00 AM");
+                    }
+                    // Forzar alternancia estricta uno por uno en la tarde
+                    for (let i = 0; i < pmCount; i++) {
+                        masterSlotsPool.push(i % 2 === 0 ? "02:00 PM" : "03:00 PM");
+                    }
 
-                    // Inyectamos de forma uno a uno sin excepciones corporales
+                    // Inyectar sin alterar el orden
                     standardSupport.forEach((agent, index) => {
                         agent.shifts[day] = masterSlotsPool[index] || "02:00 PM";
                     });
@@ -574,22 +567,35 @@
             });
         });
 
-        // CONTROL ERGONÓMICO INTERJORNADA INTELIGENTE POR INTERCAMBIO (No altera totales)
-        output.forEach((agent, aIdx) => {
-            if (agent.squad === "VIP") return;
-            for (let i = 0; i < daysOfWeek.length - 1; i++) {
-                let currentDay = daysOfWeek[i]; let nextDay = daysOfWeek[i + 1];
-                if (pmWindows.includes(agent.shifts[currentDay]) && (agent.shifts[nextDay] === "06:00 AM" || agent.shifts[nextDay] === "07:00 AM")) {
-                    // Buscamos un compañero del mismo departamento que trabaje tarde al día siguiente para intercambiar el slot
-                    let peer = output.find(p => p.dept === agent.dept && p.squad !== "VIP" && p.name !== agent.name && pmWindows.includes(p.shifts[nextDay]) && !pmWindows.includes(p.shifts[currentDay]));
-                    if (peer) {
-                        let temp = agent.shifts[nextDay];
-                        agent.shifts[nextDay] = peer.shifts[nextDay];
-                        peer.shifts[nextDay] = temp;
+        // CONTROL ERGONÓMICO INTERJORNADA POR INTERCAMBIO SIMÉTRICO ESTRICTO (ZERO-SUM SWAP)
+        for (let i = 0; i < daysOfWeek.length - 1; i++) {
+            let currentDay = daysOfWeek[i]; 
+            let nextDay = daysOfWeek[i + 1];
+
+            departments.forEach(dept => {
+                let deptAgents = output.filter(p => p.dept === dept && p.squad !== "VIP");
+
+                deptAgents.forEach(agent => {
+                    // Si trabaja tarde hoy, y mañana entra temprano (06:00 AM o 07:00 AM)...
+                    if (pmWindows.includes(agent.shifts[currentDay]) && (agent.shifts[nextDay] === "06:00 AM" || agent.shifts[nextDay] === "07:00 AM")) {
+                        
+                        // Buscamos un compañero espejo perfecto: que MAÑANA trabaje de tarde, y HOY trabaje de mañana.
+                        // Esto garantiza que al intercambiar los turnos del 'nextDay', la mañana y la tarde se mantienen intactas numéricamente.
+                        let perfectPeer = deptAgents.find(p => 
+                            p.name !== agent.name && 
+                            pmWindows.includes(p.shifts[nextDay]) && 
+                            (p.shifts[currentDay] === "06:00 AM" || p.shifts[currentDay] === "07:00 AM" || p.shifts[currentDay] === "09:00 AM" || p.shifts[currentDay] === "10:00 AM")
+                        );
+
+                        if (perfectPeer) {
+                            let tempShift = agent.shifts[nextDay];
+                            agent.shifts[nextDay] = perfectPeer.shifts[nextDay];
+                            perfectPeer.shifts[nextDay] = tempShift;
+                        }
                     }
-                }
-            }
-        });
+                });
+            });
+        }
 
         localStorage.setItem('wfm_v15_output_cache', JSON.stringify(output));
         renderEngineGrid();
@@ -660,7 +666,7 @@
         const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
         const trigger = document.createElement("a");
         trigger.href = URL.createObjectURL(blob);
-        trigger.download = `WFM_v15_5_HardBalanced_Roster.xlsx`;
+        trigger.download = `WFM_v15_6_HardBalanced_Roster.xlsx`;
         trigger.click();
     }
 </script>

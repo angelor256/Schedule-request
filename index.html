@@ -73,19 +73,37 @@
 </style>
 </head>
 <body>
-    <!-- NUEVA PANTALLA DE INICIO -->
-    <div id="view-home" class="panel-view active-view">
-        <div class="home-hero">
-            <h1 style="color: var(--accent-color);">Schedule Request</h1>
-            <p>Tactical Workforce Management // v15.6</p>
-            <button class="home-btn" onclick="toggleView('app')">Enter Engine</button>
-        </div>
+   <!-- 1. PANTALLA DE INICIO (HOME) -->
+<div id="view-home" class="panel-view active-view" style="display: block;">
+    <div class="home-hero" style="max-width: 600px; margin: 100px auto; text-align: center; padding: 60px; background: var(--surface); border: 1px solid var(--border-subtle); border-radius: 20px; box-shadow: 0 10px 30px rgba(140, 118, 100, 0.1);">
+        <h1 style="color: var(--mocha); font-size: 32px; margin-bottom: 16px;">Schedule Request</h1>
+        <p style="color: var(--text-sub); margin-bottom: 30px;">Tactical Workforce Management // v15.6</p>
+        <button class="home-btn btn-accent" onclick="toggleView('app')" style="padding: 15px 40px; cursor: pointer; border: none; border-radius: 12px; font-weight: 600; color: white;">Enter Engine</button>
     </div>
+</div>
 
-    <!-- TODO TU CONTENIDO ACTUAL (Container y sus hijos) DENTRO DE ESTO -->
-    <div id="view-app" class="panel-view">
-        <!-- ... aquí va todo tu código actual que ya tenías ... -->
+<!-- 2. TU APLICACIÓN (ENGINE) -->
+<div id="view-app" class="panel-view" style="display: none;">
+    <div class="container">
+        <header>
+            <div class="app-title">
+                <h1>Tactical Workforce Management</h1>
+                <p>// ENGINE VERSION 15.6 // ANTI-ASYMMETRY LOCKED</p>
+            </div>
+            <button class="action-btn" onclick="toggleView('home')">← Back Home</button>
+        </header>
+        
+        <!-- Aquí va todo tu código actual (tablas, contenedores, etc.) -->
     </div>
+</div>
+
+<script>
+    // Función para alternar entre Home y App
+    function toggleView(target) {
+        document.getElementById('view-home').style.display = (target === 'home') ? 'block' : 'none';
+        document.getElementById('view-app').style.display = (target === 'app') ? 'block' : 'none';
+    }
+</script>
 
 <div class="container">
 

@@ -13,25 +13,63 @@
 
 <style>
     :root {
-        --bg-main: #f5f0ed; --bg-surface: #ffffff;
-        --border-subtle: #d6ccc2; --border-focus: #a39180;
-        --text-primary: #4a3f35; --text-secondary: #7d6e60;
-        --accent-color: #8c7664;
-        --sh-am-bg: #fdfaf7; --sh-am-txt: #6d5b4a; --sh-pm-bg: #f5ede6; --sh-pm-txt: #8c7664;
-        --sh-off-bg: #fcece8; --sh-off-txt: #a65e52; --sh-vac-bg: #fffbf0; --sh-vac-txt: #a68b52;
-        --sh-op-bg: #f0f5f0; --sh-op-txt: #526652;
+        --bg-main: #f5f0ed;
+        --surface: #ffffff;
+        --mocha: #8c7664;
+        --mocha-light: #d6ccc2;
+        --text-main: #4a3f35;
+        --text-sub: #7d6e60;
     }
-    body { background-color: var(--bg-main); color: var(--text-primary); font-family: 'Inter', sans-serif; padding: 40px 24px; }
-    .panel-view { display: none; }
-    .panel-view.active-view { display: block; }
-    
-    /* Estilo Home */
-    .home-hero { text-align: center; padding: 100px 20px; background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: 20px; max-width: 800px; margin: 100px auto; }
-    .home-btn { display: inline-block; padding: 15px 40px; background: var(--accent-color); color: white; text-decoration: none; border-radius: 8px; font-weight: 600; cursor: pointer; border: none; margin-top: 20px; }
 
-    /* Mantén el resto de tus clases (interactive-table, header, etc.) pero actualiza los colores usando las variables anteriores */
-    .action-btn.btn-accent { background: var(--accent-color); color: #fff; }
-    .interactive-table th { background: #fdfaf7; color: var(--text-secondary); border-bottom: 2px solid var(--border-subtle); }
+    body { 
+        background-color: var(--bg-main); 
+        color: var(--text-main); 
+        font-family: 'Inter', system-ui, sans-serif; 
+        padding: 40px; 
+    }
+
+    /* Contenedor con profundidad */
+    .panel-card { 
+        background: var(--surface); 
+        border-radius: 16px; 
+        padding: 32px; 
+        box-shadow: 0 8px 24px rgba(140, 118, 100, 0.08); 
+        border: 1px solid rgba(140, 118, 100, 0.15);
+    }
+
+    /* Botones Estilo Mocha */
+    .action-btn, .home-btn { 
+        background: var(--surface); 
+        border: 1px solid var(--mocha-light); 
+        color: var(--text-sub); 
+        padding: 12px 24px; 
+        border-radius: 12px; 
+        font-weight: 500; 
+        transition: all 0.3s ease; 
+    }
+    .action-btn:hover { background: var(--bg-main); border-color: var(--mocha); }
+    .btn-accent { background: var(--mocha) !important; color: white !important; border: none; }
+
+    /* Tablas Elegantes */
+    .interactive-table { width: 100%; border-collapse: separate; border-spacing: 0; }
+    .interactive-table th { 
+        color: var(--text-sub); 
+        text-transform: uppercase; 
+        letter-spacing: 1px; 
+        font-size: 11px; 
+        padding: 16px; 
+        border-bottom: 2px solid var(--mocha-light); 
+    }
+    .interactive-table td { padding: 12px 16px; border-bottom: 1px solid #eee; }
+    
+    /* Inputs Mocha */
+    .custom-dropdown { 
+        border: 1px solid var(--mocha-light); 
+        border-radius: 8px; 
+        padding: 6px 12px; 
+        background: #faf9f8; 
+        color: var(--text-main); 
+    }
 </style>
 </head>
 <body>

@@ -1,9 +1,9 @@
-=<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WFM Tactical Enterprise // Slate Edition</title>
+    <title>WFM Tactical Enterprise // Slate Edition v5.0</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -192,7 +192,6 @@
 
 <div class="container">
 
-    <!-- TOP CONTROL PANEL -->
     <div class="top-bar">
         <div class="app-title">
             <h1>Tactical Workforce Management Panel</h1>
@@ -204,7 +203,6 @@
         </div>
     </div>
 
-    <!-- MAIN ROSTER VIEW -->
     <div class="main-card" style="overflow-x: auto;">
         <div class="card-header-title">
             <span>Operational Master Roster Grid</span>
@@ -219,12 +217,10 @@
                 </tr>
             </thead>
             <tbody id="rosterMasterBody">
-                <!-- Inyectado dinámicamente agrupado por departamento y ordenado por jerarquía -->
-            </tbody>
+                </tbody>
         </table>
     </div>
 
-    <!-- COVERAGE TARGETS MANAGEMENT (ESTILO EXCEL) -->
     <div class="main-card">
         <div class="tabs-header">
             <button class="tab-btn active" id="tab-global" onclick="switchMetricsView('global')">Global Consolidated</button>
@@ -246,15 +242,13 @@
                 </tr>
             </thead>
             <tbody id="metricsGridBody">
-                <!-- Inyectado dinámicamente basado en la pestaña activa -->
-            </tbody>
+                </tbody>
         </table>
     </div>
 
 </div>
 
 <script>
-    // Base de datos de estructura de personal fija por jerarquía estricta
     const masterRosterStructure = {
         "Calculo Phones": {
             "VIP": ["Emerson Hernandez", "Stephannie Cunningham", "Thimy Gonzalez", "Yasser Quiros"],
@@ -274,6 +268,18 @@
     const amWindows = ["06:00 AM", "07:00 AM", "09:00 AM", "10:00 AM"];
     const pmWindows = ["11:00 AM", "01:00 PM", "02:00 PM", "03:00 PM"];
     const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+
+    // Diccionario de salida de turnos (Suposición estándar de 8 horas operativas + 1 hora de break = 9 horas en sitio)
+    const shiftEndTimes = {
+        "06:00 AM": 15, // 3:00 PM
+        "07:00 AM": 16, // 4:00 PM
+        "09:00 AM": 18, // 6:00 PM
+        "10:00 AM": 19, // 7:00 PM
+        "11:00 AM": 20, // 8:00 PM
+        "01:00 PM": 22, // 10:00 PM
+        "02:00 PM": 23, // 11:00 PM
+        "03:00 PM": 24  // 12:00 AM (Medianoche)
+    };
 
     let currentActiveView = 'global';
 
@@ -305,14 +311,12 @@
     function getCache() { return JSON.parse(localStorage.getItem('wfm_enterprise_cache')); }
     function setCache(data) { localStorage.setItem('wfm_enterprise_cache', JSON.stringify(data)); }
 
-    // RENDERIZADO COMPLETO DEL ROSTER EN FORMATO VISIBLE DIRECTO
     function renderRosterGrid() {
         const data = getCache();
         const tbody = document.getElementById('rosterMasterBody');
         tbody.innerHTML = "";
 
         Object.keys(masterRosterStructure).forEach(dept => {
-            // Fila separadora de departamento
             const separator = document.createElement('tr');
             separator.innerHTML = `<td colspan="9" class="dept-row-divider">■ ${dept.toUpperCase()} DIRECTORY</td>`;
             tbody.appendChild(separator);
@@ -374,7 +378,6 @@
             setCache(data);
         }
 
-        // Re-estilizar dinámicamente la celda elegida sin refrescar toda la pantalla
         selectEl.classList.remove('s-am', 's-pm', 's-off', 's-vac', 's-op');
         if (amWindows.includes(newVal)) selectEl.classList.add('s-am');
         if (pmWindows.includes(newVal)) selectEl.classList.add('s-pm');
@@ -385,24 +388,13 @@
         calculateAndRenderMetrics();
     }
 
-    // NUEVO MOTOR INTELIGENTE: Respeta jerarquía, fuerza 2 OFFs exactos, distribuye linealmente
+    // NUEVO MOTOR v5.0 CON VALIDACIÓN DE DESCANSO DE 12 HORAS Y BALANCEADOR DE CURVAS
     function executeSmartEngine() {
         let cache = getCache();
-        const fullShiftPool = ["06:00 AM", "07:00 AM", "09:00 AM", "10:00 AM", "11:00 AM", "01:00 PM", "02:00 PM", "03:00 PM"];
-
-        // Matriz de control de OFFs para balancear los días de la semana y que queden perfectamente parejos
-        const offDistributionMap = { "Calculo Phones": {}, "Calculo Chats": {} };
-        daysOfWeek.forEach(d => {
-            offDistributionMap["Calculo Phones"][d] = 0;
-            offDistributionMap["Calculo Chats"][d] = 0;
-        });
-
-        // Correr asignación estructurada por cascada de jerarquía
         const depts = ["Calculo Phones", "Calculo Chats"];
         const structuralTiers = ["VIP", "Senior", "Tier 2", "Tier 1"];
 
         depts.forEach(dept => {
-            // Paso 1: Resetear contadores de días libres para la nueva distribución de la semana
             let globalAgentIndex = 0;
 
             structuralTiers.forEach(tier => {
@@ -412,11 +404,9 @@
                     let agentRecord = cache.find(r => r.name === name);
                     const isMiddle = middleShiftRules.includes(name);
 
-                    // Definir los 2 días libres asignados a este agente de forma cíclica-equilibrada para aplanar la curva
+                    // Definir 2 días libres exactos fijos
                     let offDay1_Idx = (globalAgentIndex) % 7;
                     let offDay2_Idx = (globalAgentIndex + 3) % 7;
-                    
-                    // Si caen el mismo día por margen de división, mover el segundo
                     if(offDay1_Idx === offDay2_Idx) offDay2_Idx = (offDay2_Idx + 1) % 7;
 
                     let offDay1 = daysOfWeek[offDay1_Idx];
@@ -424,42 +414,59 @@
 
                     globalAgentIndex++;
 
-                    // Aplicar turnos respetando el acumulado
-                    daysOfWeek.forEach((day, dayIdx) => {
-                        // Regla Suprema: Conservar si el programador puso Vacaciones u OPEN manualmente
+                    // Recorrer los días cronológicamente para calcular el descanso de 12 horas
+                    for (let i = 0; i < daysOfWeek.length; i++) {
+                        let day = daysOfWeek[i];
+
+                        // Respetar bloqueos manuales especiales
                         if(agentRecord.shifts[day] === "Vacaciones" || agentRecord.shifts[day] === "OPEN") {
-                            return;
+                            continue;
                         }
 
-                        // Forzar exactamente los 2 Days Off calculados por balanceador
                         if (day === offDay1 || day === offDay2) {
                             agentRecord.shifts[day] = "Day Off";
-                            return;
+                            continue;
                         }
 
-                        // Distribución de ventanas horarias operativas por jerarquía (Cascada Perfecta)
-                        if (tier === "VIP") {
-                            // Balancear 50/50 mañana y tarde
-                            if (dayIdx % 2 === 0) {
-                                agentRecord.shifts[day] = isMiddle ? "09:00 AM" : "06:00 AM";
-                            } else {
-                                agentRecord.shifts[day] = isMiddle ? "01:00 PM" : "02:00 PM";
-                            }
-                        } else if (tier === "Senior") {
-                            if (dayIdx % 2 === 0) {
-                                agentRecord.shifts[day] = isMiddle ? "10:00 AM" : "07:00 AM";
-                            } else {
-                                agentRecord.shifts[day] = isMiddle ? "11:00 AM" : "03:00 PM";
-                            }
-                        } else {
-                            // Tiers de relleno equilibrado: Rellenan cruzado para contrarrestar los huecos
-                            if ((globalAgentIndex + dayIdx) % 2 === 0) {
-                                agentRecord.shifts[day] = isMiddle ? "09:00 AM" : "07:00 AM";
-                            } else {
-                                agentRecord.shifts[day] = isMiddle ? "01:00 PM" : "02:00 PM";
+                        // VALIDACIÓN DE 12 HORAS DE DESCANSO CON JORNADA ANTERIOR
+                        let hourRestricted = false;
+                        if (i > 0) {
+                            let yesterday = daysOfWeek[i - 1];
+                            let yesterdayShift = agentRecord.shifts[yesterday];
+                            if (yesterdayShift && yesterdayShift !== "Day Off" && yesterdayShift !== "Vacaciones") {
+                                let exitHour = shiftEndTimes[yesterdayShift];
+                                // Si sale a las 10pm (22) o después, restringir entradas AM antes de las 10am del día siguiente
+                                if (exitHour >= 22) {
+                                    hourRestricted = true;
+                                }
                             }
                         }
-                    });
+
+                        // ASIGNACIÓN BALANCEADA: Evita picos y balancea equitativamente AM/PM
+                        if (tier === "VIP" || tier === "Senior") {
+                            if (hourRestricted) {
+                                agentRecord.shifts[day] = isMiddle ? "01:00 PM" : "02:00 PM";
+                            } else {
+                                if (i % 2 === 0) {
+                                    agentRecord.shifts[day] = isMiddle ? "09:00 AM" : "06:00 AM";
+                                } else {
+                                    agentRecord.shifts[day] = isMiddle ? "11:00 AM" : "02:00 PM";
+                                }
+                            }
+                        } else {
+                            // Tiers inferiores actúan como ecualizadores de balance dinámico
+                            if (hourRestricted) {
+                                agentRecord.shifts[day] = isMiddle ? "03:00 PM" : "03:00 PM";
+                            } else {
+                                // Alternar linealmente para no saturar las tardes
+                                if ((globalAgentIndex + i) % 2 === 0) {
+                                    agentRecord.shifts[day] = isMiddle ? "10:00 AM" : "07:00 AM";
+                                } else {
+                                    agentRecord.shifts[day] = isMiddle ? "01:00 PM" : "02:00 PM";
+                                }
+                            }
+                        }
+                    }
                 });
             });
         });
@@ -467,10 +474,9 @@
         setCache(cache);
         renderRosterGrid();
         calculateAndRenderMetrics();
-        alert("⚡ Strategic Balancing Completed: 2 Days Off Strictly Mandated Per Agent.");
+        alert("⚡ Engine 5.0 Completed: 12-Hour Rest Restraints and Headcount Curves Successfully Enforced.");
     }
 
-    // CONTROL DE PESTAÑAS DE VISTAS ANALÍTICAS
     function switchMetricsView(viewName) {
         currentActiveView = viewName;
         document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
@@ -478,12 +484,10 @@
         calculateAndRenderMetrics();
     }
 
-    // CÁLCULO EN TIEMPO REAL CON FILTRADO INDEPENDIENTE (PHONES / CHATS / UNIDOS)
     function calculateAndRenderMetrics() {
         const data = getCache();
         const allHours = [...amWindows, ...pmWindows];
 
-        // Estructuras de conteo vacías
         const countMatrix = {};
         allHours.forEach(h => {
             countMatrix[h] = {};
@@ -493,7 +497,6 @@
         const amTotals = {}; const pmTotals = {}; const offTotals = {};
         daysOfWeek.forEach(d => { amTotals[d] = 0; pmTotals[d] = 0; offTotals[d] = 0; });
 
-        // Procesar datos según filtro de pestaña activa
         data.forEach(agent => {
             if (currentActiveView === 'phones' && agent.dept !== 'Calculo Phones') return;
             if (currentActiveView === 'chats' && agent.dept !== 'Calculo Chats') return;
@@ -509,11 +512,10 @@
             });
         });
 
-        // Construir HTML de la matriz inferior
         const tbody = document.getElementById('metricsGridBody');
         tbody.innerHTML = "";
 
-        // Sección Early / Middle
+        // A-Shifts
         tbody.innerHTML += `<tr><td colspan="8" class="m-title-head" style="color:var(--sh-am-txt);">▲ EARLY / MIDDLE SHIFTS (A-SHIFTS)</td></tr>`;
         amWindows.forEach(sh => {
             let row = `<tr><td style="text-align:left; font-weight:500;">${sh}</td>`;
@@ -524,7 +526,7 @@
         daysOfWeek.forEach(d => amTotalRow += `<td>${amTotals[d]}</td>`);
         tbody.innerHTML += amTotalRow + `</tr>`;
 
-        // Sección Late / Closing
+        // B-Shifts
         tbody.innerHTML += `<tr><td colspan="8" class="m-title-head" style="color:var(--sh-pm-txt);">▼ LATE / CLOSING SHIFTS (B-SHIFTS)</td></tr>`;
         pmWindows.forEach(sh => {
             let row = `<tr><td style="text-align:left; font-weight:500;">${sh}</td>`;
@@ -535,13 +537,12 @@
         daysOfWeek.forEach(d => pmTotalRow += `<td>${pmTotals[d]}</td>`);
         tbody.innerHTML += pmTotalRow + `</tr>`;
 
-        // Fila de control de OFFs (Aplanada y balanceada)
+        // Off counts
         let offRow = `<tr class="off-total-row"><td>OFF For The Day (Day Off + Vac)</td>`;
         daysOfWeek.forEach(d => offRow += `<td>${offTotals[d]} agent(s)</td>`);
         tbody.innerHTML += offRow + `</tr>`;
     }
 
-    // EXPORTADOR INTEGRAL A SPREADSHEET EXCEL MULTI-SHEET
     async function exportDataToExcel() {
         const log = getCache();
         const workbook = new ExcelJS.Workbook();
@@ -564,7 +565,7 @@
         const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
         const trigger = document.createElement("a");
         trigger.href = URL.createObjectURL(blob);
-        trigger.download = `WFM_Balanced_Enterprise_Master.xlsx`;
+        trigger.download = `WFM_Enterprise_v5_Master.xlsx`;
         trigger.click();
     }
 </script>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WFM Tactical Enterprise // v11.0 Premium Engine</title>
+    <title>WFM Tactical Enterprise // v11.1 Premium Engine</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -134,7 +134,6 @@
             align-items: center;
         }
 
-        /* Segmented Controller (Filtro unificado de Métricas) */
         .segmented-control {
             display: inline-flex;
             background: #090a10;
@@ -240,7 +239,7 @@
     <div class="glass-header">
         <div class="app-title">
             <h1>Tactical Workforce Management Panel</h1>
-            <p>// CORE SYSTEM ENG v11.0 // PREMIUM GLASS INTERFACE</p>
+            <p>// CORE SYSTEM ENG v11.1 // PREMIUM GLASS INTERFACE</p>
         </div>
         <div>
             <button class="action-btn btn-download" onclick="exportDataToExcel()">📥 Export Matrix Copy</button>
@@ -305,7 +304,7 @@
             <div class="card-title-bar">
                 <span>📊 Matriz Analytics Integrada</span>
                 
-                <!-- CONTROL SEGMENTADO: Aquí eliges qué ver de forma independiente -->
+                <!-- CONTROL SEGMENTADO -->
                 <div class="segmented-control">
                     <button class="segment-btn active-segment" id="seg-all" onclick="changeMetricsFilter('all')">View Global</button>
                     <button class="segment-btn" id="seg-phones" onclick="changeMetricsFilter('Calculo Phones')">Phones Only</button>
@@ -351,7 +350,7 @@
     const pmWindows = ["11:00 AM", "01:00 PM", "02:00 PM", "03:00 PM"];
     const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
-    let selectedMetricsFilter = "all"; // Estado por defecto del segmento
+    let selectedMetricsFilter = "all";
 
     window.onload = function() {
         if (!localStorage.getItem('wfm_v11_request_cache')) {
@@ -422,6 +421,7 @@
 
                 coreRosterMap[dept][squad].forEach(name => {
                     const agent = data.find(r => r.name === name);
+                    if(!agent) return;
                     const tr = document.createElement('tr');
                     
                     let cells = `<td><span style="font-weight:600; padding-left: 10px;">${name}</span></td>`;
@@ -450,6 +450,7 @@
 
                 coreRosterMap[dept][squad].forEach(name => {
                     const agent = data.find(r => r.name === name);
+                    if(!agent) return;
                     const tr = document.createElement('tr');
                     
                     let cells = `<td><span style="font-weight:600; padding-left: 10px;">${name}</span></td>`;
@@ -480,7 +481,7 @@
         
         let html = `<select class="custom-dropdown ${styleClass}" data-name="${name}" data-day="${day}" onchange="${callback}">`;
         pools.forEach(p => {
-            html += `<option value="${p}" ${p currentVal === p ? 'selected':''}>${p}</option>`;
+            html += `<option value="${p}" ${currentVal === p ? 'selected' : ''}>${p}</option>`;
         });
         html += `</select>`;
         return html;
@@ -579,11 +580,9 @@
         toggleViewSegment('engine');
     }
 
-    // PROCESAMIENTO ANALÍTICO SEGMENTADO (Filtros por canal operativo)
     function processAnalyticsRefresh() {
         const rawData = JSON.parse(localStorage.getItem('wfm_v11_output_cache')) || [];
         
-        // Aplicar el filtro dinámico seleccionado por el usuario en el control segmentado
         let filteredData = rawData;
         if (selectedMetricsFilter !== "all") {
             filteredData = rawData.filter(agent => agent.dept === selectedMetricsFilter);
@@ -614,7 +613,6 @@
         const targetTbody = document.getElementById('analyticsDataBody');
         targetTbody.innerHTML = "";
 
-        // UI Segment AM
         targetTbody.innerHTML += `<tr><td colspan="8" class="analytics-section-title" style="color:var(--neon-blue);">▲ AM PRODUCTION WINDOWS</td></tr>`;
         amWindows.forEach(windowBlock => {
             let tr = `<tr><td style="text-align:left; font-weight:600; color: #cbd5e1;">${windowBlock}</td>`;
@@ -625,7 +623,6 @@
         daysOfWeek.forEach(d => sumAMRow += `<td>${totalizerAM[d]}</td>`);
         targetTbody.innerHTML += sumAMRow + `</tr>`;
 
-        // UI Segment PM
         targetTbody.innerHTML += `<tr><td colspan="8" class="analytics-section-title" style="color:var(--neon-purple);">▼ PM PRODUCTION WINDOWS</td></tr>`;
         pmWindows.forEach(windowBlock => {
             let tr = `<tr><td style="text-align:left; font-weight:600; color: #cbd5e1;">${windowBlock}</td>`;
@@ -636,7 +633,6 @@
         daysOfWeek.forEach(d => sumPMRow += `<td>${totalizerPM[d]}</td>`);
         targetTbody.innerHTML += sumPMRow + `</tr>`;
 
-        // Volume Shrinkage
         let shrinkRow = `<tr class="total-row-shrinkage"><td>Shrinkage / Total Off Vol.</td>`;
         daysOfWeek.forEach(d => shrinkRow += `<td>${totalizerShrink[d]} Ags</td>`);
         targetTbody.innerHTML += shrinkRow + `</tr>`;

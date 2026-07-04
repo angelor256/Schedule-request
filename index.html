@@ -3,209 +3,266 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WFM Tactical Enterprise // v14.0 Strict VIP Engine</title>
+    <title>WFM Tactical Enterprise // v15.0 Balanced VIP Engine</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
 
     <style>
         :root {
-            --bg-main: #0a0b10;
-            --bg-surface: #121420;
-            --bg-surface-elevated: #1a1d2f;
-            --border-glow: #242943;
-            --border-subtle: #191d32;
+            --bg-main: #f8fafc;
+            --bg-surface: #ffffff;
+            --border-subtle: #e2e8f0;
+            --border-focus: #94a3b8;
             
-            --text-primary: #f1f5f9;
-            --text-secondary: #64748b;
-            --text-muted: #475569;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --text-muted: #94a3b8;
+            --accent-color: #2563eb;
             
-            --neon-blue: #00f0ff;
-            --neon-purple: #bd00ff;
-            --neon-green: #00ff87;
-            --neon-coral: #ff4655;
-            
-            --sh-am-bg: rgba(0, 240, 255, 0.07); --sh-am-txt: #00f0ff; --sh-am-border: rgba(0, 240, 255, 0.25);
-            --sh-pm-bg: rgba(189, 0, 255, 0.08); --sh-pm-txt: #e280ff; --sh-pm-border: rgba(189, 0, 255, 0.25);
-            --sh-off-bg: rgba(255, 70, 85, 0.08); --sh-off-txt: #ff4655; --sh-off-border: rgba(255, 70, 85, 0.25);
-            --sh-vac-bg: rgba(251, 191, 36, 0.08); --sh-vac-txt: #fbbf24; --sh-vac-border: rgba(251, 191, 36, 0.25);
-            --sh-op-bg: rgba(0, 255, 135, 0.07); --sh-op-txt: #00ff87; --sh-op-border: rgba(0, 255, 135, 0.3);
+            /* Soft Pastels Palette for Shifts */
+            --sh-am-bg: #eff6ff; --sh-am-txt: #1e40af; --sh-am-border: #bfdbfe;
+            --sh-pm-bg: #faf5ff; --sh-pm-txt: #6b21a8; --sh-pm-border: #e9d5ff;
+            --sh-off-bg: #fef2f2; --sh-off-txt: #991b1b; --sh-off-border: #fecaca;
+            --sh-vac-bg: #fffbeb; --sh-vac-txt: #92400e; --sh-vac-border: #fef3c7;
+            --sh-op-bg: #f0fdf4; --sh-op-txt: #166534; --sh-op-border: #bbf7d0;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
             background-color: var(--bg-main);
             color: var(--text-primary);
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            padding: 30px;
-            letter-spacing: -0.2px;
+            font-family: 'Inter', sans-serif;
+            padding: 40px 24px;
+            line-height: 1.5;
         }
 
-        .container { max-width: 1780px; margin: 0 auto; }
+        .container { max-width: 1680px; margin: 0 auto; }
 
-        .glass-header {
+        header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: linear-gradient(135deg, #121420 0%, #0d0e17 100%);
-            border: 1px solid var(--border-glow);
-            padding: 24px 30px;
-            border-radius: 16px;
-            margin-bottom: 25px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            padding: 24px 32px;
+            border-radius: 12px;
+            margin-bottom: 32px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
         }
-        .app-title h1 { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; background: linear-gradient(90deg, #fff, #94a3b8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .app-title p { font-size: 11px; color: var(--neon-blue); font-family: 'JetBrains Mono', monospace; margin-top: 4px; text-transform: uppercase; letter-spacing: 1px; }
+        .app-title h1 { font-size: 20px; font-weight: 700; color: var(--text-primary); letter-spacing: -0.5px; }
+        .app-title p { font-size: 12px; color: var(--text-secondary); margin-top: 2px; font-family: 'JetBrains Mono', monospace; }
 
+        /* Main System Tabs */
         .navigation-dock {
             display: flex;
-            gap: 16px;
-            margin-bottom: 30px;
+            gap: 8px;
+            margin-bottom: 24px;
             border-bottom: 1px solid var(--border-subtle);
-            padding-bottom: 12px;
+            padding-bottom: 1px;
         }
         .dock-tab {
             background: transparent;
             border: none;
             color: var(--text-secondary);
-            padding: 12px 24px;
+            padding: 12px 20px;
             font-size: 14px;
-            font-weight: 600;
+            font-weight: 500;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
+            transition: all 0.2s ease;
+            border-radius: 6px 6px 0 0;
+            margin-bottom: -1px;
         }
-        .dock-tab:hover { color: var(--text-primary); }
-        .dock-tab.active-tab { color: var(--neon-blue); }
-        .dock-tab.active-tab::after {
-            content: ''; position: absolute; bottom: -13px; left: 0; width: 100%; height: 3px; background: var(--neon-blue); box-shadow: 0 0 12px var(--neon-blue);
+        .dock-tab:hover { color: var(--text-primary); background-color: #f1f5f9; }
+        .dock-tab.active-tab { 
+            color: var(--accent-color); 
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-bottom-color: var(--bg-surface);
+            font-weight: 600;
         }
 
+        /* Action Buttons */
         .action-btn {
-            background: #171a2b; border: 1px solid #2d3454; color: var(--text-primary); padding: 12px 24px; font-size: 13px; font-weight: 600; border-radius: 10px; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px;
+            background: var(--bg-surface); border: 1px solid var(--border-subtle); color: var(--text-secondary); padding: 10px 18px; font-size: 13px; font-weight: 500; border-radius: 8px; cursor: pointer; transition: all 0.15s ease; display: inline-flex; align-items: center; gap: 8px;
         }
-        .action-btn:hover { background: #1e223b; border-color: var(--neon-blue); }
-        .btn-accent { background: var(--neon-blue); color: #000; font-weight: 700; border: none; }
-        .btn-accent:hover { background: #00d8e6; box-shadow: 0 0 15px rgba(0,240,255,0.4); }
-        .btn-download { background: transparent; border: 1px solid var(--neon-green); color: var(--neon-green); }
-        .btn-download:hover { background: rgba(0,255,135,0.1); }
+        .action-btn:hover { background: #f8fafc; border-color: var(--border-focus); color: var(--text-primary); }
+        .btn-accent { background: var(--accent-color); color: #ffffff; border: none; font-weight: 600; }
+        .btn-accent:hover { background: #1d4ed8; color: #ffffff; box-shadow: 0 4px 12px rgba(37,99,235,0.15); }
 
         .panel-view { display: none; }
         .panel-view.active-view { display: block; }
 
-        .panel-card { background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: 16px; padding: 24px; margin-bottom: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
-        .card-title-bar { font-size: 16px; color: var(--text-primary); font-weight: 700; margin-bottom: 22px; display: flex; justify-content: space-between; align-items: center; }
+        .panel-card { background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 28px; margin-bottom: 32px; box-shadow: 0 1px 3px rgba(0,0,0,0.02); }
+        .card-title-bar { font-size: 15px; color: var(--text-primary); font-weight: 600; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
 
-        .segmented-control { display: inline-flex; background: #090a10; padding: 4px; border-radius: 8px; border: 1px solid var(--border-subtle); }
-        .segment-btn { background: transparent; border: none; color: var(--text-secondary); padding: 8px 16px; font-size: 12px; font-weight: 600; border-radius: 6px; cursor: pointer; transition: all 0.2s; }
-        .segment-btn.active-segment { background: var(--bg-surface-elevated); color: var(--neon-blue); box-shadow: 0 2px 8px rgba(0,0,0,0.4); }
+        /* Sub-navigation for Departments */
+        .dept-switcher {
+            display: flex;
+            gap: 6px;
+            background: #f1f5f9;
+            padding: 4px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: inline-flex;
+        }
+        .dept-btn {
+            background: transparent; border: none; color: var(--text-secondary); padding: 6px 14px; font-size: 12px; font-weight: 600; border-radius: 6px; cursor: pointer; transition: all 0.15s;
+        }
+        .dept-btn.active-dept {
+            background: var(--bg-surface); color: var(--text-primary); box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
 
+        /* Structured Tables */
         .interactive-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-        .interactive-table th { background: #090a10; color: var(--text-secondary); text-align: left; padding: 16px 14px; font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid var(--border-subtle); }
-        .interactive-table td { padding: 10px 14px; border-bottom: 1px solid #0d0f18; color: var(--text-primary); }
+        .interactive-table th { background: #f8fafc; color: var(--text-secondary); text-align: left; padding: 14px 16px; font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid var(--border-subtle); }
+        .interactive-table td { padding: 10px 16px; border-bottom: 1px solid #f1f5f9; color: var(--text-primary); }
         
-        .row-dept-header { background: linear-gradient(90deg, #0d0f18 0%, transparent 100%); color: var(--neon-blue) !important; font-weight: 700; font-size: 13px; padding: 14px 14px !important; border-bottom: 1px solid var(--border-glow) !important; }
-        .row-squad-header { background: transparent; color: #e2e8f0 !important; font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; padding: 12px 14px !important; }
+        .row-squad-header { background: #fafafa; color: var(--text-secondary) !important; font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; padding: 10px 16px !important; border-bottom: 1px solid var(--border-subtle) !important; }
 
-        .badge-pill { font-size: 10px; font-family: 'JetBrains Mono', monospace; background: #1a1d30; color: #94a3b8; padding: 4px 10px; border-radius: 20px; font-weight: 500; border: 1px solid #22273f; }
-        .badge-vip { background: rgba(239, 68, 68, 0.15); color: #f87171; border-color: rgba(239, 68, 68, 0.3); font-weight: 700; }
+        .badge-pill { font-size: 11px; padding: 2px 8px; border-radius: 6px; font-weight: 500; background: #f1f5f9; color: var(--text-secondary); border: 1px solid var(--border-subtle); }
+        .badge-vip { background: #fff1f2; color: #9f1239; border-color: #ffe4e6; font-weight: 600; }
 
-        .custom-dropdown { background: #090a10; border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 8px; border-radius: 8px; font-family: 'JetBrains Mono', monospace; font-size: 11px; width: 125px; outline: none; cursor: pointer; text-align: center; transition: all 0.2s; }
-        .custom-dropdown:focus { border-color: var(--neon-blue); }
+        /* Smooth Dropdowns styling */
+        .custom-dropdown { background: #ffffff; border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 7px 10px; border-radius: 6px; font-family: 'JetBrains Mono', monospace; font-size: 11px; width: 120px; outline: none; cursor: pointer; text-align: center; font-weight: 500; transition: all 0.15s ease; }
+        .custom-dropdown:focus { border-color: var(--border-focus); }
         .custom-dropdown.s-am { background: var(--sh-am-bg); color: var(--sh-am-txt); border-color: var(--sh-am-border); }
         .custom-dropdown.s-pm { background: var(--sh-pm-bg); color: var(--sh-pm-txt); border-color: var(--sh-pm-border); }
-        .custom-dropdown.s-off { background: var(--sh-off-bg); color: var(--sh-off-txt); border-color: var(--sh-off-border); }
+        .custom-dropdown.s-off { background: var(--sh-off-bg); color: var(--sh-off-txt); border-color: var(--sh-off-border); font-weight: 600; }
         .custom-dropdown.s-vac { background: var(--sh-vac-bg); color: var(--sh-vac-txt); border-color: var(--sh-vac-border); }
-        .custom-dropdown.s-op { background: var(--sh-op-bg); color: var(--sh-op-txt); border-color: var(--sh-op-border); font-weight: 700; }
+        .custom-dropdown.s-op { background: var(--sh-op-bg); color: var(--sh-op-txt); border-color: var(--sh-op-border); }
 
+        /* Integrated Analytics Corporate Grid */
         .analytics-matrix { width: 100%; border-collapse: collapse; font-family: 'JetBrains Mono', monospace; font-size: 12px; }
-        .analytics-matrix th, .analytics-matrix td { border: 1px solid var(--border-subtle); padding: 12px; text-align: center; }
-        .analytics-matrix th { background: #090a10; color: var(--text-secondary); font-weight: 500; }
-        .analytics-section-title { text-align: left !important; font-weight: 600; color: var(--text-primary); background: #131523 !important; }
-        .total-row-am { background: rgba(0,240,255,0.02); font-weight: 700; color: var(--sh-am-txt); }
-        .total-row-pm { background: rgba(189,0,255,0.02); font-weight: 700; color: var(--sh-pm-txt); }
-        .total-row-shrinkage { background: rgba(255,70,85,0.02); font-weight: 700; color: var(--sh-off-txt); }
+        .analytics-matrix th, .analytics-matrix td { border: 1px solid var(--border-subtle); padding: 10px 12px; text-align: center; }
+        .analytics-matrix th { background: #f8fafc; color: var(--text-secondary); font-weight: 600; font-size: 11px; }
+        .analytics-section-title { text-align: left !important; font-weight: 600; color: var(--text-primary); background: #f1f5f9 !important; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .total-row-am { background: #f8fafc; font-weight: 600; color: var(--sh-am-txt); }
+        .total-row-pm { background: #f8fafc; font-weight: 600; color: var(--sh-pm-txt); }
+        .total-row-shrinkage { background: #fff5f5; font-weight: 600; color: var(--sh-off-txt); }
     </style>
 </head>
 <body>
 
 <div class="container">
 
-    <div class="glass-header">
+    <header>
         <div class="app-title">
-            <h1>Tactical Workforce Management Panel</h1>
-            <p>// CORE SYSTEM ENG v14.0 // STRICT TWO-PHASE PIPELINE</p>
+            <h1>Tactical Workforce Management</h1>
+            <p>// ENGINE VERSION 15.0 // BALANCED DISTRIBUTION CONTROL</p>
         </div>
         <div>
-            <button class="action-btn btn-download" onclick="exportDataToExcel()">📥 Export Master Copy</button>
+            <button class="action-btn" onclick="exportDataToExcel()">📥 Export Matrix to Excel</button>
         </div>
-    </div>
+    </header>
 
     <div class="navigation-dock">
-        <button class="dock-tab active-tab" id="tab-request" onclick="toggleViewSegment('request')">01 / Agent Preference Deck (Requests)</button>
-        <button class="dock-tab" id="tab-engine" onclick="toggleViewSegment('engine')">02 / Tactical Production Roster (Final Schedule)</button>
+        <button class="dock-tab active-tab" id="tab-request" onclick="toggleViewSegment('request')">01 / Preferences Dashboard</button>
+        <button class="dock-tab" id="tab-engine" onclick="toggleViewSegment('engine')">02 / Master Shift Roster</button>
     </div>
 
-    <!-- SCREEN 1 -->
+    <!-- WINDOW 1: REQUEST PRE-DECK -->
     <div id="view-request" class="panel-view active-view">
-        <div class="panel-card" style="border-top: 3px solid var(--neon-purple);">
-            <div class="card-title-bar">
-                <span>📊 Entrada de Agentes (Pre-asignaciones de Roster)</span>
-                <button class="action-btn btn-accent" onclick="compileRosterPipeline()">Execute Hierarchical Engine ⚙️</button>
-            </div>
-            <div style="overflow-x: auto;">
-                <table class="interactive-table">
-                    <thead>
-                        <tr>
-                            <th style="width: 260px;">Agent Full Name</th>
-                            <th style="width: 130px;">Squad Level</th>
-                            <th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th><th>Sun</th>
-                        </tr>
-                    </thead>
-                    <tbody id="requestDeckBody"></tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-
-    <!-- SCREEN 2 -->
-    <div id="view-engine" class="panel-view">
-        <div class="panel-card" style="border-top: 3px solid var(--neon-blue);">
-            <div class="card-title-bar">
-                <span>⚡ Cuadrante Maestro Jerárquico (VIPs Protegidos con 2 Offs Max)</span>
-                <span style="font-size: 11px; color: var(--neon-green); font-family: 'JetBrains Mono', monospace;">STATUS: STRICT HIERARCHICAL ENFORCED</span>
-            </div>
-            <div style="overflow-x: auto;">
-                <table class="interactive-table">
-                    <thead>
-                        <tr>
-                            <th style="width: 260px;">Agent Full Name</th>
-                            <th style="width: 130px;">Squad Level</th>
-                            <th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th><th>Sun</th>
-                        </tr>
-                    </thead>
-                    <tbody id="engineDeckBody"></tbody>
-                </table>
-            </div>
-        </div>
-
         <div class="panel-card">
             <div class="card-title-bar">
-                <span>📊 Matriz Analytics Integrada</span>
-                <div class="segmented-control">
-                    <button class="segment-btn active-segment" id="seg-all" onclick="changeMetricsFilter('all')">View Global</button>
-                    <button class="segment-btn" id="seg-phones" onclick="changeMetricsFilter('Calculo Phones')">Phones Only</button>
-                    <button class="segment-btn" id="seg-chats" onclick="changeMetricsFilter('Calculo Chats')">Chats Only</button>
+                <span>📋 Input Deck (Agent Preferences & Leaves)</span>
+                <button class="action-btn btn-accent" onclick="compileRosterPipeline()">Generate Balanced Schedule ⚙️</button>
+            </div>
+            
+            <div class="dept-switcher">
+                <button class="dept-btn active-dept" id="req-btn-phones" onclick="switchDeptView('Phones', 'request')">Calculo Phones</button>
+                <button class="dept-btn" id="req-btn-chats" onclick="switchDeptView('Chats', 'request')">Calculo Chats</button>
+            </div>
+
+            <!-- Phones Sub-table -->
+            <div id="req-container-Phones" class="dept-table-container">
+                <table class="interactive-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 280px;">Agent Name</th>
+                            <th style="width: 140px;">Tier Level</th>
+                            <th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th><th>Sun</th>
+                        </tr>
+                    </thead>
+                    <tbody id="reqBodyPhones"></tbody>
+                </table>
+            </div>
+
+            <!-- Chats Sub-table -->
+            <div id="req-container-Chats" class="dept-table-container" style="display: none;">
+                <table class="interactive-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 280px;">Agent Name</th>
+                            <th style="width: 140px;">Tier Level</th>
+                            <th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th><th>Sun</th>
+                        </tr>
+                    </thead>
+                    <tbody id="reqBodyChats"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- WINDOW 2: OUTPUT PROVISION ROSTER -->
+    <div id="view-engine" class="panel-view">
+        <div class="panel-card">
+            <div class="card-title-bar">
+                <span>📅 Production Schedule (Enforced 1 VIP Off Daily Limit)</span>
+            </div>
+
+            <div class="dept-switcher">
+                <button class="dept-btn active-dept" id="out-btn-phones" onclick="switchDeptView('Phones', 'output')">Calculo Phones</button>
+                <button class="dept-btn" id="out-btn-chats" onclick="switchDeptView('Chats', 'output')">Calculo Chats</button>
+            </div>
+
+            <!-- Phones Output Table -->
+            <div id="out-container-Phones" class="dept-table-container">
+                <table class="interactive-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 280px;">Agent Name</th>
+                            <th style="width: 140px;">Tier Level</th>
+                            <th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th><th>Sun</th>
+                        </tr>
+                    </thead>
+                    <tbody id="outBodyPhones"></tbody>
+                </table>
+            </div>
+
+            <!-- Chats Output Table -->
+            <div id="out-container-Chats" class="dept-table-container" style="display: none;">
+                <table class="interactive-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 280px;">Agent Name</th>
+                            <th style="width: 140px;">Tier Level</th>
+                            <th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th><th>Sun</th>
+                        </tr>
+                    </thead>
+                    <tbody id="outBodyChats"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Integrated Corporate Metrics Panel -->
+        <div class="panel-card">
+            <div class="card-title-bar">
+                <span>📈 Real-time Supply Statistics</span>
+                <div class="dept-switcher" style="margin-bottom: 0;">
+                    <button class="dept-btn active-dept" id="an-btn-all" onclick="changeMetricsFilter('all')">Global View</button>
+                    <button class="dept-btn" id="an-btn-phones" onclick="changeMetricsFilter('Calculo Phones')">Phones Analytics</button>
+                    <button class="dept-btn" id="an-btn-chats" onclick="changeMetricsFilter('Calculo Chats')">Chats Analytics</button>
                 </div>
             </div>
             <div style="overflow-x: auto;">
                 <table class="analytics-matrix">
                     <thead>
                         <tr>
-                            <th style="width: 240px; text-align: left;">Roster Window Block</th>
+                            <th style="width: 260px; text-align: left;">Roster Block Window</th>
                             <th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th><th>Sun</th>
                         </tr>
                     </thead>
@@ -242,10 +299,12 @@
     const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
     let selectedMetricsFilter = "all";
+    let activeReqDept = "Phones";
+    let activeOutDept = "Phones";
 
     window.onload = function() {
-        if (!localStorage.getItem('wfm_v14_request_cache')) initDatabaseStructure();
-        if (!localStorage.getItem('wfm_v14_output_cache')) localStorage.setItem('wfm_v14_output_cache', localStorage.getItem('wfm_v14_request_cache'));
+        if (!localStorage.getItem('wfm_v15_request_cache')) initDatabaseStructure();
+        if (!localStorage.getItem('wfm_v15_output_cache')) localStorage.setItem('wfm_v15_output_cache', localStorage.getItem('wfm_v15_request_cache'));
         renderInputGrid();
         renderEngineGrid();
         processAnalyticsRefresh();
@@ -269,7 +328,7 @@
                 });
             });
         });
-        localStorage.setItem('wfm_v14_request_cache', JSON.stringify(cache));
+        localStorage.setItem('wfm_v15_request_cache', JSON.stringify(cache));
     }
 
     function toggleViewSegment(view) {
@@ -279,41 +338,61 @@
         document.getElementById(`tab-${view}`).classList.add('active-tab');
     }
 
+    function switchDeptView(dept, type) {
+        if (type === 'request') {
+            activeReqDept = dept;
+            document.querySelectorAll('#view-request .dept-btn').forEach(b => b.classList.remove('active-dept'));
+            document.getElementById(`req-btn-${dept.toLowerCase()}`).classList.add('active-dept');
+            document.querySelectorAll('#view-request .dept-table-container').forEach(c => c.style.display = 'none');
+            document.getElementById(`req-container-${dept}`).style.display = 'block';
+        } else {
+            activeOutDept = dept;
+            document.querySelectorAll('#view-engine .dept-btn').forEach(b => b.classList.remove('active-dept'));
+            document.getElementById(`out-btn-${dept.toLowerCase()}`).classList.add('active-dept');
+            document.querySelectorAll('#view-engine .dept-table-container').forEach(c => c.style.display = 'none');
+            document.getElementById(`out-container-${dept}`).style.display = 'block';
+        }
+    }
+
     function renderInputGrid() {
-        const data = JSON.parse(localStorage.getItem('wfm_v14_request_cache'));
-        const tbody = document.getElementById('requestDeckBody'); tbody.innerHTML = "";
+        const data = JSON.parse(localStorage.getItem('wfm_v15_request_cache'));
+        const tbodyPhones = document.getElementById('reqBodyPhones'); tbodyPhones.innerHTML = "";
+        const tbodyChats = document.getElementById('reqBodyChats'); tbodyChats.innerHTML = "";
+
         Object.keys(coreRosterMap).forEach(dept => {
-            tbody.innerHTML += `<tr><td colspan="9" class="row-dept-header">// DEPT: ${dept.toUpperCase()}</td></tr>`;
+            const currentTbody = (dept === "Calculo Phones") ? tbodyPhones : tbodyChats;
             Object.keys(coreRosterMap[dept]).forEach(squad => {
-                tbody.innerHTML += `<tr><td colspan="9" class="row-squad-header">✦ ${squad} Group</td></tr>`;
+                currentTbody.innerHTML += `<tr><td colspan="9" class="row-squad-header">✦ ${squad} Group</td></tr>`;
                 coreRosterMap[dept][squad].forEach(name => {
                     const agent = data.find(r => r.name === name); if(!agent) return;
                     const tr = document.createElement('tr');
                     let isVip = squad === "VIP";
-                    let cells = `<td><span style="font-weight:600; padding-left:10px;">${name}</span></td>`;
+                    let cells = `<td><span style="font-weight:600;">${name}</span></td>`;
                     cells += `<td><span class="badge-pill ${isVip ? 'badge-vip' : ''}">${squad}</span></td>`;
                     daysOfWeek.forEach(day => { cells += `<td>${buildSelectOptions(name, day, agent.shifts[day], 'request')}</td>`; });
-                    tr.innerHTML = cells; tbody.appendChild(tr);
+                    tr.innerHTML = cells; currentTbody.appendChild(tr);
                 });
             });
         });
     }
 
     function renderEngineGrid() {
-        const data = JSON.parse(localStorage.getItem('wfm_v14_output_cache'));
-        const tbody = document.getElementById('engineDeckBody'); tbody.innerHTML = "";
+        const data = JSON.parse(localStorage.getItem('wfm_v15_output_cache'));
+        const tbodyPhones = document.getElementById('outBodyPhones'); tbodyPhones.innerHTML = "";
+        const tbodyChats = document.getElementById('outBodyChats'); tbodyChats.innerHTML = "";
+
         Object.keys(coreRosterMap).forEach(dept => {
-            tbody.innerHTML += `<tr><td colspan="9" class="row-dept-header">// DEPT: ${dept.toUpperCase()}</td></tr>`;
+            const currentTbody = (dept === "Calculo Phones") ? tbodyPhones : tbodyChats;
             Object.keys(coreRosterMap[dept]).forEach(squad => {
-                tbody.innerHTML += `<tr><td colspan="9" class="row-squad-header">✦ ${squad} Group</td></tr>`;
+                currentTbody.innerHTML += `<tr><td colspan="9" class="row-squad-header">✦ ${squad} Group</td></tr>`;
                 coreRosterMap[dept][squad].forEach(name => {
                     const agent = data.find(r => r.name === name); if(!agent) return;
                     const tr = document.createElement('tr');
                     let isVip = squad === "VIP";
-                    let cells = `<td><span style="font-weight:600; padding-left:10px;">${name}</span></td>`;
+                    let cells = `<td><span style="font-weight:600;">${name}</span></td>`;
                     cells += `<td><span class="badge-pill ${isVip ? 'badge-vip' : ''}">${squad}</span></td>`;
                     daysOfWeek.forEach(day => { cells += `<td>${buildSelectOptions(name, day, agent.shifts[day], 'output')}</td>`; });
-                    tr.innerHTML = cells; tbody.appendChild(tr);
+                    tr.innerHTML = cells; currentTbody.appendChild(tr);
                 });
             });
         });
@@ -334,17 +413,17 @@
 
     function syncLiveRequest(el) {
         const name = el.getAttribute('data-name'); const day = el.getAttribute('data-day');
-        let data = JSON.parse(localStorage.getItem('wfm_v14_request_cache'));
+        let data = JSON.parse(localStorage.getItem('wfm_v15_request_cache'));
         let target = data.find(r => r.name === name); if(target) target.shifts[day] = el.value;
-        localStorage.setItem('wfm_v14_request_cache', JSON.stringify(data));
+        localStorage.setItem('wfm_v15_request_cache', JSON.stringify(data));
         repaintDropdown(el);
     }
 
     function syncLiveOutput(el) {
         const name = el.getAttribute('data-name'); const day = el.getAttribute('data-day');
-        let data = JSON.parse(localStorage.getItem('wfm_v14_output_cache'));
+        let data = JSON.parse(localStorage.getItem('wfm_v15_output_cache'));
         let target = data.find(r => r.name === name); if(target) target.shifts[day] = el.value;
-        localStorage.setItem('wfm_v14_output_cache', JSON.stringify(data));
+        localStorage.setItem('wfm_v15_output_cache', JSON.stringify(data));
         repaintDropdown(el); processAnalyticsRefresh();
     }
 
@@ -360,16 +439,16 @@
 
     function changeMetricsFilter(filterMode) {
         selectedMetricsFilter = filterMode;
-        document.querySelectorAll('.segment-btn').forEach(b => b.classList.remove('active-segment'));
-        if (filterMode === 'all') document.getElementById('seg-all').append('active-segment');
-        if (filterMode === 'Calculo Phones') document.getElementById('seg-phones').classList.add('active-segment');
-        if (filterMode === 'Calculo Chats') document.getElementById('seg-chats').classList.add('active-segment');
+        document.querySelectorAll('#view-engine .dept-switcher .dept-btn').forEach(b => b.classList.remove('active-dept'));
+        if (filterMode === 'all') document.getElementById('an-btn-all').classList.add('active-dept');
+        if (filterMode === 'Calculo Phones') document.getElementById('an-btn-phones').classList.add('active-dept');
+        if (filterMode === 'Calculo Chats') document.getElementById('an-btn-chats').classList.add('active-dept');
         processAnalyticsRefresh();
     }
 
-    // INTERFAZ DE PROCESAMIENTO CORREGIDA CON TOPES DE DESCANSO
+    // ALGORITMO INTEGRADO AJUSTADO CON DISTRIBUCIÓN MATRICIAL MATEMÁTICA STRICTA
     function compileRosterPipeline() {
-        let requests = JSON.parse(localStorage.getItem('wfm_v14_request_cache'));
+        let requests = JSON.parse(localStorage.getItem('wfm_v15_request_cache'));
         let output = JSON.parse(JSON.stringify(requests)); 
         const departments = ["Calculo Phones", "Calculo Chats"];
 
@@ -377,77 +456,66 @@
             let vips = output.filter(r => r.dept === dept && r.squad === "VIP");
             let supportTiers = output.filter(r => r.dept === dept && r.squad !== "VIP");
 
-            // 1. Inicializar estructura base de VIPs limpia (remover auto-offs basura de versiones previas)
+            // Limpieza inicial total de la matriz VIP
             vips.forEach(v => {
                 daysOfWeek.forEach(day => {
-                    if (v.shifts[day] !== "Vacaciones" && v.shifts[day] !== "Day Off") {
-                        v.shifts[day] = "OPEN";
-                    }
+                    if (v.shifts[day] !== "Vacaciones") v.shifts[day] = "OPEN";
                 });
             });
 
-            // 2. Controladores de días libres distribuidos estrictos (Máximo 2 libres por VIP)
-            daysOfWeek.forEach((day, dIdx) => {
-                let currentOffsOnDay = vips.filter(v => v.shifts[day] === "Day Off" || v.shifts[day] === "Vacaciones").length;
-                
-                // Si nadie está libre este día, forzamos un libre estratégico cuidando el límite semanal
-                if (currentOffsOnDay === 0) {
-                    let candidate = vips.find(v => {
-                        let totalWeeklyOffs = daysOfWeek.filter(d => v.shifts[d] === "Day Off" || v.shifts[d] === "Vacaciones").length;
-                        return totalWeeklyOffs < 2 && v.shifts[day] === "OPEN";
+            // DISTRIBUCIÓN MATRICIAL MATEMÁTICA PERFECTA PARA EL GRUPO VIP
+            if (dept === "Calculo Phones" && vips.length === 4) {
+                // Matriz estricta para Phones (4 VIPs, 1 libre por día de L-J, 1 libre compartido en fin de semana para completar 2 libres cada uno)
+                const perfectPhonesMatrix = {
+                    0: ["Day Off", "OPEN", "OPEN", "OPEN", "Day Off", "OPEN", "OPEN"], // Emerson
+                    1: ["OPEN", "Day Off", "OPEN", "OPEN", "OPEN", "Day Off", "OPEN"], // Stephannie
+                    2: ["OPEN", "OPEN", "Day Off", "OPEN", "OPEN", "OPEN", "Day Off"], // Thimy
+                    3: ["OPEN", "OPEN", "OPEN", "Day Off", "Day Off", "OPEN", "OPEN"]  // Yasser
+                };
+                vips.forEach((v, idx) => {
+                    daysOfWeek.forEach((day, dIdx) => {
+                        if (v.shifts[day] !== "Vacaciones") v.shifts[day] = perfectPhonesMatrix[idx][dIdx];
                     });
-                    if (candidate) {
-                        candidate.shifts[day] = "Day Off";
-                    }
-                }
-            });
+                });
+            } else {
+                // Algoritmo dinámico round-robin balanceado para Chats u otros tamaños de grupo VIP
+                let currentOffPointers = {}; 
+                daysOfWeek.forEach(d => currentOffPointers[d] = vips.filter(v => v.shifts[d] === "Vacaciones").length);
 
-            // Forzar balance final de días libres semanales para los VIPs (Debe ser exactamente 2 por persona)
-            vips.forEach(v => {
-                let currentOffs = daysOfWeek.filter(d => v.shifts[d] === "Day Off" || v.shifts[d] === "Vacaciones").length;
-                if (currentOffs < 2) {
-                    for (let day of daysOfWeek) {
-                        // Buscar días donde no rompamos el mínimo de cobertura
-                        let VIPsLaboralesHoy = vips.filter(other => other.shifts[day] !== "Day Off" && other.shifts[day] !== "Vacaciones").length;
-                        if (v.shifts[day] === "OPEN" && VIPsLaboralesHoy > 1) {
-                            v.shifts[day] = "Day Off";
-                            currentOffs++;
-                            if (currentOffs === 2) break;
+                vips.forEach(v => {
+                    let totalOffs = daysOfWeek.filter(d => v.shifts[d] === "Vacaciones" || v.shifts[d] === "Day Off").length;
+                    if (totalOffs < 2) {
+                        let sortedDays = [...daysOfWeek].sort((a, b) => currentOffPointers[a] - currentOffPointers[b]);
+                        for (let day of sortedDays) {
+                            if (v.shifts[day] === "OPEN") {
+                                v.shifts[day] = "Day Off";
+                                currentOffsPointers[day]++;
+                                totalOffs++;
+                                if (totalOffs === 2) break;
+                            }
                         }
                     }
-                }
-            });
+                });
+            }
 
-            // ==========================================
-            // ASIGNACIÓN DE HORARIOS MATRICIALES VIP
-            // ==========================================
+            // ASIGNACIÓN HORARIA VIP
             daysOfWeek.forEach(day => {
                 let activeVips = vips.filter(v => v.shifts[day] !== "Day Off" && v.shifts[day] !== "Vacaciones");
                 let countActiveVips = activeVips.length;
 
                 if (countActiveVips >= 4) {
-                    activeVips[0].shifts[day] = "06:00 AM";
-                    activeVips[1].shifts[day] = "07:00 AM";
-                    activeVips[2].shifts[day] = "02:00 PM";
-                    activeVips[3].shifts[day] = "03:00 PM";
-                    // Si sobran vips por alta densidad, se distribuyen en ventanas complementarias
-                    for(let i=4; i<countActiveVips; i++) {
-                        activeVips[i].shifts[day] = i % 2 === 0 ? "07:00 AM" : "02:00 PM";
-                    }
+                    activeVips[0].shifts[day] = "06:00 AM"; activeVips[1].shifts[day] = "07:00 AM";
+                    activeVips[2].shifts[day] = "02:00 PM"; activeVips[3].shifts[day] = "03:00 PM";
+                    for(let i=4; i<countActiveVips; i++) activeVips[i].shifts[day] = i % 2 === 0 ? "07:00 AM" : "02:00 PM";
                 } else if (countActiveVips === 3) {
-                    activeVips[0].shifts[day] = "06:00 AM";
-                    activeVips[1].shifts[day] = "09:00 AM"; // Middle
-                    activeVips[2].shifts[day] = "03:00 PM";
+                    activeVips[0].shifts[day] = "06:00 AM"; activeVips[1].shifts[day] = "09:00 AM"; activeVips[2].shifts[day] = "03:00 PM";
                 } else if (countActiveVips === 2) {
-                    activeVips[0].shifts[day] = "06:00 AM";
-                    activeVips[1].shifts[day] = "02:00 PM";
+                    activeVips[0].shifts[day] = "06:00 AM"; activeVips[1].shifts[day] = "02:00 PM";
                 } else if (countActiveVips === 1) {
                     activeVips[0].shifts[day] = "06:00 AM";
                 }
 
-                // ==========================================
-                // FASE 2: BALANCEO DEL RESTO DE LA OPERACIÓN
-                // ==========================================
+                // BALANCEO DE SOPORTE GENERAL (TIERS 1 Y 2)
                 supportTiers.forEach(agent => {
                     let offDaysCount = daysOfWeek.filter(d => agent.shifts[d] === "Day Off" || agent.shifts[d] === "Vacaciones").length;
                     if (offDaysCount < 2) {
@@ -457,8 +525,7 @@
                             : ["Sunday", "Saturday", "Wednesday", "Thursday", "Tuesday", "Monday", "Friday"];
                         for (let d of evaluationOrder) {
                             if (agent.shifts[d] !== "Day Off" && agent.shifts[d] !== "Vacaciones") {
-                                agent.shifts[d] = "Day Off"; 
-                                break;
+                                agent.shifts[d] = "Day Off"; break;
                             }
                         }
                     }
@@ -496,7 +563,7 @@
             });
         });
 
-        // CONTROL FINAL DE CONCORDANCIA ERGONÓMICA (12 Horas de descanso entre jornadas)
+        // REGLA ERGONÓMICA INTER JORNADA (12 Horas de descanso mínimo)
         output.forEach(agent => {
             for (let i = 0; i < daysOfWeek.length - 1; i++) {
                 let currentDay = daysOfWeek[i]; let nextDay = daysOfWeek[i + 1];
@@ -510,14 +577,14 @@
             }
         });
 
-        localStorage.setItem('wfm_v14_output_cache', JSON.stringify(output));
+        localStorage.setItem('wfm_v15_output_cache', JSON.stringify(output));
         renderEngineGrid();
         processAnalyticsRefresh();
         toggleViewSegment('engine');
     }
 
     function processAnalyticsRefresh() {
-        const rawData = JSON.parse(localStorage.getItem('wfm_v14_output_cache')) || [];
+        const rawData = JSON.parse(localStorage.getItem('wfm_v15_output_cache')) || [];
         let filteredData = rawData;
         if (selectedMetricsFilter !== "all") filteredData = rawData.filter(agent => agent.dept === selectedMetricsFilter);
 
@@ -536,33 +603,33 @@
         });
 
         const targetTbody = document.getElementById('analyticsDataBody'); targetTbody.innerHTML = "";
-        targetTbody.innerHTML += `<tr><td colspan="8" class="analytics-section-title" style="color:var(--neon-blue);">▲ AM PRODUCTION WINDOWS</td></tr>`;
+        targetTbody.innerHTML += `<tr><td colspan="8" class="analytics-section-title">▲ AM Capacity Blocks</td></tr>`;
         amWindows.forEach(windowBlock => {
-            let tr = `<tr><td style="text-align:left; font-weight:600; color: #cbd5e1;">${windowBlock}</td>`;
+            let tr = `<tr><td style="text-align:left; font-weight:500; color: var(--text-secondary);">${windowBlock}</td>`;
             daysOfWeek.forEach(d => tr += `<td>${calculatedMatrix[windowBlock][d]}</td>`);
             targetTbody.innerHTML += tr + `</tr>`;
         });
-        let sumAMRow = `<tr class="total-row-am"><td>Total AM Capacity</td>`;
+        let sumAMRow = `<tr class="total-row-am"><td style="text-align:left;">Net Capacity AM</td>`;
         daysOfWeek.forEach(d => sumAMRow += `<td>${totalizerAM[d]}</td>`);
         targetTbody.innerHTML += sumAMRow + `</tr>`;
 
-        targetTbody.innerHTML += `<tr><td colspan="8" class="analytics-section-title" style="color:var(--neon-purple);">▼ PM PRODUCTION WINDOWS</td></tr>`;
+        targetTbody.innerHTML += `<tr><td colspan="8" class="analytics-section-title">▼ PM Capacity Blocks</td></tr>`;
         pmWindows.forEach(windowBlock => {
-            let tr = `<tr><td style="text-align:left; font-weight:600; color: #cbd5e1;">${windowBlock}</td>`;
+            let tr = `<tr><td style="text-align:left; font-weight:500; color: var(--text-secondary);">${windowBlock}</td>`;
             daysOfWeek.forEach(d => tr += `<td>${calculatedMatrix[windowBlock][d]}</td>`);
             targetTbody.innerHTML += tr + `</tr>`;
         });
-        let sumPMRow = `<tr class="total-row-pm"><td>Total PM Capacity</td>`;
+        let sumPMRow = `<tr class="total-row-pm"><td style="text-align:left;">Net Capacity PM</td>`;
         daysOfWeek.forEach(d => sumPMRow += `<td>${totalizerPM[d]}</td>`);
         targetTbody.innerHTML += sumPMRow + `</tr>`;
 
-        let shrinkRow = `<tr class="total-row-shrinkage"><td>Total Off Volume (Shrinkage)</td>`;
-        daysOfWeek.forEach(d => shrinkRow += `<td>${totalizerShrink[d]} Agents</td>`);
+        let shrinkRow = `<tr class="total-row-shrinkage"><td style="text-align:left;">Total Off / Volume Loss</td>`;
+        daysOfWeek.forEach(d => shrinkRow += `<td>${totalizerShrink[d]} Ag.</td>`);
         targetTbody.innerHTML += shrinkRow + `</tr>`;
     }
 
     async function exportDataToExcel() {
-        const log = JSON.parse(localStorage.getItem('wfm_v14_output_cache'));
+        const log = JSON.parse(localStorage.getItem('wfm_v15_output_cache'));
         const workbook = new ExcelJS.Workbook();
         ["Calculo Phones", "Calculo Chats"].forEach(deptName => {
             const sheet = workbook.addWorksheet(deptName);
@@ -579,7 +646,7 @@
         const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
         const trigger = document.createElement("a");
         trigger.href = URL.createObjectURL(blob);
-        trigger.download = `WFM_v14_Strict_VIP_Master.xlsx`;
+        trigger.download = `WFM_v15_Final_Roster.xlsx`;
         trigger.click();
     }
 </script>

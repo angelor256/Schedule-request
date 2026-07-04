@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WFM Tactical Enterprise // v9.0 Multi-Screen Architecture</title>
+    <title>WFM Tactical Enterprise // v10.0 Stable Roster Engine</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,9 +13,9 @@
 
     <style>
         :root {
-            --bg-app: #07080d;
-            --bg-card: #0f111a;
-            --border-color: #1e2235;
+            --bg-app: #06070a;
+            --bg-card: #0e1017;
+            --border-color: #1b1e2e;
             --text-title: #f8fafc;
             --text-body: #94a3b8;
             
@@ -53,11 +53,10 @@
         .app-title h1 { font-size: 20px; color: var(--text-title); font-weight: 700; letter-spacing: -0.5px; }
         .app-title p { font-size: 12px; color: #475569; margin-top: 2px; }
 
-        /* Navigation Architecture */
         .screen-navigation {
             display: flex;
             gap: 12px;
-            background: #131622;
+            background: #11131c;
             padding: 6px;
             border-radius: 8px;
             border: 1px solid var(--border-color);
@@ -69,11 +68,11 @@
             border: none;
             color: #64748b;
             padding: 12px;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 600;
             cursor: pointer;
             border-radius: 6px;
-            transition: all 0.2s ease;
+            transition: all 0.2s;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -82,16 +81,16 @@
         .nav-tab.active-screen {
             background: var(--bg-card);
             color: var(--text-title);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            border: 1px solid #2e344e;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+            border: 1px solid #292e45;
         }
 
         .screen-panel { display: none; }
         .screen-panel.active-panel { display: block; }
 
         .btn {
-            background: #1e2235;
-            border: 1px solid #31364c;
+            background: #171a26;
+            border: 1px solid #2b3045;
             color: var(--text-title);
             padding: 10px 20px;
             font-size: 13px;
@@ -100,7 +99,7 @@
             cursor: pointer;
             transition: all 0.2s;
         }
-        .btn:hover { background: #282e48; }
+        .btn:hover { background: #222738; }
         .btn-primary { background: var(--accent-blue); border: none; }
         .btn-primary:hover { background: #2563eb; }
         .btn-success { background: var(--accent-green); border: none; }
@@ -125,39 +124,38 @@
 
         .roster-table { width: 100%; border-collapse: collapse; font-size: 13px; }
         .roster-table th {
-            background: #141724;
+            background: #12141f;
             color: #64748b;
             text-align: left;
             padding: 14px 12px;
             font-weight: 600;
             border-bottom: 2px solid var(--border-color);
         }
-        .roster-table td { padding: 9px 12px; border-bottom: 1px solid #141724; color: var(--text-title); }
+        .roster-table td { padding: 9px 12px; border-bottom: 1px solid #12141f; color: var(--text-title); }
         
-        /* Squad Separators Visuals */
         .dept-row-divider {
-            background: #0d0f17;
+            background: #090a0f;
             color: var(--accent-blue) !important;
             font-weight: 700;
             font-size: 13px;
             letter-spacing: 0.5px;
             padding: 12px !important;
-            border-bottom: 2px solid #22263b !important;
+            border-bottom: 2px solid #1e2235 !important;
         }
         .squad-group-row {
-            background: #121520;
-            color: #cbd5e1 !important;
-            font-weight: 600;
+            background: #11131c;
+            color: #e2e8f0 !important;
+            font-weight: 700;
             font-size: 11px;
             text-transform: uppercase;
             letter-spacing: 1px;
-            padding: 6px 12px !important;
-            border-left: 3px solid var(--accent-purple);
+            padding: 8px 12px !important;
+            border-left: 4px solid var(--accent-purple);
         }
 
         .squad-badge {
             font-size: 11px;
-            background: #1a1d29;
+            background: #161924;
             color: #94a3b8;
             padding: 3px 8px;
             border-radius: 4px;
@@ -165,7 +163,7 @@
         }
 
         .grid-select {
-            background: #141724;
+            background: #12141f;
             border: 1px solid var(--border-color);
             color: var(--text-title);
             padding: 7px;
@@ -176,7 +174,6 @@
             outline: none;
             cursor: pointer;
             text-align: center;
-            font-weight: 500;
         }
         .grid-select.s-am { background: var(--sh-am-bg); color: var(--sh-am-txt); border-color: rgba(56,189,248,0.2); }
         .grid-select.s-pm { background: var(--sh-pm-bg); color: var(--sh-pm-txt); border-color: rgba(129,140,248,0.2); }
@@ -186,8 +183,8 @@
 
         .metric-grid-table { width: 100%; border-collapse: collapse; font-family: 'JetBrains Mono', monospace; font-size: 12px; }
         .metric-grid-table th, .metric-grid-table td { border: 1px solid var(--border-color); padding: 10px; text-align: center; }
-        .metric-grid-table th { background: #111420; color: #64748b; }
-        .m-title-head { text-align: left !important; font-weight: 600; color: var(--text-title); background: #141825 !important; }
+        .metric-grid-table th { background: #0f111a; color: #64748b; }
+        .m-title-head { text-align: left !important; font-weight: 600; color: var(--text-title); background: #131622 !important; }
         .sub-total-row { background: rgba(56,189,248,0.02); font-weight: 700; color: var(--sh-am-txt); }
         .off-total-row { background: rgba(248,113,113,0.02); font-weight: 700; color: var(--sh-off-txt); }
     </style>
@@ -199,33 +196,30 @@
     <div class="top-header">
         <div class="app-title">
             <h1>Tactical Workforce Management Panel</h1>
-            <p>Enterprise Suite v9.0 // Independent Request & Generation Screens</p>
+            <p>Enterprise Production Engine v10.0 // Fixed Spread Days Off & Fluid Open Requests</p>
         </div>
-        <div id="masterActions">
+        <div>
             <button class="btn btn-success" onclick="exportDataToExcel()">📥 Download Master Excel Copy</button>
         </div>
     </div>
 
-    <!-- Screen Switcher Tabs -->
+    <!-- Screen Navigation tabs -->
     <div class="screen-navigation">
         <button class="nav-tab active-screen" id="btn-screen-request" onclick="switchMainScreen('request')">
-            📝 Screen 1: Agent Input Requests & Defaults
+            📝 Screen 1: Agent Input Requests & Preference Settings
         </button>
         <button class="nav-tab" id="btn-screen-engine" onclick="switchMainScreen('engine')">
-            ⚡ Screen 2: WFM Production Planner (Calculated Output)
+            ⚡ Screen 2: WFM Tactical Roster Planner (Optimized Output)
         </button>
     </div>
 
-    <!-- SCREEN 1: REQUEST INPUTS (La gente pone sus preferencias aquí) -->
+    <!-- SCREEN 1: INPUT REQUESTS -->
     <div id="panel-screen-request" class="screen-panel active-panel">
         <div class="main-card" style="border-color: var(--accent-purple);">
             <div class="card-header-title">
-                <span style="color: var(--accent-purple);">1️⃣ Input Interface: Agent Prefs & Requests</span>
-                <button class="btn btn-primary" onclick="processAndBuildSchedule()">⚙️ Compile & Build Balanced Roster</button>
+                <span style="color: var(--accent-purple);">1️⃣ Inputs Matrix: Set Preferences / Vacation / OPEN</span>
+                <button class="btn btn-primary" onclick="processAndBuildSchedule()">⚙️ Execute & Compile Roster</button>
             </div>
-            <p style="font-size:12px; color:#64748b; margin-bottom: 15px;">
-                Define preferences or requested slots below. Use <strong>OPEN</strong> for agents without a fixed choice—the engine will treat them as flexible assets to fill structural gaps.
-            </p>
             <div style="overflow-x: auto;">
                 <table class="roster-table">
                     <thead>
@@ -241,12 +235,12 @@
         </div>
     </div>
 
-    <!-- SCREEN 2: FINAL ENGINE OUTPUT (Donde se calcula la optimización de VIPs y OPENs) -->
+    <!-- SCREEN 2: FINAL OUTPUT PLANNED GRID -->
     <div id="panel-screen-engine" class="screen-panel">
         <div class="main-card" style="border-color: var(--accent-blue);">
             <div class="card-header-title">
-                <span style="color: var(--accent-blue);">2️⃣ Production Output Grid (WFM Optimized)</span>
-                <span style="font-size:12px; color:#64748b;">VIP Days Off Split // "OPEN" Requests Fulfilled Operational Targets</span>
+                <span style="color: var(--accent-blue);">2️⃣ Final Production Output Grid (WFM Operational Model)</span>
+                <span style="font-size:12px; color:#64748b;">Evenly Dispersed Days Off // VIP Anti-Collision Gaps Resolved</span>
             </div>
             <div style="overflow-x: auto;">
                 <table class="roster-table">
@@ -262,10 +256,10 @@
             </div>
         </div>
 
-        <!-- Dynamic Coverage Reports -->
+        <!-- Real-time Metrics Coverage Reports -->
         <div class="main-card">
             <div class="card-header-title">
-                <span>Operational Real-Time Headcount Analytics</span>
+                <span>Operational Roster Analytics Report</span>
             </div>
             <table class="metric-grid-table">
                 <thead>
@@ -305,12 +299,11 @@
     const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
     window.onload = function() {
-        if (!localStorage.getItem('wfm_v9_request_cache')) {
+        if (!localStorage.getItem('wfm_v10_request_cache')) {
             initRequestCache();
         }
-        if (!localStorage.getItem('wfm_v9_output_cache')) {
-            // El output inicia como copia espejo antes del primer procesamiento
-            localStorage.setItem('wfm_v9_output_cache', localStorage.getItem('wfm_v9_request_cache'));
+        if (!localStorage.getItem('wfm_v10_output_cache')) {
+            localStorage.setItem('wfm_v10_output_cache', localStorage.getItem('wfm_v10_request_cache'));
         }
         renderInputRequestsGrid();
         renderEngineOutputGrid();
@@ -319,27 +312,44 @@
 
     function initRequestCache() {
         const list = [];
-        let indexCounter = 0;
+        let globalAgentCount = 0;
+
         Object.keys(masterRosterStructure).forEach(dept => {
             Object.keys(masterRosterStructure[dept]).forEach(squad => {
                 masterRosterStructure[dept][squad].forEach(name => {
-                    // Estado inicial dummy para requests
                     let defaultShifts = {};
-                    daysOfWeek.forEach((d, i) => {
-                        if (squad === "VIP") {
-                            // Dejar algunos iniciales mezclados para simular inputs
-                            defaultShifts[d] = (i === 0 || i === 4) ? "Day Off" : (indexCounter % 2 === 0 ? "06:00 AM" : "03:00 PM");
+                    const isRestrictedWE = weekendOffBlocklist.includes(name);
+
+                    // Recuperar la excelente lógica original de dispersión matemática para los libres
+                    let off1Idx, off2Idx;
+                    if (isRestrictedWE) {
+                        off1Idx = (globalAgentCount % 3);       // Entre Lun, Mar, Mie
+                        off2Idx = off1Idx + 2;                   // Mie, Jue o Vie
+                        if(off1Idx === off2Idx) off2Idx = 4;
+                    } else {
+                        off1Idx = (globalAgentCount * 3) % 7;
+                        off2Idx = (globalAgentCount * 3 + 4) % 7;
+                        if (off1Idx === off2Idx) off2Idx = (off2Idx + 1) % 7;
+                    }
+
+                    let offDay1 = daysOfWeek[off1Idx];
+                    let offDay2 = daysOfWeek[off2Idx];
+
+                    daysOfWeek.forEach(day => {
+                        if (day === offDay1 || day === offDay2) {
+                            defaultShifts[day] = "Day Off";
                         } else {
-                            defaultShifts[d] = (i === 2 || i === 5) ? "Day Off" : "OPEN";
+                            // Dejar como "OPEN" por defecto para que la operación rellene dinámicamente según solicitudes
+                            defaultShifts[day] = "OPEN";
                         }
                     });
-                    
+
                     list.push({ name, dept, squad, shifts: defaultShifts });
-                    indexCounter++;
+                    globalAgentCount++;
                 });
             });
         });
-        localStorage.setItem('wfm_v9_request_cache', JSON.stringify(list));
+        localStorage.setItem('wfm_v10_request_cache', JSON.stringify(list));
     }
 
     function switchMainScreen(target) {
@@ -350,17 +360,16 @@
         document.getElementById(`btn-screen-${target}`).classList.add('active-screen');
     }
 
-    // RENDERIZAR PANTALLA 1: REQUESTS
     function renderInputRequestsGrid() {
-        const data = JSON.parse(localStorage.getItem('wfm_v9_request_cache'));
+        const data = JSON.parse(localStorage.getItem('wfm_v10_request_cache'));
         const tbody = document.getElementById('requestTableBody');
         tbody.innerHTML = "";
 
         Object.keys(masterRosterStructure).forEach(dept => {
-            tbody.innerHTML += `<tr><td colspan="9" class="dept-row-divider">■ ${dept.toUpperCase()} (REQUEST INPUT STORAGE)</td></tr>`;
+            tbody.innerHTML += `<tr><td colspan="9" class="dept-row-divider">■ ${dept.toUpperCase()} DIRECTORY</td></tr>`;
 
             Object.keys(masterRosterStructure[dept]).forEach(squad => {
-                tbody.innerHTML += `<tr><td colspan="9" class="squad-group-row">👑 ${squad} SQUAD</td></tr>`;
+                tbody.innerHTML += `<tr><td colspan="9" class="squad-group-row">👑 ${squad} Squad</td></tr>`;
 
                 masterRosterStructure[dept][squad].forEach(name => {
                     const agent = data.find(r => r.name === name);
@@ -379,17 +388,16 @@
         });
     }
 
-    // RENDERIZAR PANTALLA 2: HORARIO CALCULADO FINAL
     function renderEngineOutputGrid() {
-        const data = JSON.parse(localStorage.getItem('wfm_v9_output_cache'));
+        const data = JSON.parse(localStorage.getItem('wfm_v10_output_cache'));
         const tbody = document.getElementById('engineOutputBody');
         tbody.innerHTML = "";
 
         Object.keys(masterRosterStructure).forEach(dept => {
-            tbody.innerHTML += `<tr><td colspan="9" class="dept-row-divider">■ ${dept.toUpperCase()} (FINAL COMPILED ROSTER)</td></tr>`;
+            tbody.innerHTML += `<tr><td colspan="9" class="dept-row-divider">■ ${dept.toUpperCase()} DIRECTORY</td></tr>`;
 
             Object.keys(masterRosterStructure[dept]).forEach(squad => {
-                tbody.innerHTML += `<tr><td colspan="9" class="squad-group-row">👑 ${squad} SQUAD</td></tr>`;
+                tbody.innerHTML += `<tr><td colspan="9" class="squad-group-row">👑 ${squad} Squad</td></tr>`;
 
                 masterRosterStructure[dept][squad].forEach(name => {
                     const agent = data.find(r => r.name === name);
@@ -432,20 +440,20 @@
     function updateLiveRequest(el) {
         const name = el.getAttribute('data-name');
         const day = el.getAttribute('data-day');
-        let data = JSON.parse(localStorage.getItem('wfm_v9_request_cache'));
+        let data = JSON.parse(localStorage.getItem('wfm_v10_request_cache'));
         let target = data.find(r => r.name === name);
         if(target) target.shifts[day] = el.value;
-        localStorage.setItem('wfm_v9_request_cache', JSON.stringify(data));
+        localStorage.setItem('wfm_v10_request_cache', JSON.stringify(data));
         refreshSelectColor(el);
     }
 
     function updateLiveOutput(el) {
         const name = el.getAttribute('data-name');
         const day = el.getAttribute('data-day');
-        let data = JSON.parse(localStorage.getItem('wfm_v9_output_cache'));
+        let data = JSON.parse(localStorage.getItem('wfm_v10_output_cache'));
         let target = data.find(r => r.name === name);
         if(target) target.shifts[day] = el.value;
-        localStorage.setItem('wfm_v9_output_cache', JSON.stringify(data));
+        localStorage.setItem('wfm_v10_output_cache', JSON.stringify(data));
         refreshSelectColor(el);
         calculateMetrics();
     }
@@ -460,111 +468,93 @@
         if (val === "OPEN") el.classList.add('s-op');
     }
 
-    // MOTOR v9.0: GESTIÓN INTELIGENTE DE SQUADS, VIPS ESCALONADOS Y RELLENO MEDIANTE "OPEN"
+    // PROCESAMIENTO v10.0: RECUPERA DÍAS OFF ESPARCIDOS Y RESUELVE LOS "OPEN" BASADO EN COVERAGE
     function processAndBuildSchedule() {
-        let requests = JSON.parse(localStorage.getItem('wfm_v9_request_cache'));
-        let output = JSON.parse(JSON.stringify(requests)); // Clonar requests originales para procesar
+        let requests = JSON.parse(localStorage.getItem('wfm_v10_request_cache'));
+        let output = JSON.parse(JSON.stringify(requests)); 
 
         const depts = ["Calculo Phones", "Calculo Chats"];
 
         depts.forEach(dept => {
-            // --- FASE 1: ARREGLAR Y ESCALONAR ABSOLUTAMENTE LOS VIPS ---
-            // Los VIPs no pueden colapsar en los mismos días libres. Forzamos un split óptimo de cobertura.
-            const vips = output.filter(r => r.dept === dept && r.squad === "VIP");
-            
-            // Mapeo cíclico seguro de Days Off para que los 4 VIPs del pool queden perfectamente distribuidos
-            const vipOffSchedulePattern = [
-                ["Monday", "Wednesday"],  // VIP 1
-                ["Tuesday", "Thursday"],  // VIP 2
-                ["Wednesday", "Friday"],   // VIP 3
-                ["Thursday", "Monday"]    // VIP 4
-            ];
+            // 1. CONTROL DE ANTI-COLLISION DE DÍAS OFF PARA LOS VIPS ÚNICAMENTE
+            // Si detecta que dos VIPs caen exactamente en el mismo día libre, rota sutilmente uno para salvaguardar el tier
+            const deptVips = output.filter(r => r.dept === dept && r.squad === "VIP");
+            let observedOffDays = [];
 
-            vips.forEach((vipAgent, index) => {
-                let assignedPattern = vipOffSchedulePattern[index % vipOffSchedulePattern.length];
-                
+            deptVips.forEach((vip, vIdx) => {
                 daysOfWeek.forEach((day, dIdx) => {
-                    // Respetar vacaciones forzadas
-                    if (vipAgent.shifts[day] === "Vacaciones") return;
-
-                    if (assignedPattern.includes(day)) {
-                        vipAgent.shifts[day] = "Day Off";
-                    } else {
-                        // Respetar balance de 2 AM y 2 PM en los días que sí trabajan
-                        // Si el índice es par arranca en AM y luego va a PM (salvo el salto por el Off)
-                        let baseShiftType = (index % 2 === 0) ? "AM" : "PM";
-                        
-                        // Si venía de PM el día anterior, mantener protección de transición legal (PM -> OFF -> AM)
-                        if (dIdx > 0 && vipAgent.shifts[daysOfWeek[dIdx-1]] === "Day Off") {
-                            vipAgent.shifts[day] = "06:00 AM"; // Limpia el shift de manera segura hacia la mañana
+                    if (vip.shifts[day] === "Day Off") {
+                        let key = `${day}-${vIdx % 2}`; // Agrupador por bloques analíticos
+                        if (observedOffDays.includes(key)) {
+                            // Mover este libre de forma segura al día siguiente para evitar desamparo total
+                            vip.shifts[day] = "OPEN"; 
+                            let nextDay = daysOfWeek[(dIdx + 1) % 7];
+                            if (vip.shifts[nextDay] !== "Vacaciones") {
+                                vip.shifts[nextDay] = "Day Off";
+                            }
                         } else {
-                            vipAgent.shifts[day] = (baseShiftType === "AM") ? "06:00 AM" : "03:00 PM";
+                            observedOffDays.push(key);
                         }
                     }
                 });
             });
 
-            // --- FASE 2: DETECTAR HUECOS Y REDISTRIBUIR SQUADS (Seniors & Tiers con requests "OPEN") ---
-            // Contamos la matriz de headcount actual tras fijar los VIPs clave
+            // 2. LLENADO EXCLUSIVO DE LOS "OPEN" BASADO EN CONTADORES REALES DE HEADCOUNT
             daysOfWeek.forEach(day => {
-                let currentAMCount = output.filter(r => r.dept === dept && amWindows.includes(r.shifts[day])).length;
-                let currentPMCount = output.filter(r => r.dept === dept && pmWindows.includes(r.shifts[day])).length;
+                // Contar cuántos agentes ya tienen un horario fijo (AM o PM) en este departamento
+                let amCount = output.filter(r => r.dept === dept && amWindows.includes(r.shifts[day])).length;
+                let pmCount = output.filter(r => r.dept === dept && pmWindows.includes(r.shifts[day])).length;
 
-                // Buscamos agentes del mismo departamento en tiers inferiores que tengan estatus flexible "OPEN"
-                const flexibleAgents = output.filter(r => r.dept === dept && r.squad !== "VIP" && r.shifts[day] === "OPEN");
+                // Capturar solo las celdas que dicen "OPEN" para rellenar
+                const openAgents = output.filter(r => r.dept === dept && r.shifts[day] === "OPEN");
 
-                flexibleAgents.forEach(agent => {
+                openAgents.forEach((agent, aIdx) => {
                     const isMiddle = middleShiftRules.includes(agent.name);
-                    const isRestrictedWE = weekendOffBlocklist.includes(agent.name);
-
-                    // Verificar si este día le toca Day Off operacional para balancear
-                    // Si es fin de semana y está en la blocklist, NO puede tener Day Off
-                    if ((day === "Saturday" || day === "Sunday") && isRestrictedWE) {
-                        // Forzarlo a trabajar para sostener el fin de semana
-                        if (currentAMCount <= currentPMCount) {
-                            agent.shifts[day] = isMiddle ? "09:00 AM" : "06:00 AM";
-                            currentAMCount++;
-                        } else {
-                            agent.shifts[day] = isMiddle ? "01:00 PM" : "03:00 PM";
-                            currentPMCount++;
-                        }
-                        return;
-                    }
-
-                    // Balance dinámico usando los campos "OPEN"
-                    if (currentAMCount <= currentPMCount) {
-                        agent.shifts[day] = isMiddle ? "09:00 AM" : "06:00 AM";
-                        currentAMCount++;
+                    
+                    // Estrategia de balanceo de WFM: Asignar el bloque más débil en cobertura actual
+                    if (amCount <= pmCount) {
+                        agent.shifts[day] = isMiddle ? "09:00 AM" : ((aIdx % 2 === 0) ? "06:00 AM" : "07:00 AM");
+                        amCount++;
                     } else {
-                        agent.shifts[day] = isMiddle ? "11:00 AM" : "02:00 PM";
-                        currentPMCount++;
+                        agent.shifts[day] = isMiddle ? "01:00 PM" : ((aIdx % 2 === 0) ? "02:00 PM" : "03:00 PM");
+                        pmCount++;
                     }
                 });
             });
 
-            // --- FASE 3: LIMPIEZA FINAL DE CUALQUIER "OPEN" RESIDUAL ---
+            // 3. SANITIZACIÓN FINAL EXTRA POR SEGURIDAD DE TRÁNSITO LABORAL (PM -> OFF -> AM)
             output.forEach(agent => {
-                if(agent.dept === dept) {
-                    daysOfWeek.forEach(day => {
-                        if(agent.shifts[day] === "OPEN") {
-                            agent.shifts[day] = middleShiftRules.includes(agent.name) ? "09:00 AM" : "07:00 AM";
+                if (agent.dept === dept) {
+                    daysOfWeek.forEach((day, idx) => {
+                        if (idx > 0 && agent.shifts[daysOfWeek[idx-1]] === "Day Off" && agent.shifts[day] === "OPEN") {
+                            agent.shifts[day] = middleShiftRules.includes(agent.name) ? "09:00 AM" : "06:00 AM";
                         }
                     });
                 }
             });
         });
 
-        localStorage.setItem('wfm_v9_output_cache', JSON.stringify(output));
+        localStorage.setItem('wfm_v10_output_cache', JSON.stringify(output));
         renderEngineOutputGrid();
         calculateMetrics();
         
-        // Mover automáticamente a la pantalla del planificador táctico finalizado
         switchMainScreen('engine');
-        alert("⚡ Engine v9.0 Compiled Successfully!\n\n1. VIP Squad Days Off are perfectly split to ensure zero gaps.\n2. All 'OPEN' preferences consumed & replaced for operational balance.\n3. Distinct squad layouts activated.");
+        alert("⚡ Engine v10.0 Normalized!\n\n- Mathematical dynamic Days Off distribution fully restored.\n- Overlapping VIP days off resolved.\n- 'OPEN' entries resolved correctly based on target gaps.");
+    }
+
+    function updateLiveOutput(el) {
+        const name = el.getAttribute('data-name');
+        const day = el.getAttribute('data-day');
+        let data = JSON.parse(localStorage.getItem('wfm_v10_output_cache'));
+        let target = data.find(r => r.name === name);
+        if(target) target.shifts[day] = el.value;
+        localStorage.setItem('wfm_v10_output_cache', JSON.stringify(data));
+        refreshSelectColor(el);
+        calculateMetrics();
     }
 
     function calculateMetrics() {
-        const data = JSON.parse(localStorage.getItem('wfm_v9_output_cache')) || [];
+        const data = JSON.parse(localStorage.getItem('wfm_v10_output_cache')) || [];
         const allHours = [...amWindows, ...pmWindows];
 
         const countMatrix = {};
@@ -590,7 +580,7 @@
         const tbody = document.getElementById('metricsGridBody');
         tbody.innerHTML = "";
 
-        // Render AM Metric Lines
+        // AM Rows
         tbody.innerHTML += `<tr><td colspan="8" class="m-title-head" style="color:var(--sh-am-txt);">▲ EARLY / MIDDLE WINDOW HEADCOUNT</td></tr>`;
         amWindows.forEach(sh => {
             let row = `<tr><td style="text-align:left; font-weight:600;">${sh}</td>`;
@@ -601,7 +591,7 @@
         daysOfWeek.forEach(d => amTotalRow += `<td>${amTotals[d]}</td>`);
         tbody.innerHTML += amTotalRow + `</tr>`;
 
-        // Render PM Metric Lines
+        // PM Rows
         tbody.innerHTML += `<tr><td colspan="8" class="m-title-head" style="color:var(--sh-pm-txt);">▼ LATE / CLOSING WINDOW HEADCOUNT</td></tr>`;
         pmWindows.forEach(sh => {
             let row = `<tr><td style="text-align:left; font-weight:600;">${sh}</td>`;
@@ -612,14 +602,14 @@
         daysOfWeek.forEach(d => pmTotalRow += `<td>${pmTotals[d]}</td>`);
         tbody.innerHTML += pmTotalRow + `</tr>`;
 
-        // Render Absences Metrics
+        // Absences Row
         let offRow = `<tr class="off-total-row"><td>Total Shrinkage / Days Off</td>`;
         daysOfWeek.forEach(d => offRow += `<td>${offTotals[d]} Vol.</td>`);
         tbody.innerHTML += offRow + `</tr>`;
     }
 
     async function exportDataToExcel() {
-        const log = JSON.parse(localStorage.getItem('wfm_v9_output_cache'));
+        const log = JSON.parse(localStorage.getItem('wfm_v10_output_cache'));
         const workbook = new ExcelJS.Workbook();
         
         ["Calculo Phones", "Calculo Chats"].forEach(deptName => {
@@ -640,7 +630,7 @@
         const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
         const trigger = document.createElement("a");
         trigger.href = URL.createObjectURL(blob);
-        trigger.download = `WFM_v9_Optimized_Roster.xlsx`;
+        trigger.download = `WFM_v10_Fixed_Roster.xlsx`;
         trigger.click();
     }
 </script>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WFM Core // Tactical Matrix</title>
+    <title>WFM Core // Tactical Matrix Dropdown</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -23,7 +23,6 @@
             --text-ghost: #6c7a9c;
             --text-body: #cbd5e1;
 
-            /* Mapeo estricto de colores tácticos para los estados */
             --off-bg: #2d191e; --off-txt: #ff5252;
             --vac-bg: #2d2619; --vac-txt: #ffb74d;
             --open-bg: #192d20; --open-txt: #26de81;
@@ -41,13 +40,12 @@
 
         .workspace-grid {
             display: grid;
-            grid-template-columns: 350px 1fr;
+            grid-template-columns: 380px 1fr;
             gap: 30px;
             max-width: 1600px;
             margin: 0 auto;
         }
 
-        /* Paneles Estilo Bento */
         .bento-card {
             background: var(--panel-bg);
             border: 1px solid var(--panel-border);
@@ -82,63 +80,36 @@
             border: 1px solid rgba(0, 255, 102, 0.2);
         }
 
-        /* Buscador de Estructura */
-        .search-box {
-            background: #080a0f;
-            border: 1px solid var(--panel-border);
-            border-radius: 10px;
-            padding: 12px 16px;
-            color: var(--text-pure);
-            font-family: inherit;
-            width: 100%;
+        /* Estilos de los Selectores de dropdown */
+        .dropdown-group {
             margin-bottom: 20px;
-            outline: none;
         }
-        .search-box:focus {
-            border-color: var(--accent-neon);
-        }
-
-        /* Lista de Clusters Permanentes */
-        .cluster-tree {
-            max-height: 650px;
-            overflow-y: auto;
-            padding-right: 5px;
-        }
-        .cluster-group-title {
+        .dropdown-label {
             font-family: 'JetBrains Mono', monospace;
             font-size: 11px;
             color: var(--text-ghost);
             text-transform: uppercase;
             letter-spacing: 1px;
-            margin: 20px 0 10px 0;
-            display: flex;
-            justify-content: space-between;
+            display: block;
+            margin-bottom: 8px;
         }
-
-        .node-agent {
-            background: #171d2a;
-            padding: 12px 16px;
-            border-radius: 8px;
-            margin-bottom: 6px;
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--text-body);
-            cursor: pointer;
-            transition: all 0.2s ease;
-            border: 1px solid transparent;
-        }
-        .node-agent:hover {
-            border-color: var(--panel-border);
-            background: #1c2333;
-            transform: translateX(4px);
-        }
-        .node-agent.selected {
-            background: var(--accent-dim);
-            border-color: var(--accent-neon);
+        .main-dropdown {
+            width: 100%;
+            background: #080a0f;
+            border: 1px solid var(--panel-border);
+            border-radius: 10px;
+            padding: 14px;
             color: var(--text-pure);
+            font-family: inherit;
+            font-size: 14px;
+            outline: none;
+            cursor: pointer;
+            transition: border-color 0.2s ease;
+        }
+        .main-dropdown:focus {
+            border-color: var(--accent-neon);
         }
 
-        /* Consola del Editor Central */
         .editor-workspace {
             display: flex;
             flex-direction: column;
@@ -161,7 +132,6 @@
             padding: 40px;
         }
 
-        /* Matriz de Entrada */
         .matrix-table {
             width: 100%;
             border-collapse: separate;
@@ -193,13 +163,11 @@
             transition: all 0.25s ease;
         }
         
-        /* Dinámica de estados visuales */
         .cell-selector.st-shift { background: var(--shift-bg); border-color: rgba(84, 160, 255, 0.3); color: var(--shift-txt); }
         .cell-selector.st-off { background: var(--off-bg); border-color: rgba(255, 82, 82, 0.3); color: var(--off-txt); }
         .cell-selector.st-vac { background: var(--vac-bg); border-color: rgba(255, 183, 77, 0.3); color: var(--vac-txt); }
         .cell-selector.st-open { background: var(--open-bg); border-color: rgba(38, 222, 129, 0.3); color: var(--open-txt); }
 
-        /* Botonera de Acción Sólida */
         .btn-action {
             background: #1c2333;
             border: 1px solid var(--panel-border);
@@ -225,8 +193,20 @@
             background: #00d957;
             box-shadow: 0 0 20px rgba(0, 255, 102, 0.3);
         }
+        .btn-random {
+            background: #4a154b;
+            color: #ffffff;
+            border: 1px solid #6b1d6c;
+            padding: 6px 14px;
+            font-size: 11px;
+            border-radius: 6px;
+            text-transform: uppercase;
+        }
+        .btn-random:hover {
+            background: #611f62;
+            box-shadow: 0 0 10px rgba(107, 29, 108, 0.5);
+        }
 
-        /* Consola Administrativa Inferior */
         .admin-footer {
             grid-column: span 2;
             margin-top: 10px;
@@ -263,45 +243,61 @@
             margin-bottom: 12px;
             outline: none;
         }
-
-        /* Scrollbar custom */
-        ::-webkit-scrollbar { width: 5px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: var(--panel-border); border-radius: 4px; }
     </style>
 </head>
 <body>
 
 <div class="workspace-grid">
     
-    <!-- HEADER -->
     <div class="header-system">
-        <div class="sys-title">WFM // CONTROL SYSTEM <span>v2.1</span></div>
+        <div class="sys-title">WFM // CONTROL MATRIX <span>v3.0</span></div>
         <button class="btn-action btn-prime" onclick="exportDataToExcel()">Download Master Spreadsheet</button>
     </div>
 
-    <!-- PANEL IZQUIERDO: ROSTER COMPLETO SIEMPRE VISIBLE -->
     <div class="bento-card">
-        <label style="font-family:'JetBrains Mono', monospace; font-size:11px; color:var(--text-ghost); display:block; margin-bottom:10px; text-transform:uppercase;">Operational Roster</label>
-        <input type="text" class="search-box" id="rosterSearch" placeholder="Filter active asset name..." oninput="filterRoster()">
-        
-        <div class="cluster-tree" id="rosterTree">
-            <!-- Cargado de manera estática mediante Javascript al iniciar -->
+        <div style="margin-bottom: 25px; border-bottom: 1px solid var(--panel-border); padding-bottom: 15px;">
+            <h3 style="color: var(--text-pure); font-size: 16px;">Asset Directory</h3>
+            <p style="font-size: 12px; color: var(--text-ghost);">Select cluster asset from dropdown lists</p>
+        </div>
+
+        <div class="dropdown-group">
+            <label class="dropdown-label" id="lbl-phones">Calculo Phones [--]</label>
+            <select class="main-dropdown cluster-dd" id="dd-phones" onchange="handleDropdownSelection(this, 'Calculo Phones')">
+                <option value="">Choose Agent...</option>
+            </select>
+        </div>
+
+        <div class="dropdown-group">
+            <label class="dropdown-label" id="lbl-chats">Calculo Chats [--]</label>
+            <select class="main-dropdown cluster-dd" id="dd-chats" onchange="handleDropdownSelection(this, 'Calculo Chats')">
+                <option value="">Choose Agent...</option>
+            </select>
+        </div>
+
+        <div class="dropdown-group">
+            <label class="dropdown-label" id="lbl-proc">Processing Squad [--]</label>
+            <select class="main-dropdown cluster-dd" id="dd-proc" onchange="handleDropdownSelection(this, 'Calculo Processing Squad')">
+                <option value="">Choose Agent...</option>
+            </select>
         </div>
     </div>
 
-    <!-- PANEL DERECHO: CONSOLA DE CONFIGURACIÓN -->
     <div class="bento-card">
         <div id="editorContainer" class="editor-workspace">
             <div class="empty-state" id="emptyState">
-                [SYSTEM WAITING]<br><br>Select any core asset node from the left directory roster to calibrate the weekly parameters.
+                [SYSTEM IDLE]<br><br>Please choose an operational asset from the dropdown clusters to unlock scheduling properties.
             </div>
 
             <div id="activeEditor" style="display: none; flex-direction: column; justify-content: space-between; height: 100%;">
                 <div>
-                    <span style="font-family:'JetBrains Mono', monospace; font-size:11px; color:var(--accent-neon); text-transform:uppercase;">Active Allocation Target</span>
-                    <h2 id="targetAgentName" style="color: var(--text-pure); font-size: 28px; font-weight: 800; margin-top: 2px;">---</h2>
-                    <p id="targetAgentCluster" style="font-family:'JetBrains Mono', monospace; font-size:12px; color: var(--text-ghost); margin-top: 4px;">Cluster: --</p>
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                        <div>
+                            <span style="font-family:'JetBrains Mono', monospace; font-size:11px; color:var(--accent-neon); text-transform:uppercase;">Active Allocation Target</span>
+                            <h2 id="targetAgentName" style="color: var(--text-pure); font-size: 28px; font-weight: 800; margin-top: 2px;">---</h2>
+                            <p id="targetAgentCluster" style="font-family:'JetBrains Mono', monospace; font-size:12px; color: var(--text-ghost); margin-top: 4px;">Cluster: --</p>
+                        </div>
+                        <button class="btn-action btn-random" onclick="randomizeShifts()">🎲 Randomize Schedule</button>
+                    </div>
                     
                     <table class="matrix-table">
                         <thead>
@@ -323,7 +319,7 @@
                     </table>
 
                     <label style="font-family:'JetBrains Mono', monospace; font-size:11px; color:var(--text-ghost); display:block; margin-bottom:8px; text-transform:uppercase;">Contextual Logs / Deviations</label>
-                    <input type="text" id="nodeNotes" class="search-box" style="background:#171d2a;" placeholder="Log standard deviations, exceptions, or exceptions here...">
+                    <input type="text" id="nodeNotes" style="width: 100%; background: #080a0f; border: 1px solid var(--panel-border); border-radius: 10px; padding: 12px 16px; color: var(--text-pure);" placeholder="Log standard deviations, exceptions, or observations here...">
                 </div>
 
                 <div style="display: flex; justify-content: flex-end; gap: 15px; border-top: 1px solid var(--panel-border); padding-top: 20px;">
@@ -334,7 +330,6 @@
         </div>
     </div>
 
-    <!-- CONSOLA INFERIOR: CONTROL REGISTRY -->
     <div class="admin-footer">
         <div style="display:flex; justify-content:space-between; align-items:center;">
             <div style="font-family:'JetBrains Mono', monospace; font-size: 13px; font-weight: 700; color:var(--text-pure);">ROSTER REGISTRY MANAGEMENT</div>
@@ -375,7 +370,6 @@
 </div>
 
 <script>
-    // Inicialización del ecosistema de datos extraídos nativos
     const initialDataset = {
         "Calculo Phones": [
             "Emerson Hernandez", "Stephannie Cunningham", "Thimy Gonzalez", "Yasser Quiros", 
@@ -403,72 +397,74 @@
     let activeSelectedCluster = "";
     let adminAuthorized = false;
 
-    // Inicializar renderizado inmediato al cargar la página
     window.onload = function() {
-        renderRosterTree();
+        populateDropdowns();
     };
 
     function getDB() { return JSON.parse(localStorage.getItem('wfm_core_db')); }
     
     function setDB(data) { 
         localStorage.setItem('wfm_core_db', JSON.stringify(data)); 
-        renderRosterTree();
+        populateDropdowns();
     }
 
-    // Renderizado transparente e inmediato de todo el personal
-    function renderRosterTree() {
+    // Poblar de forma limpia los dropdowns correspondientes
+    function populateDropdowns() {
         const db = getDB();
-        const container = document.getElementById('rosterTree');
-        container.innerHTML = '';
+        
+        const config = [
+            { id: 'dd-phones', labelId: 'lbl-phones', key: 'Calculo Phones' },
+            { id: 'dd-chats', labelId: 'lbl-chats', key: 'Calculo Chats' },
+            { id: 'dd-proc', labelId: 'lbl-proc', key: 'Calculo Processing Squad' }
+        ];
 
-        Object.keys(db).forEach(clusterName => {
-            const groupHeader = document.createElement('div');
-            groupHeader.className = 'cluster-group-title';
-            groupHeader.innerHTML = `<span>${clusterName}</span> <span>[${db[clusterName].length}]</span>`;
-            container.appendChild(groupHeader);
-
-            db[clusterName].forEach(name => {
-                const node = document.createElement('div');
-                node.className = 'node-agent';
-                node.textContent = name;
-                node.setAttribute('data-name', name.toLowerCase());
-                
-                if(name === activeSelectedAgent) node.classList.add('selected');
-                
-                node.onclick = () => selectAgent(name, clusterName);
-                container.appendChild(node);
+        config.forEach(item => {
+            const selectEl = document.getElementById(item.id);
+            const labelEl = document.getElementById(item.labelId);
+            const agents = db[item.key] || [];
+            
+            labelEl.textContent = `${item.key} [${agents.length}]`;
+            
+            // Guardar valor anterior para que no se resetee bruscamente si hay cambios admin
+            const previousValue = selectEl.value;
+            selectEl.innerHTML = '<option value="">Choose Agent...</option>';
+            
+            agents.forEach(agent => {
+                const opt = document.createElement('option');
+                opt.value = agent;
+                opt.textContent = agent;
+                selectEl.appendChild(opt);
             });
+
+            if(activeSelectedCluster === item.key && agents.includes(activeSelectedAgent)) {
+                selectEl.value = activeSelectedAgent;
+            }
         });
 
         populateAdminDropdowns();
     }
 
-    function filterRoster() {
-        const query = document.getElementById('rosterSearch').value.toLowerCase();
-        document.querySelectorAll('.node-agent').forEach(node => {
-            const name = node.getAttribute('data-name');
-            node.style.display = name.includes(query) ? 'block' : 'none';
-        });
-    }
-
-    function selectAgent(name, cluster) {
-        activeSelectedAgent = name;
-        activeSelectedCluster = cluster;
+    function handleDropdownSelection(selectEl, clusterName) {
+        if (!selectEl.value) return;
         
-        document.querySelectorAll('.node-agent').forEach(n => n.classList.remove('selected'));
-        renderRosterTree(); // Forzar actualización visual
+        // Resetear los otros dropdowns para consistencia visual
+        document.querySelectorAll('.cluster-dd').forEach(dd => {
+            if(dd.id !== selectEl.id) dd.value = "";
+        });
+
+        activeSelectedAgent = selectEl.value;
+        activeSelectedCluster = clusterName;
 
         document.getElementById('emptyState').style.display = 'none';
         document.getElementById('activeEditor').style.display = 'flex';
         
-        document.getElementById('targetAgentName').textContent = name;
-        document.getElementById('targetAgentCluster').textContent = `Cluster: ${cluster}`;
+        document.getElementById('targetAgentName').textContent = activeSelectedAgent;
+        document.getElementById('targetAgentCluster').textContent = `Cluster: ${clusterName}`;
 
-        configureMatrixInputs(name);
+        configureMatrixInputs(activeSelectedAgent);
     }
 
     function configureMatrixInputs(name) {
-        // Reglas de negocio del archivo original
         const specialRules = ["Luis Fernando Ruiz", "Marlon Wright", "Anilu Guzman Villalobos"];
         const blockWeekendOff = ["Keisha Cross Brown", ...specialRules];
 
@@ -511,7 +507,6 @@
 
             select.innerHTML = optionsHTML;
 
-            // Cargar datos guardados si existen en el log de sesión
             let log = JSON.parse(localStorage.getItem('wfm_master_log')) || [];
             let savedRecord = log.find(r => r.name === name);
             if (savedRecord && savedRecord.shifts[day]) {
@@ -528,6 +523,29 @@
         document.getElementById('nodeNotes').value = savedRecord ? savedRecord.notes : "";
     }
 
+    // NUEVA FUNCIÓN: Generación de horario aleatorio inteligente (Randomize)
+    function randomizeShifts() {
+        if (!activeSelectedAgent) return;
+
+        document.querySelectorAll('.day-select').forEach(select => {
+            // Filtrar las opciones válidas: EXCLUIR 'Vacaciones' y 'OPEN'
+            const validOptions = [];
+            for (let i = 0; i < select.options.length; i++) {
+                const val = select.options[i].value;
+                if (val !== "Vacaciones" && val !== "OPEN") {
+                    validOptions.push(val);
+                }
+            }
+
+            if (validOptions.length > 0) {
+                // Seleccionar un índice aleatorio del pool seguro
+                const randomVal = validOptions[Math.floor(Math.random() * validOptions.length)];
+                select.value = randomVal;
+                styleCell(select);
+            }
+        });
+    }
+
     function styleCell(elem) {
         elem.classList.remove('st-shift', 'st-off', 'st-vac', 'st-open');
         if (elem.value === "Day Off") elem.classList.add('st-off');
@@ -541,7 +559,7 @@
         activeSelectedCluster = "";
         document.getElementById('activeEditor').style.display = 'none';
         document.getElementById('emptyState').style.display = 'flex';
-        document.querySelectorAll('.node-agent').forEach(n => n.classList.remove('selected'));
+        document.querySelectorAll('.cluster-dd').forEach(dd => dd.value = "");
     }
 
     function saveAgentMatrix() {
@@ -566,7 +584,7 @@
         dismissEditor();
     }
 
-    // LÓGICA DE CONTROL ADMINISTRATIVO
+    // CONTROL ADMINISTRATIVO
     function unlockAdminConsole() {
         if (!adminAuthorized) {
             const verification = prompt("Access Key Required:");
@@ -636,7 +654,7 @@
         setDB(db);
     }
 
-    // EXPORTACIÓN EXCEL INTERACTIVA DE ALTA CALIDAD
+    // EXPORTACIÓN A EXCEL MANTENIENDO CALIDAD Y COLORES ORIGINALES
     async function exportDataToExcel() {
         const auth = prompt("Identity Validation Challenge:");
         if (auth !== "Sups2019") return alert("Unauthorized access logged.");

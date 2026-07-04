@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WFM Tactical Enterprise // v15.1 Balanced VIP Engine</title>
+    <title>WFM Tactical Enterprise // v15.2 Calibrated Roster Engine</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -152,7 +152,7 @@
     <header>
         <div class="app-title">
             <h1>Tactical Workforce Management</h1>
-            <p>// ENGINE VERSION 15.1 // DEPLOYED DISTRIBUTION CONTROL</p>
+            <p>// ENGINE VERSION 15.2 // SUPREME CALIBRATION PRO</p>
         </div>
         <div>
             <button class="action-btn" onclick="exportDataToExcel()">📥 Export Matrix to Excel</button>
@@ -455,6 +455,7 @@
             let vips = output.filter(r => r.dept === dept && r.squad === "VIP");
             let supportTiers = output.filter(r => r.dept === dept && r.squad !== "VIP");
 
+            // 1. REGLA VIP EXACTA E INTACTA
             vips.forEach(v => {
                 daysOfWeek.forEach(day => {
                     if (v.shifts[day] !== "Vacaciones") v.shifts[day] = "OPEN";
@@ -493,6 +494,7 @@
                 });
             }
 
+            // ASIGNACIÓN HORARIA VIP
             daysOfWeek.forEach(day => {
                 let activeVips = vips.filter(v => v.shifts[day] !== "Day Off" && v.shifts[day] !== "Vacaciones");
                 let countActiveVips = activeVips.length;
@@ -508,23 +510,51 @@
                 } else if (countActiveVips === 1) {
                     activeVips[0].shifts[day] = "06:00 AM";
                 }
+            });
 
-                supportTiers.forEach(agent => {
-                    let offDaysCount = daysOfWeek.filter(d => agent.shifts[d] === "Day Off" || agent.shifts[d] === "Vacaciones").length;
-                    if (offDaysCount < 2) {
-                        let blockWE = weekendOffBlocklist.includes(agent.name);
-                        let evaluationOrder = blockWE 
-                            ? ["Wednesday", "Thursday", "Tuesday", "Monday", "Friday"]
-                            : ["Sunday", "Saturday", "Wednesday", "Thursday", "Tuesday", "Monday", "Friday"];
-                        for (let d of evaluationOrder) {
-                            if (agent.shifts[d] !== "Day Off" && agent.shifts[d] !== "Vacaciones") {
-                                agent.shifts[d] = "Day Off"; break;
-                            }
-                        }
+            // 2. NUEVO ALGORITMO DE SUAVIZADO Y CALIBRACIÓN PARA EL PERSONAL DE SOPORTE
+            // Limpiar estados "OPEN" anteriores de soporte para evitar herencias desbalanceadas
+            supportTiers.forEach(agent => {
+                daysOfWeek.forEach(day => {
+                    if (agent.shifts[day] !== "Day Off" && agent.shifts[day] !== "Vacaciones") {
+                        agent.shifts[day] = "OPEN";
                     }
                 });
+            });
 
-                let activeSupport = supportTiers.filter(s => s.shifts[day] !== "Day Off" && s.shifts[day] !== "Vacaciones");
+            // Distribuir días libres de soporte balanceando la carga diaria global
+            let supportOffCounters = {};
+            daysOfWeek.forEach(d => supportOffCounters[d] = 0);
+
+            supportTiers.forEach(agent => {
+                let currentOffs = daysOfWeek.filter(d => agent.shifts[d] === "Day Off" || agent.shifts[d] === "Vacaciones").length;
+                if (currentOffs < 2) {
+                    let blockWE = weekendOffBlocklist.includes(agent.name);
+                    let allowedDays = blockWE 
+                        ? ["Wednesday", "Thursday", "Tuesday", "Monday", "Friday"]
+                        : ["Sunday", "Saturday", "Wednesday", "Thursday", "Tuesday", "Monday", "Friday"];
+                    
+                    // Ordenar días basados en dónde se necesita menos días de descanso (menor conteo) para equilibrar la disponibilidad activa
+                    allowedDays.sort((a, b) => supportOffCounters[a] - supportOffCounters[b]);
+
+                    for (let d of allowedDays) {
+                        if (agent.shifts[d] === "OPEN") {
+                            agent.shifts[d] = "Day Off";
+                            supportOffCounters[d]++;
+                            currentOffs++;
+                            if (currentOffs === 2) break;
+                        }
+                    }
+                }
+            });
+
+            // Asignación de horarios cruzada e hiper-pareja por día
+            let weeklyAMTracker = 0; // Alternador global para balancear la paridad de la curva entera
+
+            daysOfWeek.forEach(day => {
+                let activeSupport = supportTiers.filter(s => s.shifts[day] === "OPEN");
+                
+                // Extraer personal con reglas de horas intermedias
                 let middleSupport = activeSupport.filter(s => middleShiftRules.includes(s.name));
                 let standardSupport = activeSupport.filter(s => !middleShiftRules.includes(s.name));
 
@@ -533,29 +563,36 @@
                     s.shifts[day] = midPool[sIdx % midPool.length];
                 });
 
+                // Calibración exacta del personal estándar
                 let totalStandardAvailable = standardSupport.length;
-                let halfSupport = Math.floor(totalStandardAvailable / 2);
-                let remSupport = totalStandardAvailable % 2;
+                if (totalStandardAvailable > 0) {
+                    let half = Math.floor(totalStandardAvailable / 2);
+                    let remainder = totalStandardAvailable % 2;
 
-                let targetAM = halfSupport + remSupport;
-                let targetPM = halfSupport;
+                    // El residuo se alterna estratégicamente usando el tracker semanal para evitar sobrecargar la mañana constantemente
+                    let targetAM = half + (remainder > 0 && weeklyAMTracker % 2 === 0 ? 1 : 0);
+                    let targetPM = totalStandardAvailable - targetAM;
+                    if (remainder > 0) weeklyAMTracker++;
 
-                let target6AM = Math.floor(targetAM / 2) + (targetAM % 2);
-                let target7AM = Math.floor(targetAM / 2);
-                let target2PM = Math.floor(targetPM / 2) + (targetPM % 2);
-                let target3PM = Math.floor(targetPM / 2);
+                    // Sub-reparto parejo entre las 4 cabeceras horarias principales
+                    let t6 = Math.ceil(targetAM / 2);
+                    let t7 = targetAM - t6;
+                    let t2 = Math.ceil(targetPM / 2);
+                    let t3 = targetPM - t2;
 
-                let track6 = 0; let track7 = 0; let track2 = 0; let track3 = 0;
+                    let c6 = 0, c7 = 0, c2 = 0, c3 = 0;
 
-                standardSupport.forEach(s => {
-                    if (track6 < target6AM) { s.shifts[day] = "06:00 AM"; track6++; }
-                    else if (track7 < target7AM) { s.shifts[day] = "07:00 AM"; track7++; }
-                    else if (track2 < target2PM) { s.shifts[day] = "02:00 PM"; track2++; }
-                    else { s.shifts[day] = "03:00 PM"; track3++; }
-                });
+                    standardSupport.forEach(s => {
+                        if (c6 < t6) { s.shifts[day] = "06:00 AM"; c6++; }
+                        else if (c7 < t7) { s.shifts[day] = "07:00 AM"; c7++; }
+                        else if (c2 < t2) { s.shifts[day] = "02:00 PM"; c2++; }
+                        else { s.shifts[day] = "03:00 PM"; c3++; }
+                    });
+                }
             });
         });
 
+        // REGLA ERGONÓMICA INTER JORNADA (12 Horas de descanso mínimo)
         output.forEach(agent => {
             for (let i = 0; i < daysOfWeek.length - 1; i++) {
                 let currentDay = daysOfWeek[i]; let nextDay = daysOfWeek[i + 1];

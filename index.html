@@ -3,641 +3,130 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WFM Tactical Enterprise // v15.6 Hard-Locked Balance Engine</title>
+    <title>WFM // Mocha Mousse Edition</title>
     
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
 
-<style>
-    :root {
-        --bg-main: #f5f0ed;
-        --surface: #ffffff;
-        --mocha: #8c7664;
-        --mocha-light: #d6ccc2;
-        --text-main: #4a3f35;
-        --text-sub: #7d6e60;
-    }
+    <style>
+        :root {
+            --mocha-primary: #9a7d6d; /* Color Mocha Mousse base */
+            --mocha-light: #dccbc0;
+            --mocha-bg: #f5f2ef;
+            --mocha-text: #4a3f38;
+            --white: #ffffff;
+        }
 
-    body { 
-        background-color: var(--bg-main); 
-        color: var(--text-main); 
-        font-family: 'Inter', system-ui, sans-serif; 
-        padding: 40px; 
-    }
+        body {
+            background-color: var(--mocha-bg);
+            color: var(--mocha-text);
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
 
-    /* Contenedor con profundidad */
-    .panel-card { 
-        background: var(--surface); 
-        border-radius: 16px; 
-        padding: 32px; 
-        box-shadow: 0 8px 24px rgba(140, 118, 100, 0.08); 
-        border: 1px solid rgba(140, 118, 100, 0.15);
-    }
+        .container { max-width: 1000px; margin: 0 auto; }
 
-    /* Botones Estilo Mocha */
-    .action-btn, .home-btn { 
-        background: var(--surface); 
-        border: 1px solid var(--mocha-light); 
-        color: var(--text-sub); 
-        padding: 12px 24px; 
-        border-radius: 12px; 
-        font-weight: 500; 
-        transition: all 0.3s ease; 
-    }
-    .action-btn:hover { background: var(--bg-main); border-color: var(--mocha); }
-    .btn-accent { background: var(--mocha) !important; color: white !important; border: none; }
+        /* Estilo de la nueva Home Page */
+        .home-card {
+            background: var(--white);
+            border: 1px solid var(--mocha-light);
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            text-align: center;
+            margin-top: 50px;
+        }
 
-    /* Tablas Elegantes */
-    .interactive-table { width: 100%; border-collapse: separate; border-spacing: 0; }
-    .interactive-table th { 
-        color: var(--text-sub); 
-        text-transform: uppercase; 
-        letter-spacing: 1px; 
-        font-size: 11px; 
-        padding: 16px; 
-        border-bottom: 2px solid var(--mocha-light); 
-    }
-    .interactive-table td { padding: 12px 16px; border-bottom: 1px solid #eee; }
-    
-    /* Inputs Mocha */
-    .custom-dropdown { 
-        border: 1px solid var(--mocha-light); 
-        border-radius: 8px; 
-        padding: 6px 12px; 
-        background: #faf9f8; 
-        color: var(--text-main); 
-    }
-</style>
+        .home-card h1 {
+            font-size: 2.5rem;
+            color: var(--mocha-primary);
+            margin-bottom: 20px;
+        }
+
+        .home-card p {
+            font-size: 1.1rem;
+            color: var(--mocha-text);
+            margin-bottom: 30px;
+        }
+
+        .btn-start {
+            background: var(--mocha-primary);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+        }
+
+        /* Estilos generales para las tablas y paneles existentes */
+        .panel-view { display: none; }
+        .panel-view.active-view { display: block; }
+        
+        .panel-card { 
+            background: var(--white); 
+            border: 1px solid var(--mocha-light); 
+            border-radius: 12px; 
+            padding: 28px; 
+            margin-top: 20px;
+        }
+
+        .interactive-table { width: 100%; border-collapse: collapse; }
+        .interactive-table th { background: #fdfaf8; border-bottom: 2px solid var(--mocha-light); padding: 12px; }
+        .interactive-table td { border-bottom: 1px solid #eee; padding: 10px; }
+
+        .navigation-dock { margin-bottom: 20px; display: flex; gap: 10px; }
+        .dock-tab { padding: 10px 20px; border-radius: 8px; border: 1px solid var(--mocha-light); background: transparent; cursor: pointer; }
+        .dock-tab.active-tab { background: var(--mocha-primary); color: white; border-color: var(--mocha-primary); }
+    </style>
 </head>
 <body>
-   <!-- 1. PANTALLA DE INICIO (HOME) -->
-<div id="view-home" class="panel-view active-view" style="display: block;">
-    <div class="home-hero" style="max-width: 600px; margin: 100px auto; text-align: center; padding: 60px; background: var(--surface); border: 1px solid var(--border-subtle); border-radius: 20px; box-shadow: 0 10px 30px rgba(140, 118, 100, 0.1);">
-        <h1 style="color: var(--mocha); font-size: 32px; margin-bottom: 16px;">Schedule Request</h1>
-        <p style="color: var(--text-sub); margin-bottom: 30px;">Tactical Workforce Management // v15.6</p>
-        <button class="home-btn btn-accent" onclick="toggleView('app')" style="padding: 15px 40px; cursor: pointer; border: none; border-radius: 12px; font-weight: 600; color: white;">Enter Engine</button>
-    </div>
-</div>
-
-<!-- 2. TU APLICACIÓN (ENGINE) -->
-<div id="view-app" class="panel-view" style="display: none;">
-    <div class="container">
-        <header>
-            <div class="app-title">
-                <h1>Tactical Workforce Management</h1>
-                <p>// ENGINE VERSION 15.6 // ANTI-ASYMMETRY LOCKED</p>
-            </div>
-            <button class="action-btn" onclick="toggleView('home')">← Back Home</button>
-        </header>
-        
-        <!-- Aquí va todo tu código actual (tablas, contenedores, etc.) -->
-    </div>
-</div>
-
-<script>
-    // Función para alternar entre Home y App
-    function toggleView(target) {
-        document.getElementById('view-home').style.display = (target === 'home') ? 'block' : 'none';
-        document.getElementById('view-app').style.display = (target === 'app') ? 'block' : 'none';
-    }
-</script>
 
 <div class="container">
-
-    <header>
-        <div class="app-title">
-            <h1>Tactical Workforce Management</h1>
-            <p>// ENGINE VERSION 15.6 // ANTI-ASYMMETRY LOCKED</p>
-        </div>
-        <div>
-            <button class="action-btn" onclick="exportDataToExcel()">📥 Export Matrix to Excel</button>
-        </div>
-    </header>
-
-    <div class="navigation-dock">
-        <button class="dock-tab active-tab" id="tab-request" onclick="toggleViewSegment('request')">01 / Preferences Dashboard</button>
-        <button class="dock-tab" id="tab-engine" onclick="toggleViewSegment('engine')">02 / Master Shift Roster</button>
-    </div>
-
-    <div id="view-request" class="panel-view active-view">
-        <div class="panel-card">
-            <div class="card-title-bar">
-                <span>📋 Input Deck (Agent Preferences & Leaves)</span>
-                <button class="action-btn btn-accent" onclick="compileRosterPipeline()">Generate Balanced Schedule ⚙️</button>
-            </div>
-            
-            <div class="dept-switcher">
-                <button class="dept-btn active-dept" id="req-btn-phones" onclick="switchDeptView('Phones', 'request')">Calculo Phones</button>
-                <button class="dept-btn" id="req-btn-chats" onclick="switchDeptView('Chats', 'request')">Calculo Chats</button>
-            </div>
-
-            <div id="req-container-Phones" class="dept-table-container">
-                <table class="interactive-table">
-                    <thead>
-                        <tr>
-                            <th style="width: 280px;">Agent Name</th>
-                            <th style="width: 140px;">Tier Level</th>
-                            <th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th><th>Sun</th>
-                        </tr>
-                    </thead>
-                    <tbody id="reqBodyPhones"></tbody>
-                </table>
-            </div>
-
-            <div id="req-container-Chats" class="dept-table-container" style="display: none;">
-                <table class="interactive-table">
-                    <thead>
-                        <tr>
-                            <th style="width: 280px;">Agent Name</th>
-                            <th style="width: 140px;">Tier Level</th>
-                            <th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th><th>Sun</th>
-                        </tr>
-                    </thead>
-                    <tbody id="reqBodyChats"></tbody>
-                </table>
-            </div>
+    <!-- Home Page Section -->
+    <div id="home-view" class="panel-view active-view">
+        <div class="home-card">
+            <h1>Schedule Request Customer Service</h1>
+            <p>Welcome to the tactical engine. Please proceed to manage your shifts.</p>
+            <button class="btn-start" onclick="toggleView('request')">Enter Dashboard</button>
         </div>
     </div>
 
-    <div id="view-engine" class="panel-view">
-        <div class="panel-card">
-            <div class="card-title-bar">
-                <span>📅 Production Schedule (Enforced Perfect Block Balancing)</span>
-            </div>
+    <!-- Navigation (Hidden until user enters) -->
+    <div id="main-content" style="display:none;">
+        <div class="navigation-dock">
+            <button class="dock-tab active-tab" onclick="toggleView('request')">Preferences</button>
+            <button class="dock-tab" onclick="toggleView('engine')">Production Schedule</button>
+        </div>
 
-            <div class="dept-switcher">
-                <button class="dept-btn active-dept" id="out-btn-phones" onclick="switchDeptView('Phones', 'output')">Calculo Phones</button>
-                <button class="dept-btn" id="out-btn-chats" onclick="switchDeptView('Chats', 'output')">Calculo Chats</button>
-            </div>
-
-            <div id="out-container-Phones" class="dept-table-container">
-                <table class="interactive-table">
-                    <thead>
-                        <tr>
-                            <th style="width: 280px;">Agent Name</th>
-                            <th style="width: 140px;">Tier Level</th>
-                            <th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th><th>Sun</th>
-                        </tr>
-                    </thead>
-                    <tbody id="outBodyPhones"></tbody>
-                </table>
-            </div>
-
-            <div id="out-container-Chats" class="dept-table-container" style="display: none;">
-                <table class="interactive-table">
-                    <thead>
-                        <tr>
-                            <th style="width: 280px;">Agent Name</th>
-                            <th style="width: 140px;">Tier Level</th>
-                            <th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th><th>Sun</th>
-                        </tr>
-                    </thead>
-                    <tbody id="outBodyChats"></tbody>
-                </table>
+        <div id="view-request" class="panel-view active-view">
+            <div class="panel-card">
+                <h3>Input Deck</h3>
+                <div id="reqBodyPhones"></div>
             </div>
         </div>
 
-        <div class="panel-card">
-            <div class="card-title-bar">
-                <span>📈 Real-time Supply Statistics</span>
-                <div class="dept-switcher" style="margin-bottom: 0;">
-                    <button class="dept-btn active-dept" id="an-btn-all" onclick="changeMetricsFilter('all')">Global View</button>
-                    <button class="dept-btn" id="an-btn-phones" onclick="changeMetricsFilter('Calculo Phones')">Phones Analytics</button>
-                    <button class="dept-btn" id="an-btn-chats" onclick="changeMetricsFilter('Calculo Chats')">Chats Analytics</button>
-                </div>
-            </div>
-            <div style="overflow-x: auto;">
-                <table class="analytics-matrix">
-                    <thead>
-                        <tr>
-                            <th style="width: 260px; text-align: left;">Roster Block Window</th>
-                            <th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th><th>Sun</th>
-                        </tr>
-                    </thead>
-                    <tbody id="analyticsDataBody"></tbody>
-                </table>
+        <div id="view-engine" class="panel-view">
+            <div class="panel-card">
+                <h3>Production Schedule</h3>
             </div>
         </div>
     </div>
-
 </div>
 
 <script>
-    const coreRosterMap = {
-        "Calculo Phones": {
-            "VIP": ["Emerson Hernandez", "Stephannie Cunningham", "Thimy Gonzalez", "Yasser Quiros"],
-            "Senior": ["Andrey Castillo", "Rory Bulgarelli", "Phillip Desanti", "Eddison Prendas"],
-            "Tier 2": ["Carlos Alejandro Amador Luna", "Carlos Ortiz", "David Vogler", "Valerie Alfaro", "Jose Maria Cartin Peralta", "Samuel Carballo"],
-            "Tier 1": ["Luis Fernando Ruiz"]
-        },
-        "Calculo Chats": {
-            "VIP": ["Elena Rojas", "Elliot Navarro", "Julian Mena", "Sebastian Puerta", "Maria Jose Quiros Quiros"],
-            "Senior": ["Naomy Sanchez", "Adrian Navarro", "Diego Matamoros"],
-            "Tier 2": ["Carolina Castro", "Isaac Barrantes Alvarado", "Pablo Guzman", "Anilu Guzman Villalobos", "Sheydron Clark"],
-            "Tier 1": ["Keisha Cross Brown", "Marlon Wright"]
-        }
-    };
-
-    const middleShiftRules = ["Luis Fernando Ruiz", "Marlon Wright", "Anilu Guzman Villalobos"];
-    const weekendOffBlocklist = ["Luis Fernando Ruiz", "Marlon Wright", "Anilu Guzman Villalobos", "Keisha Cross Brown"];
-
-    const amWindows = ["06:00 AM", "07:00 AM", "09:00 AM", "10:00 AM"];
-    const pmWindows = ["11:00 AM", "01:00 PM", "02:00 PM", "03:00 PM"];
-    const hoursPriority = ["06:00 AM", "07:00 AM", "09:00 AM", "10:00 AM", "11:00 AM", "01:00 PM", "02:00 PM", "03:00 PM"];
-    const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
-
-    let selectedMetricsFilter = "all";
-    let activeReqDept = "Phones";
-    let activeOutDept = "Phones";
-
-    window.onload = function() {
-        if (!localStorage.getItem('wfm_v15_request_cache')) initDatabaseStructure();
-        if (!localStorage.getItem('wfm_v15_output_cache')) localStorage.setItem('wfm_v15_output_cache', localStorage.getItem('wfm_v15_request_cache'));
-        renderInputGrid();
-        renderEngineGrid();
-        processAnalyticsRefresh();
-    };
-
-    function initDatabaseStructure() {
-        const cache = [];
-        let indexer = 0;
-        Object.keys(coreRosterMap).forEach(dept => {
-            Object.keys(coreRosterMap[dept]).forEach(squad => {
-                coreRosterMap[dept][squad].forEach(name => {
-                    let defaultShifts = {};
-                    let off1 = (indexer * 2) % 7;
-                    let off2 = (indexer * 2 + 3) % 7;
-                    if(off1 === off2) off2 = (off2 + 1) % 7;
-                    daysOfWeek.forEach((d, idx) => {
-                        defaultShifts[d] = (idx === off1 || idx === off2) ? "Day Off" : "OPEN";
-                    });
-                    cache.push({ name, dept, squad, shifts: defaultShifts });
-                    indexer++;
-                });
-            });
-        });
-        localStorage.setItem('wfm_v15_request_cache', JSON.stringify(cache));
-    }
-
-    function toggleViewSegment(view) {
+    function toggleView(view) {
+        // Muestra el contenido principal
+        document.getElementById('home-view').style.display = 'none';
+        document.getElementById('main-content').style.display = 'block';
+        
+        // Lógica de navegación existente adaptada
         document.querySelectorAll('.panel-view').forEach(p => p.classList.remove('active-view'));
-        document.querySelectorAll('.dock-tab').forEach(t => t.classList.remove('active-tab'));
         document.getElementById(`view-${view}`).classList.add('active-view');
-        document.getElementById(`tab-${view}`).classList.add('active-tab');
-    }
-
-    function switchDeptView(dept, type) {
-        if (type === 'request') {
-            activeReqDept = dept;
-            document.querySelectorAll('#view-request .dept-btn').forEach(b => b.classList.remove('active-dept'));
-            document.getElementById(`req-btn-${dept.toLowerCase()}`).classList.add('active-dept');
-            document.querySelectorAll('#view-request .dept-table-container').forEach(c => c.style.display = 'none');
-            document.getElementById(`req-container-${dept}`).style.display = 'block';
-        } else {
-            activeOutDept = dept;
-            document.querySelectorAll('#view-engine .dept-btn').forEach(b => b.classList.remove('active-dept'));
-            document.getElementById(`out-btn-${dept.toLowerCase()}`).classList.add('active-dept');
-            document.querySelectorAll('#view-engine .dept-table-container').forEach(c => c.style.display = 'none');
-            document.getElementById(`out-container-${dept}`).style.display = 'block';
-        }
-    }
-
-    function renderInputGrid() {
-        const data = JSON.parse(localStorage.getItem('wfm_v15_request_cache'));
-        const tbodyPhones = document.getElementById('reqBodyPhones'); tbodyPhones.innerHTML = "";
-        const tbodyChats = document.getElementById('reqBodyChats'); tbodyChats.innerHTML = "";
-
-        Object.keys(coreRosterMap).forEach(dept => {
-            const currentTbody = (dept === "Calculo Phones") ? tbodyPhones : tbodyChats;
-            Object.keys(coreRosterMap[dept]).forEach(squad => {
-                currentTbody.innerHTML += `<tr><td colspan="9" class="row-squad-header">✦ ${squad} Group</td></tr>`;
-                coreRosterMap[dept][squad].forEach(name => {
-                    const agent = data.find(r => r.name === name); if(!agent) return;
-                    const tr = document.createElement('tr');
-                    let isVip = squad === "VIP";
-                    let cells = `<td><span style="font-weight:600;">${name}</span></td>`;
-                    cells += `<td><span class="badge-pill ${isVip ? 'badge-vip' : ''}">${squad}</span></td>`;
-                    daysOfWeek.forEach(day => { cells += `<td>${buildSelectOptions(name, day, agent.shifts[day], 'request')}</td>`; });
-                    tr.innerHTML = cells; currentTbody.appendChild(tr);
-                });
-            });
-        });
-    }
-
-    function renderEngineGrid() {
-        const data = JSON.parse(localStorage.getItem('wfm_v15_output_cache'));
-        const tbodyPhones = document.getElementById('outBodyPhones'); tbodyPhones.innerHTML = "";
-        const tbodyChats = document.getElementById('outBodyChats'); tbodyChats.innerHTML = "";
-
-        Object.keys(coreRosterMap).forEach(dept => {
-            const currentTbody = (dept === "Calculo Phones") ? tbodyPhones : tbodyChats;
-            Object.keys(coreRosterMap[dept]).forEach(squad => {
-                currentTbody.innerHTML += `<tr><td colspan="9" class="row-squad-header">✦ ${squad} Group</td></tr>`;
-                coreRosterMap[dept][squad].forEach(name => {
-                    const agent = data.find(r => r.name === name); if(!agent) return;
-                    const tr = document.createElement('tr');
-                    let isVip = squad === "VIP";
-                    let cells = `<td><span style="font-weight:600;">${name}</span></td>`;
-                    cells += `<td><span class="badge-pill ${isVip ? 'badge-vip' : ''}">${squad}</span></td>`;
-                    daysOfWeek.forEach(day => { cells += `<td>${buildSelectOptions(name, day, agent.shifts[day], 'output')}</td>`; });
-                    tr.innerHTML = cells; currentTbody.appendChild(tr);
-                });
-            });
-        });
-    }
-
-    function buildSelectOptions(name, day, currentVal, type) {
-        let pools = ["06:00 AM", "07:00 AM", "09:00 AM", "10:00 AM", "11:00 AM", "01:00 PM", "02:00 PM", "03:00 PM", "OPEN", "Vacaciones", "Day Off"];
-        let styleClass = "s-am";
-        if (pmWindows.includes(currentVal)) styleClass = "s-pm";
-        if (currentVal === "Day Off") styleClass = "s-off";
-        if (currentVal === "Vacaciones") styleClass = "s-vac";
-        if (currentVal === "OPEN") styleClass = "s-op";
-        let callback = type === 'request' ? 'syncLiveRequest(this)' : 'syncLiveOutput(this)';
-        let html = `<select class="custom-dropdown ${styleClass}" data-name="${name}" data-day="${day}" onchange="${callback}">`;
-        pools.forEach(p => { html += `<option value="${p}" ${currentVal === p ? 'selected' : ''}>${p}</option>`; });
-        return html + `</select>`;
-    }
-
-    function syncLiveRequest(el) {
-        const name = el.getAttribute('data-name'); const day = el.getAttribute('data-day');
-        let data = JSON.parse(localStorage.getItem('wfm_v15_request_cache'));
-        let target = data.find(r => r.name === name); if(target) target.shifts[day] = el.value;
-        localStorage.setItem('wfm_v15_request_cache', JSON.stringify(data));
-        repaintDropdown(el);
-    }
-
-    function syncLiveOutput(el) {
-        const name = el.getAttribute('data-name'); const day = el.getAttribute('data-day');
-        let data = JSON.parse(localStorage.getItem('wfm_v15_output_cache'));
-        let target = data.find(r => r.name === name); if(target) target.shifts[day] = el.value;
-        localStorage.setItem('wfm_v15_output_cache', JSON.stringify(data));
-        repaintDropdown(el); processAnalyticsRefresh();
-    }
-
-    function repaintDropdown(el) {
-        el.classList.remove('s-am', 's-pm', 's-off', 's-vac', 's-op');
-        let val = el.value;
-        if (amWindows.includes(val)) el.classList.add('s-am');
-        if (pmWindows.includes(val)) el.classList.add('s-pm');
-        if (val === "Day Off") el.classList.add('s-off');
-        if (val === "Vacaciones") el.classList.add('s-vac');
-        if (val === "OPEN") el.classList.add('s-op');
-    }
-
-    function changeMetricsFilter(filterMode) {
-        selectedMetricsFilter = filterMode;
-        document.querySelectorAll('#view-engine .dept-switcher .dept-btn').forEach(b => b.classList.remove('active-dept'));
-        if (filterMode === 'all') document.getElementById('an-btn-all').classList.add('active-dept');
-        if (filterMode === 'Calculo Phones') document.getElementById('an-btn-phones').classList.add('active-dept');
-        if (filterMode === 'Calculo Chats') document.getElementById('an-btn-chats').classList.add('active-dept');
-        processAnalyticsRefresh();
-    }
-
-    function compileRosterPipeline() {
-        let requests = JSON.parse(localStorage.getItem('wfm_v15_request_cache'));
-        let output = JSON.parse(JSON.stringify(requests)); 
-        const departments = ["Calculo Phones", "Calculo Chats"];
-
-        departments.forEach(dept => {
-            let vips = output.filter(r => r.dept === dept && r.squad === "VIP");
-            let supportTiers = output.filter(r => r.dept === dept && r.squad !== "VIP");
-
-            // 1. REGLA VIP - DISTRIBUCIÓN SIMÉTRICA BASE
-            vips.forEach(v => {
-                daysOfWeek.forEach(day => {
-                    if (v.shifts[day] !== "Vacaciones") v.shifts[day] = "OPEN";
-                });
-            });
-
-            if (dept === "Calculo Phones" && vips.length === 4) {
-                const perfectPhonesMatrix = {
-                    0: ["Day Off", "OPEN", "OPEN", "OPEN", "Day Off", "OPEN", "OPEN"], 
-                    1: ["OPEN", "Day Off", "OPEN", "OPEN", "OPEN", "Day Off", "OPEN"], 
-                    2: ["OPEN", "OPEN", "Day Off", "OPEN", "OPEN", "OPEN", "Day Off"], 
-                    3: ["OPEN", "OPEN", "OPEN", "Day Off", "Day Off", "OPEN", "OPEN"]  
-                };
-                vips.forEach((v, idx) => {
-                    daysOfWeek.forEach((day, dIdx) => {
-                        if (v.shifts[day] !== "Vacaciones") v.shifts[day] = perfectPhonesMatrix[idx][dIdx];
-                    });
-                });
-            } else {
-                let currentOffPointers = {}; 
-                daysOfWeek.forEach(d => currentOffPointers[d] = vips.filter(v => v.shifts[d] === "Vacaciones").length);
-
-                vips.forEach(v => {
-                    let totalOffs = daysOfWeek.filter(d => v.shifts[d] === "Vacaciones" || v.shifts[d] === "Day Off").length;
-                    if (totalOffs < 2) {
-                        let sortedDays = [...daysOfWeek].sort((a, b) => currentOffPointers[a] - currentOffPointers[b]);
-                        for (let day of sortedDays) {
-                            if (v.shifts[day] === "OPEN") {
-                                v.shifts[day] = "Day Off";
-                                currentOffPointers[day]++;
-                                totalOffs++;
-                                if (totalOffs === 2) break;
-                            }
-                        }
-                    }
-                });
-            }
-
-            daysOfWeek.forEach(day => {
-                let activeVips = vips.filter(v => v.shifts[day] !== "Day Off" && v.shifts[day] !== "Vacaciones");
-                let countActiveVips = activeVips.length;
-
-                if (countActiveVips >= 4) {
-                    activeVips[0].shifts[day] = "06:00 AM"; activeVips[1].shifts[day] = "07:00 AM";
-                    activeVips[2].shifts[day] = "02:00 PM"; activeVips[3].shifts[day] = "03:00 PM";
-                    for(let i=4; i<countActiveVips; i++) activeVips[i].shifts[day] = i % 2 === 0 ? "07:00 AM" : "02:00 PM";
-                } else if (countActiveVips === 3) {
-                    activeVips[0].shifts[day] = "06:00 AM"; activeVips[1].shifts[day] = "09:00 AM"; activeVips[2].shifts[day] = "03:00 PM";
-                } else if (countActiveVips === 2) {
-                    activeVips[0].shifts[day] = "06:00 AM"; activeVips[1].shifts[day] = "02:00 PM";
-                } else if (countActiveVips === 1) {
-                    activeVips[0].shifts[day] = "06:00 AM";
-                }
-            });
-
-            // 2. LOGÍSTICA SOPORTE: REESTRUCTURACIÓN DE CONTENEDORES INMUTABLES
-            supportTiers.forEach(agent => {
-                daysOfWeek.forEach(day => {
-                    if (agent.shifts[day] !== "Day Off" && agent.shifts[day] !== "Vacaciones") {
-                        agent.shifts[day] = "OPEN";
-                    }
-                });
-            });
-
-            let supportOffCounters = {};
-            daysOfWeek.forEach(d => supportOffCounters[d] = 0);
-
-            supportTiers.forEach(agent => {
-                let currentOffs = daysOfWeek.filter(d => agent.shifts[d] === "Day Off" || agent.shifts[d] === "Vacaciones").length;
-                if (currentOffs < 2) {
-                    let blockWE = weekendOffBlocklist.includes(agent.name);
-                    let allowedDays = blockWE 
-                        ? ["Wednesday", "Thursday", "Tuesday", "Monday", "Friday"]
-                        : ["Sunday", "Saturday", "Wednesday", "Thursday", "Tuesday", "Monday", "Friday"];
-                    
-                    allowedDays.sort((a, b) => supportOffCounters[a] - supportOffCounters[b]);
-
-                    for (let d of allowedDays) {
-                        if (agent.shifts[d] === "OPEN") {
-                            agent.shifts[d] = "Day Off";
-                            supportOffCounters[d]++;
-                            currentOffs++;
-                            if (currentOffs === 2) break;
-                        }
-                    }
-                }
-            });
-
-            // CONTROL ESTRICTO DE LLEGADA HORARIA - BLINDAJE ANTI-DESFASE
-            daysOfWeek.forEach(day => {
-                let activeSupport = supportTiers.filter(s => s.shifts[day] === "OPEN");
-                
-                let middleSupport = activeSupport.filter(s => middleShiftRules.includes(s.name));
-                let standardSupport = activeSupport.filter(s => !middleShiftRules.includes(s.name));
-
-                // Turnos medios (fijos)
-                middleSupport.forEach((s, sIdx) => {
-                    let midPool = ["09:00 AM", "10:00 AM", "11:00 AM"];
-                    s.shifts[day] = midPool[sIdx % midPool.length];
-                });
-
-                let totalStandard = standardSupport.length;
-                if (totalStandard > 0) {
-                    let amCount = Math.floor(totalStandard / 2);
-                    let pmCount = totalStandard - amCount; 
-
-                    // Forzar alternancia estricta uno por uno en la mañana para paridad 6am y 7am
-                    let masterSlotsPool = [];
-                    for (let i = 0; i < amCount; i++) {
-                        masterSlotsPool.push(i % 2 === 0 ? "06:00 AM" : "07:00 AM");
-                    }
-                    // Forzar alternancia estricta uno por uno en la tarde
-                    for (let i = 0; i < pmCount; i++) {
-                        masterSlotsPool.push(i % 2 === 0 ? "02:00 PM" : "03:00 PM");
-                    }
-
-                    // Inyectar sin alterar el orden
-                    standardSupport.forEach((agent, index) => {
-                        agent.shifts[day] = masterSlotsPool[index] || "02:00 PM";
-                    });
-                }
-            });
-        });
-
-        // CONTROL ERGONÓMICO INTERJORNADA POR INTERCAMBIO SIMÉTRICO ESTRICTO (ZERO-SUM SWAP)
-        for (let i = 0; i < daysOfWeek.length - 1; i++) {
-            let currentDay = daysOfWeek[i]; 
-            let nextDay = daysOfWeek[i + 1];
-
-            departments.forEach(dept => {
-                let deptAgents = output.filter(p => p.dept === dept && p.squad !== "VIP");
-
-                deptAgents.forEach(agent => {
-                    // Si trabaja tarde hoy, y mañana entra temprano (06:00 AM o 07:00 AM)...
-                    if (pmWindows.includes(agent.shifts[currentDay]) && (agent.shifts[nextDay] === "06:00 AM" || agent.shifts[nextDay] === "07:00 AM")) {
-                        
-                        // Buscamos un compañero espejo perfecto: que MAÑANA trabaje de tarde, y HOY trabaje de mañana.
-                        // Esto garantiza que al intercambiar los turnos del 'nextDay', la mañana y la tarde se mantienen intactas numéricamente.
-                        let perfectPeer = deptAgents.find(p => 
-                            p.name !== agent.name && 
-                            pmWindows.includes(p.shifts[nextDay]) && 
-                            (p.shifts[currentDay] === "06:00 AM" || p.shifts[currentDay] === "07:00 AM" || p.shifts[currentDay] === "09:00 AM" || p.shifts[currentDay] === "10:00 AM")
-                        );
-
-                        if (perfectPeer) {
-                            let tempShift = agent.shifts[nextDay];
-                            agent.shifts[nextDay] = perfectPeer.shifts[nextDay];
-                            perfectPeer.shifts[nextDay] = tempShift;
-                        }
-                    }
-                });
-            });
-        }
-
-        localStorage.setItem('wfm_v15_output_cache', JSON.stringify(output));
-        renderEngineGrid();
-        processAnalyticsRefresh();
-        toggleViewSegment('engine');
-    }
-
-    function processAnalyticsRefresh() {
-        const rawData = JSON.parse(localStorage.getItem('wfm_v15_output_cache')) || [];
-        let filteredData = rawData;
-        if (selectedMetricsFilter !== "all") filteredData = rawData.filter(agent => agent.dept === selectedMetricsFilter);
-
-        const calculatedMatrix = {}; hoursPriority.forEach(h => { calculatedMatrix[h] = {}; daysOfWeek.forEach(d => calculatedMatrix[h][d] = 0); });
-        const totalizerAM = {}; const totalizerPM = {}; const totalizerShrink = {};
-        daysOfWeek.forEach(d => { totalizerAM[d] = 0; totalizerPM[d] = 0; totalizerShrink[d] = 0; });
-
-        filteredData.forEach(agent => {
-            daysOfWeek.forEach(day => {
-                const activeShift = agent.shifts[day] || "Day Off";
-                if (calculatedMatrix[activeShift]) calculatedMatrix[activeShift][day]++;
-                if (amWindows.includes(activeShift)) totalizerAM[day]++;
-                if (pmWindows.includes(activeShift)) totalizerPM[day]++;
-                if (activeShift === "Day Off" || activeShift === "Vacaciones") totalizerShrink[day]++;
-            });
-        });
-
-        const targetTbody = document.getElementById('analyticsDataBody'); targetTbody.innerHTML = "";
-        targetTbody.innerHTML += `<tr><td colspan="8" class="analytics-section-title">▲ AM Capacity Blocks</td></tr>`;
-        amWindows.forEach(windowBlock => {
-            let tr = `<tr><td style="text-align:left; font-weight:500; color: var(--text-secondary);">${windowBlock}</td>`;
-            daysOfWeek.forEach(d => tr += `<td>${calculatedMatrix[windowBlock][d]}</td>`);
-            targetTbody.innerHTML += tr + `</tr>`;
-        });
-        let sumAMRow = `<tr class="total-row-am"><td style="text-align:left;">Net Capacity AM</td>`;
-        daysOfWeek.forEach(d => sumAMRow += `<td>${totalizerAM[d]}</td>`);
-        targetTbody.innerHTML += sumAMRow + `</tr>`;
-
-        targetTbody.innerHTML += `<tr><td colspan="8" class="analytics-section-title">▼ PM Capacity Blocks</td></tr>`;
-        pmWindows.forEach(windowBlock => {
-            let tr = `<tr><td style="text-align:left; font-weight:500; color: var(--text-secondary);">${windowBlock}</td>`;
-            daysOfWeek.forEach(d => tr += `<td>${calculatedMatrix[windowBlock][d]}</td>`);
-            targetTbody.innerHTML += tr + `</tr>`;
-        });
-        let sumPMRow = `<tr class="total-row-pm"><td style="text-align:left;">Net Capacity PM</td>`;
-        daysOfWeek.forEach(d => sumPMRow += `<td>${totalizerPM[d]}</td>`);
-        targetTbody.innerHTML += sumPMRow + `</tr>`;
-
-        let shrinkRow = `<tr class="total-row-shrinkage"><td style="text-align:left;">Total Off / Volume Loss</td>`;
-        daysOfWeek.forEach(d => shrinkRow += `<td>${totalizerShrink[d]} Ag.</td>`);
-        targetTbody.innerHTML += shrinkRow + `</tr>`;
-    }
-
-    async function exportDataToExcel() {
-        const log = JSON.parse(localStorage.getItem('wfm_v15_output_cache'));
-        const workbook = new ExcelJS.Workbook();
-        ["Calculo Phones", "Calculo Chats"].forEach(deptName => {
-            const sheet = workbook.addWorksheet(deptName);
-            sheet.columns = [
-                { header: 'Agent Full Name', key: 'name', width: 28 },
-                { header: 'Squad Level', key: 'squad', width: 15 },
-                ...daysOfWeek.map(d => ({ header: d, key: d, width: 15 }))
-            ];
-            log.filter(e => e.dept === deptName).forEach(entry => {
-                sheet.addRow({ name: entry.name, squad: entry.squad, ...entry.shifts });
-            });
-        });
-        const buffer = await workbook.xlsx.writeBuffer();
-        const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
-        const trigger = document.createElement("a");
-        trigger.href = URL.createObjectURL(blob);
-        trigger.download = `WFM_v15_6_HardBalanced_Roster.xlsx`;
-        trigger.click();
     }
 </script>
+
 </body>
 </html>
-function toggleView(target) {
-    document.getElementById('view-home').classList.remove('active-view');
-    document.getElementById('view-app').classList.remove('active-view');
-    document.getElementById('view-' + target).classList.add('active-view');
-}

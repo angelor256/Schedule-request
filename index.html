@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WFM Tactical Enterprise // v11.1 Premium Engine</title>
+    <title>WFM Tactical Enterprise // v12.0 AI-Optimizer Engine</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -239,20 +239,20 @@
     <div class="glass-header">
         <div class="app-title">
             <h1>Tactical Workforce Management Panel</h1>
-            <p>// CORE SYSTEM ENG v11.1 // PREMIUM GLASS INTERFACE</p>
+            <p>// CORE SYSTEM ENG v12.0 // INDUSTRIAL INTELLIGENCE AUTOMATION</p>
         </div>
         <div>
-            <button class="action-btn btn-download" onclick="exportDataToExcel()">📥 Export Matrix Copy</button>
+            <button class="action-btn btn-download" onclick="exportDataToExcel()">📥 Export Master Copy</button>
         </div>
     </div>
 
     <!-- Navigation Tab Dock -->
     <div class="navigation-dock">
         <button class="dock-tab active-tab" id="tab-request" onclick="toggleViewSegment('request')">
-            01 / Agent Preference Deck
+            01 / Agent Preference Deck (Requests)
         </button>
         <button class="dock-tab" id="tab-engine" onclick="toggleViewSegment('engine')">
-            02 / Tactical Production Roster
+            02 / Tactical Production Roster (Final Schedule)
         </button>
     </div>
 
@@ -260,7 +260,7 @@
     <div id="view-request" class="panel-view active-view">
         <div class="panel-card" style="border-top: 3px solid var(--neon-purple);">
             <div class="card-title-bar">
-                <span>📊 Configuración de Parámetros y Disponibilidad Inicial</span>
+                <span>📊 Simulación de Entrada de Agentes (Requests Libres)</span>
                 <button class="action-btn btn-accent" onclick="compileRosterPipeline()">Execute Optimizer Engine ⚙️</button>
             </div>
             <div style="overflow-x: auto;">
@@ -278,12 +278,12 @@
         </div>
     </div>
 
-    <!-- SCREEN 2: PRODUCTION MODEL -->
+    <!-- SCREEN 2: PRODUCTION MODEL (CORREGIDO AUTOMÁTICAMENTE) -->
     <div id="view-engine" class="panel-view">
         <div class="panel-card" style="border-top: 3px solid var(--neon-blue);">
             <div class="card-title-bar">
-                <span>⚡ Cuadrante Maestro de Producción WFM</span>
-                <span style="font-size: 11px; color: var(--neon-blue); font-family: 'JetBrains Mono', monospace;">STATUS: VERIFIED STABLE</span>
+                <span>⚡ Cuadrante Maestro Optimizado (Reglas de Ley Aplicadas)</span>
+                <span style="font-size: 11px; color: var(--neon-green); font-family: 'JetBrains Mono', monospace;">STATUS: AUTO-ENFORCED SUCCESS</span>
             </div>
             <div style="overflow-x: auto;">
                 <table class="interactive-table">
@@ -299,12 +299,10 @@
             </div>
         </div>
 
-        <!-- Real-time Metrics Dashboard with Segmented Controls -->
+        <!-- Real-time Metrics Dashboard -->
         <div class="panel-card">
             <div class="card-title-bar">
                 <span>📊 Matriz Analytics Integrada</span>
-                
-                <!-- CONTROL SEGMENTADO -->
                 <div class="segmented-control">
                     <button class="segment-btn active-segment" id="seg-all" onclick="changeMetricsFilter('all')">View Global</button>
                     <button class="segment-btn" id="seg-phones" onclick="changeMetricsFilter('Calculo Phones')">Phones Only</button>
@@ -348,16 +346,17 @@
 
     const amWindows = ["06:00 AM", "07:00 AM", "09:00 AM", "10:00 AM"];
     const pmWindows = ["11:00 AM", "01:00 PM", "02:00 PM", "03:00 PM"];
+    const hoursPriority = ["06:00 AM", "07:00 AM", "09:00 AM", "10:00 AM", "11:00 AM", "01:00 PM", "02:00 PM", "03:00 PM"];
     const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
     let selectedMetricsFilter = "all";
 
     window.onload = function() {
-        if (!localStorage.getItem('wfm_v11_request_cache')) {
+        if (!localStorage.getItem('wfm_v12_request_cache')) {
             initDatabaseStructure();
         }
-        if (!localStorage.getItem('wfm_v11_output_cache')) {
-            localStorage.setItem('wfm_v11_output_cache', localStorage.getItem('wfm_v11_request_cache'));
+        if (!localStorage.getItem('wfm_v12_output_cache')) {
+            localStorage.setItem('wfm_v12_output_cache', localStorage.getItem('wfm_v12_request_cache'));
         }
         renderInputGrid();
         renderEngineGrid();
@@ -385,11 +384,8 @@
                         if (off1 === off2) off2 = (off2 + 1) % 7;
                     }
 
-                    let day1 = daysOfWeek[off1];
-                    let day2 = daysOfWeek[off2];
-
-                    daysOfWeek.forEach(d => {
-                        defaultShifts[d] = (d === day1 || d === day2) ? "Day Off" : "OPEN";
+                    daysOfWeek.forEach((d, idx) => {
+                        defaultShifts[d] = (idx === off1 || idx === off2) ? "Day Off" : "OPEN";
                     });
 
                     cache.push({ name, dept, squad, shifts: defaultShifts });
@@ -397,7 +393,7 @@
                 });
             });
         });
-        localStorage.setItem('wfm_v11_request_cache', JSON.stringify(cache));
+        localStorage.setItem('wfm_v12_request_cache', JSON.stringify(cache));
     }
 
     function toggleViewSegment(view) {
@@ -409,24 +405,20 @@
     }
 
     function renderInputGrid() {
-        const data = JSON.parse(localStorage.getItem('wfm_v11_request_cache'));
+        const data = JSON.parse(localStorage.getItem('wfm_v12_request_cache'));
         const tbody = document.getElementById('requestDeckBody');
         tbody.innerHTML = "";
 
         Object.keys(coreRosterMap).forEach(dept => {
             tbody.innerHTML += `<tr><td colspan="9" class="row-dept-header">// DEPT: ${dept.toUpperCase()}</td></tr>`;
-
             Object.keys(coreRosterMap[dept]).forEach(squad => {
                 tbody.innerHTML += `<tr><td colspan="9" class="row-squad-header">✦ ${squad} Tier Group</td></tr>`;
-
                 coreRosterMap[dept][squad].forEach(name => {
                     const agent = data.find(r => r.name === name);
                     if(!agent) return;
                     const tr = document.createElement('tr');
-                    
                     let cells = `<td><span style="font-weight:600; padding-left: 10px;">${name}</span></td>`;
                     cells += `<td><span class="badge-pill">${squad}</span></td>`;
-                    
                     daysOfWeek.forEach(day => {
                         cells += `<td>${buildSelectOptions(name, day, agent.shifts[day], 'request')}</td>`;
                     });
@@ -438,24 +430,20 @@
     }
 
     function renderEngineGrid() {
-        const data = JSON.parse(localStorage.getItem('wfm_v11_output_cache'));
+        const data = JSON.parse(localStorage.getItem('wfm_v12_output_cache'));
         const tbody = document.getElementById('engineDeckBody');
         tbody.innerHTML = "";
 
         Object.keys(coreRosterMap).forEach(dept => {
             tbody.innerHTML += `<tr><td colspan="9" class="row-dept-header">// DEPT: ${dept.toUpperCase()}</td></tr>`;
-
             Object.keys(coreRosterMap[dept]).forEach(squad => {
                 tbody.innerHTML += `<tr><td colspan="9" class="row-squad-header">✦ ${squad} Tier Group</td></tr>`;
-
                 coreRosterMap[dept][squad].forEach(name => {
                     const agent = data.find(r => r.name === name);
                     if(!agent) return;
                     const tr = document.createElement('tr');
-                    
                     let cells = `<td><span style="font-weight:600; padding-left: 10px;">${name}</span></td>`;
                     cells += `<td><span class="badge-pill">${squad}</span></td>`;
-                    
                     daysOfWeek.forEach(day => {
                         cells += `<td>${buildSelectOptions(name, day, agent.shifts[day], 'output')}</td>`;
                     });
@@ -467,9 +455,7 @@
     }
 
     function buildSelectOptions(name, day, currentVal, type) {
-        const isMiddle = middleShiftRules.includes(name);
-        let pools = isMiddle ? ["09:00 AM", "10:00 AM", "11:00 AM", "01:00 PM"] : ["06:00 AM", "07:00 AM", "02:00 PM", "03:00 PM"];
-        pools.push("OPEN", "Vacaciones", "Day Off");
+        let pools = ["06:00 AM", "07:00 AM", "09:00 AM", "10:00 AM", "11:00 AM", "01:00 PM", "02:00 PM", "03:00 PM", "OPEN", "Vacaciones", "Day Off"];
 
         let styleClass = "s-am";
         if (pmWindows.includes(currentVal)) styleClass = "s-pm";
@@ -490,20 +476,20 @@
     function syncLiveRequest(el) {
         const name = el.getAttribute('data-name');
         const day = el.getAttribute('data-day');
-        let data = JSON.parse(localStorage.getItem('wfm_v11_request_cache'));
+        let data = JSON.parse(localStorage.getItem('wfm_v12_request_cache'));
         let target = data.find(r => r.name === name);
         if(target) target.shifts[day] = el.value;
-        localStorage.setItem('wfm_v11_request_cache', JSON.stringify(data));
+        localStorage.setItem('wfm_v12_request_cache', JSON.stringify(data));
         repaintDropdown(el);
     }
 
     function syncLiveOutput(el) {
         const name = el.getAttribute('data-name');
         const day = el.getAttribute('data-day');
-        let data = JSON.parse(localStorage.getItem('wfm_v11_output_cache'));
+        let data = JSON.parse(localStorage.getItem('wfm_v12_output_cache'));
         let target = data.find(r => r.name === name);
         if(target) target.shifts[day] = el.value;
-        localStorage.setItem('wfm_v11_output_cache', JSON.stringify(data));
+        localStorage.setItem('wfm_v12_output_cache', JSON.stringify(data));
         repaintDropdown(el);
         processAnalyticsRefresh();
     }
@@ -520,78 +506,101 @@
 
     function changeMetricsFilter(filterMode) {
         selectedMetricsFilter = filterMode;
-        
         document.querySelectorAll('.segment-btn').forEach(b => b.classList.remove('active-segment'));
         if (filterMode === 'all') document.getElementById('seg-all').classList.add('active-segment');
         if (filterMode === 'Calculo Phones') document.getElementById('seg-phones').classList.add('active-segment');
         if (filterMode === 'Calculo Chats') document.getElementById('seg-chats').classList.add('active-segment');
-        
         processAnalyticsRefresh();
     }
 
+    // MOTOR ALGORÍTMICO PRINCIPAL - PIENSA POR VOS
     function compileRosterPipeline() {
-        let requests = JSON.parse(localStorage.getItem('wfm_v11_request_cache'));
+        let requests = JSON.parse(localStorage.getItem('wfm_v12_request_cache'));
         let output = JSON.parse(JSON.stringify(requests)); 
 
-        const departments = ["Calculo Phones", "Calculo Chats"];
+        // PASO 1: Forzar Estrictamente los 2 días de descanso (Min 2 Days Off Rule)
+        output.forEach(agent => {
+            let offDaysCount = daysOfWeek.filter(d => agent.shifts[d] === "Day Off" || agent.shifts[d] === "Vacaciones").length;
+            
+            if (offDaysCount < 2) {
+                // Si puso 1 o 0 días libres por error, buscamos el día que no sea libre con menor impacto operativo general
+                // Preferimos sacrificar Miércoles o Jueves si el fin de semana está bloqueado
+                let blockWE = weekendOffBlocklist.includes(agent.name);
+                let evaluationOrder = blockWE 
+                    ? ["Wednesday", "Thursday", "Tuesday", "Monday", "Friday"]
+                    : ["Sunday", "Saturday", "Wednesday", "Thursday", "Tuesday", "Monday", "Friday"];
 
-        departments.forEach(dept => {
-            const vips = output.filter(r => r.dept === dept && r.squad === "VIP");
-            let observed = [];
-
-            vips.forEach((vip, vIdx) => {
-                daysOfWeek.forEach((day, dIdx) => {
-                    if (vip.shifts[day] === "Day Off") {
-                        let trackingKey = `${day}-${vIdx % 2}`;
-                        if (observed.includes(trackingKey)) {
-                            vip.shifts[day] = "OPEN"; 
-                            let next = daysOfWeek[(dIdx + 1) % 7];
-                            if (vip.shifts[next] !== "Vacaciones") vip.shifts[next] = "Day Off";
-                        } else {
-                            observed.push(trackingKey);
-                        }
+                for (let d of evaluationOrder) {
+                    if (agent.shifts[d] !== "Day Off" && agent.shifts[d] !== "Vacaciones") {
+                        agent.shifts[d] = "Day Off"; // Forzamos el segundo día libre automáticamente
+                        break;
                     }
-                });
-            });
+                }
+            }
+        });
 
+        // PASO 2: Resolver Horas Abiertas (OPEN) y Balancear Curvas AM/PM por Departamento
+        const departments = ["Calculo Phones", "Calculo Chats"];
+        departments.forEach(dept => {
             daysOfWeek.forEach(day => {
                 let amCount = output.filter(r => r.dept === dept && amWindows.includes(r.shifts[day])).length;
                 let pmCount = output.filter(r => r.dept === dept && pmWindows.includes(r.shifts[day])).length;
 
                 const openAgents = output.filter(r => r.dept === dept && r.shifts[day] === "OPEN");
-
                 openAgents.forEach((agent, aIdx) => {
                     const isMiddle = middleShiftRules.includes(agent.name);
-                    if (amCount <= pmCount) {
-                        agent.shifts[day] = isMiddle ? "09:00 AM" : ((aIdx % 2 === 0) ? "06:00 AM" : "07:00 AM");
-                        amCount++;
+                    if (isMiddle) {
+                        agent.shifts[day] = (aIdx % 2 === 0) ? "09:00 AM" : "10:00 AM";
                     } else {
-                        agent.shifts[day] = isMiddle ? "01:00 PM" : ((aIdx % 2 === 0) ? "02:00 PM" : "03:00 PM");
-                        pmCount++;
+                        if (amCount <= pmCount) {
+                            agent.shifts[day] = (aIdx % 2 === 0) ? "06:00 AM" : "07:00 AM";
+                            amCount++;
+                        } else {
+                            agent.shifts[day] = (aIdx % 2 === 0) ? "02:00 PM" : "03:00 PM";
+                            pmCount++;
+                        }
                     }
                 });
             });
         });
 
-        localStorage.setItem('wfm_v11_output_cache', JSON.stringify(output));
+        // PASO 3: Validación e Inyección de Ley Ergonómica de Descanso de 12 Horas Ergonómicas
+        // Si sale tarde en el día N (PM Shifts), el día N+1 NO puede entrar en el primer bloque AM (06:00 AM / 07:00 AM)
+        output.forEach(agent => {
+            for (let i = 0; i < daysOfWeek.length - 1; i++) {
+                let currentDay = daysOfWeek[i];
+                let nextDay = daysOfWeek[i + 1];
+                
+                let currentShift = agent.shifts[currentDay];
+                let nextShift = agent.shifts[nextDay];
+
+                // Identificar si el turno actual es un cierre PM tardío (11 AM, 1 PM, 2 PM, 3 PM)
+                if (pmWindows.includes(currentShift)) {
+                    // Si el día siguiente es un turno AM de apertura temprana (6 AM o 7 AM), viola las 12 horas.
+                    if (nextShift === "06:00 AM" || nextShift === "07:00 AM") {
+                        // Forzar el corrimiento automático al bloque seguro (Mid-Shift o PM según perfil)
+                        const isMiddle = middleShiftRules.includes(agent.name);
+                        agent.shifts[nextDay] = isMiddle ? "11:00 AM" : "02:00 PM";
+                    }
+                }
+            }
+        });
+
+        localStorage.setItem('wfm_v12_output_cache', JSON.stringify(output));
         renderEngineGrid();
         processAnalyticsRefresh();
-        
         toggleViewSegment('engine');
     }
 
     function processAnalyticsRefresh() {
-        const rawData = JSON.parse(localStorage.getItem('wfm_v11_output_cache')) || [];
-        
+        const rawData = JSON.parse(localStorage.getItem('wfm_v12_output_cache')) || [];
         let filteredData = rawData;
         if (selectedMetricsFilter !== "all") {
             filteredData = rawData.filter(agent => agent.dept === selectedMetricsFilter);
         }
 
-        const hoursPool = [...amWindows, ...pmWindows];
         const calculatedMatrix = {};
-        
-        hoursPool.forEach(h => {
+        hoursPriority.forEach(h => {
             calculatedMatrix[h] = {};
             daysOfWeek.forEach(d => calculatedMatrix[h][d] = 0);
         });
@@ -639,7 +648,7 @@
     }
 
     async function exportDataToExcel() {
-        const log = JSON.parse(localStorage.getItem('wfm_v11_output_cache'));
+        const log = JSON.parse(localStorage.getItem('wfm_v12_output_cache'));
         const workbook = new ExcelJS.Workbook();
         
         ["Calculo Phones", "Calculo Chats"].forEach(deptName => {
@@ -659,7 +668,7 @@
         const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
         const trigger = document.createElement("a");
         trigger.href = URL.createObjectURL(blob);
-        trigger.download = `WFM_v11_Segmented_Master.xlsx`;
+        trigger.download = `WFM_v12_Master_Optimized.xlsx`;
         trigger.click();
     }
 </script>

@@ -353,7 +353,38 @@ root.addEventListener('click',function(e){var el;
 
 root.addEventListener('change',function(e){if(!e.target)return;if(e.target.id==='gridweek'){state.gridWeek=e.target.value;render();}if(e.target.id==='reqtypesel'){state.reqType=e.target.value;render();}});
 
-generate('merit');
-</script></body></html>
-<!-- Vinculamos el archivo JavaScript como un módulo -->
-<script type="module" src="app.js"></script>
+<!-- Tu contenido HTML aquí -->
+
+<script type="module">
+  // 1. Importa las funciones de Firebase (usamos los CDN de Google)
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+  import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+
+  // 2. Configuración (aquí pegas lo que copiaste de Firebase)
+  const firebaseConfig = {
+    apiKey: "TU_API_KEY_AQUI",
+    authDomain: "schedule-maker-189f5.firebaseapp.com",
+    projectId: "schedule-maker-189f5",
+    storageBucket: "schedule-maker-189f5.appspot.com",
+    // ... resto de tus datos
+  };
+
+  // 3. Inicializar
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  // 4. Lógica para guardar (ajusta 'btnGuardar' al ID de tu botón real)
+  document.getElementById("btnGuardar").addEventListener("click", async () => {
+    try {
+      const docRef = await addDoc(collection(db, "horarios"), {
+        horaInicio: "10:00",
+        horaFin: "18:00"
+      });
+      alert("¡Horario guardado!");
+    } catch (e) {
+      console.error("Error: ", e);
+    }
+  });
+</script>
+
+</body>

@@ -1,434 +1,368 @@
 <!DOCTYPE html>
-<html lang="es"><head>
-<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>BA CS Scheduler · Customer Service</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<style>
-:root{--ink:#0B0C13;--ink2:#0E1020;--panel:rgba(255,255,255,.035);--panel2:rgba(255,255,255,.06);--line:rgba(255,255,255,.09);--chalk:#EAEBF2;--mist:#9A9FB5;--faint:#686C84;--iris:#7C83FF;--iris2:#9aa0ff;--irisSoft:rgba(124,131,255,.16);--amber:#F4B860;--mint:#5FD3A3;--rose:#FF6B81;}
-*{box-sizing:border-box;}html,body{margin:0;padding:0;}
-body{font-family:'Inter',system-ui,sans-serif;color:var(--chalk);background:radial-gradient(900px 500px at 78% -8%,rgba(124,131,255,.16),transparent 60%),radial-gradient(700px 460px at 6% 108%,rgba(244,184,96,.07),transparent 55%),linear-gradient(180deg,var(--ink),var(--ink2));min-height:100vh;-webkit-font-smoothing:antialiased;}
-.display{font-family:'Space Grotesk',sans-serif;letter-spacing:-.01em;}.mono{font-family:'JetBrains Mono',monospace;}
-.glass{background:var(--panel);border:1px solid var(--line);border-radius:18px;backdrop-filter:blur(14px);}
-.lift{transition:transform .18s,box-shadow .18s,background .18s,border-color .18s;}.lift:hover{transform:translateY(-2px);}
-.navitem{transition:background .15s,color .15s;cursor:pointer;}.navitem:hover{background:var(--panel2);}
-.chip{transition:transform .14s,box-shadow .18s;cursor:pointer;user-select:none;}.chip:hover{transform:translateY(-2px);}
-.lane{transition:border-color .2s,background .2s;}
-.meter-fill{transition:width .55s cubic-bezier(.22,1,.36,1),background .3s;}
-.view{animation:fade .35s both;}@keyframes fade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
-.pulse{animation:pulse 1.8s ease-in-out infinite;}@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(255,107,129,0);}50%{box-shadow:0 0 0 6px rgba(255,107,129,.1);}}
-.btn{cursor:pointer;border:none;font-family:inherit;transition:transform .14s,filter .18s,background .18s;}.btn:hover{transform:translateY(-1px);filter:brightness(1.06);}
-.toast{animation:slidein .3s both;}@keyframes slidein{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:none;}}
-.selRing{box-shadow:0 0 0 2px var(--iris),0 8px 24px rgba(124,131,255,.25)!important;}
-input,select,textarea{font-family:inherit;background:var(--panel2);border:1px solid var(--line);color:var(--chalk);border-radius:10px;padding:8px 10px;font-size:13px;outline:none;color-scheme:dark;}option{background:#14162a;color:#EAEBF2;}
-@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}}
-.mrole{display:none;}
-  .botnav{display:none;}
-  .botnav .bn{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:9px;font-weight:600;color:var(--mist);cursor:pointer;flex:1;padding:2px 0;text-align:center;line-height:1.1;}
-  .botnav .bn.on{color:var(--iris2);}
-  @media (max-width:820px){
-    .rail{display:none!important;}
-    .mainwrap{padding:18px 15px 96px!important;}
-    .mrole{display:flex;gap:2px;background:var(--panel2);border:1px solid var(--line);border-radius:11px;padding:3px;margin-bottom:16px;}
-    .botnav{display:flex;justify-content:space-around;align-items:flex-start;position:fixed;left:0;right:0;bottom:0;z-index:40;background:rgba(11,12,19,.97);backdrop-filter:blur(12px);border-top:1px solid var(--line);padding:9px 6px calc(10px + env(safe-area-inset-bottom));}
-    .toast{bottom:104px!important;}
-    .lbl{display:none;}
-  }
-</style></head><body><div id="app"></div>
-<script>
-var DATA = {
-  "squads": ["VIP", "Payouts", "Tier 1", "Tier 2", "Tier 3", "Senior", "3rd Party", "Deposits", "Processing", "Training", "New Hire", "Workforce", "Floor Support", "Supervisors", "Night Shift"],
-  "members": {
-    "Supervisors": ["Alfredo Villalobos", "Nicole Valverde", "Mario Acon"],
-    "Floor Support": ["Adriana Vasquez", "Carlos Barrantes", "Doris Peña", "Isabelle Morales"],
-    "VIP": ["Emerson Hernandez", "Stephannie Cunningham", "Thimy Gonzalez", "Yasser Quiros", "Elena Rojas", "Elliot Navarro", "Julian Mena", "Sebastian Puerta"],
-    "3rd Party": ["Mariana Varela", "Nicole Román", "Tamara Donaire", "Naigell Wilchard", "Isaac Porras", "Eckart Lutz"],
-    "Senior": ["Andrey Castillo", "Rory Bulgarelli", "Naomy Sanchez"],
-    "Tier 3": ["Adrian Navarro", "Eddison Prendas", "Phillip Desanti", "Maria Jose Quiros Quiros"],
-    "Tier 2": ["Carlos Ortiz", "Carlos Alejandro Amador Luna", "Carolina Castro", "Daniel Leandro Rojas", "David Vogler", "Isaac Barrantes Alvarado", "Pablo Guzman"],
-    "Tier 1": ["Anilu Guzman", "Charlene Rose", "Edson Stewart Retana", "Jose Maria Cartin Peralta", "Keisha Cross Brown", "Luis Fernando Ruiz", "Marlon Wright", "Valerie Alfaro"],
-    "Deposits": ["Michelle Saborio", "Mariana Bejarano", "Diego Matamoros", "Sebastian Rivera", "Silvana Suarez"],
-    "Payouts": ["Ignacio Blanco", "Graciela Bravo", "Fer Blanco", "Kevin Zamora", "Samuel Carballo", "Sheydron Clark", "Carlos Amador", "Vanessa Umaña"],
-    "Workforce": ["Angelo Ramírez", "Cristopher Sandoval"],
-    "Night Shift": ["Mauricio Alvarado", "Jose Pablo Robles", "Jose David Shedden", "David Cruz", "Daniel Gonzalez", "Kemar Clare Clare"],
-    "Training": ["Pablo Retana", "Victor Ramírez", "María José Fallas", "Kendra Temple", "Natalia Sibaja"],
-    "Processing": ["Luis Carvajal", "Kendall Montoya", "Josué Vargas", "Kevin Salazar", "Israel Aburto"],
-    "New Hire": ["Javier Emilio Martinez Suarez", "Keylor Andres Solis Garro", "Luis Castro Solis", "Nyssa Kittel"]
-  },
-  "queueSquads": {
-    "3rd Party": ["Casino", "Chats", "Phones"],
-    "Tier 2": ["Chats", "Phones", "Tickets", "Emails"],
-    "VIP": ["Phones", "Chats", "Emails", "Phones Over", "Chats Over", "Tickets"],
-    "Training": ["Coaching", "Chats Over", "Phones Over"],
-    "New Hire": ["Chats"],
-    "Tier 1": ["Chats", "Phones"],
-    "Deposits": ["Phones Over", "Chats Over"],
-    "Payouts": ["Chats Over", "Phones Over"],
-    "Processing": ["Phones Over", "Processing", "Chats Over"],
-    "Senior": ["Emails", "Tickets", "Phones"],
-    "Tier 3": ["Chats", "Emails", "Phones", "Tickets"],
-    "Workforce": ["Chats Over", "Phones Over"]
-  },
-  "shifts": ["06-14", "07-15", "08-16", "09-17", "10-18", "13-21", "14-22", "15-23"],
-  "coverage": {
-    "06-14": {
-      "Casino": 1,
-      "Tickets": 1,
-      "Emails": 1,
-      "Phones Over": 1,
-      "Chats Over": 1
-    },
-    "07-15": {
-      "Chats": 1,
-      "Phones": 1,
-      "Casino": 1,
-      "Emails": 1,
-      "Tickets": 1,
-      "Phones Over": 1,
-      "Chats Over": 1
-    },
-    "08-16": {
-      "Processing": 1,
-      "Chats": 1,
-      "Phones": 1,
-      "Phones Over": 1
-    },
-    "09-17": {
-      "Chats": 3,
-      "Phones": 2,
-      "Coaching": 1,
-      "Emails": 1,
-      "Chats Over": 1,
-      "Tickets": 1
-    },
-    "10-18": {
-      "Chats": 2,
-      "Phones": 2,
-      "Coaching": 1,
-      "Phones Over": 1,
-      "Chats Over": 1
-    },
-    "13-21": {
-      "Chats": 4, 
-      "Phones": 3, 
-      "Tickets": 1,
-      "Emails": 1,
-      "Phones Over": 1,
-      "Chats Over": 1,
-      "Coaching": 1
-    },
-    "14-22": {
-      "Chats": 5, 
-      "Phones": 2, 
-      "Casino": 1,
-      "Tickets": 1,
-      "Emails": 1,
-      "Chats Over": 2
-    },
-    "15-23": {
-      "Chats": 5, 
-      "Phones": 3, 
-      "Casino": 1,
-      "Tickets": 1,
-      "Emails": 1,
-      "Chats Over": 2,
-      "Phones Over": 2
-    }
-  },
-  "directQueues": ["Chats", "Phones", "Chats Over", "Phones Over"],
-  "nonQueue": {
-    "Floor Support": ["CX Report", "Leads"],
-    "Supervisors": ["Leads"]
-  },
-  "night": "Night Shift"
-};
-  // ---- build agents ----
-var AGENTS=[],_id=0;
-DATA.squads.forEach(function(sq){(DATA.members[sq]||[]).forEach(function(nm){AGENTS.push({id:++_id,name:nm,squad:sq,rating:3,allowedShifts:[]});});});
-var WEEKS=[{n:31,r:"07/27 – 08/02"},{n:32,r:"08/03 – 08/09"},{n:33,r:"08/10 – 08/16"},{n:34,r:"08/17 – 08/23"},{n:35,r:"08/24 – 08/30"},{n:36,r:"08/31 – 09/06"},{n:37,r:"09/07 – 09/13"},{n:38,r:"09/14 – 09/20"},{n:39,r:"09/21 – 09/27"},{n:40,r:"09/28 – 10/04"},{n:41,r:"10/05 – 10/11"},{n:42,r:"10/12 – 10/18"},{n:43,r:"10/19 – 10/25"},{n:44,r:"10/26 – 11/01"},{n:45,r:"11/02 – 11/08"},{n:46,r:"11/09 – 11/15"},{n:47,r:"11/16 – 11/22"},{n:48,r:"11/23 – 11/29"},{n:49,r:"11/30 – 12/06"},{n:50,r:"12/07 – 12/13"},{n:51,r:"12/14 – 12/20"},{n:52,r:"12/21 – 12/27"},{n:53,r:"12/28 – 01/03"}];
-function A(id){for(var i=0;i<AGENTS.length;i++)if(AGENTS[i].id===id)return AGENTS[i];return null;}
-function isQ(sq){return !!DATA.queueSquads[sq];}
-function elig(sq){return DATA.queueSquads[sq]||[];}
-function prefShift(a){return DATA.shifts[a.id%DATA.shifts.length];}
-function two(n){return (n<10?'0':'')+n;}
-function hhmm(d){var h=Math.floor(d),m=Math.round((d-h)*60);if(m===60){h++;m=0;}return two(h)+':'+two(m);}
-function ini(n){return n.split(' ').map(function(w){return w[0];}).slice(0,2).join('').toUpperCase();}
-function h12(x){var ap=x>=12?'am':'am';ap=x>=12?'pm':'am';var hh=x%12;if(hh===0)hh=12;return hh+':00 '+ap;}
-function fmtShift(s){var p=s.split('-');return h12(+p[0])+' - '+h12(+p[1]);}
-function h12s(x){var ap=x>=12?'pm':'am';var hh=x%12;if(hh===0)hh=12;return hh+ap;}
-function fmtShiftShort(s){var p=s.split('-');return h12s(+p[0])+'–'+h12s(+p[1]);}
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BA CS Scheduler</title>
+    <style>
+        /* Estilos base para el modo oscuro y layout limpio */
+        :root {
+            --bg-main: #0d1117;
+            --bg-card: #161b22;
+            --border-color: #30363d;
+            --text-main: #c9d1d9;
+            --text-muted: #8b949e;
+            --accent: #58a6ff;
+            --accent-bg: rgba(88, 166, 255, 0.1);
+            --danger: #f85149;
+        }
 
-var state={view:'horario',role:'admin',selShift:DATA.shifts[0],sel:null,toast:null,modal:null,assign:{},request:{},reqNote:'',reqWeek:'31',restrictId:null,horarioMode:'board',weekPlan:{},gridWeek:'31',reqType:'special'};
-var tt=null;
-function fire(m,t){state.toast={m:m,t:t||'ok'};render();if(tt)clearTimeout(tt);tt=setTimeout(function(){state.toast=null;render();},3400);}
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-function assignBreaks(){
-  var g={};
-  Object.keys(state.assign).forEach(function(id){var as=state.assign[id],a=A(+id);if(!a)return;var k=as.shift+'|'+a.squad+'|'+as.queue;(g[k]=g[k]||[]).push(+id);});
-  Object.keys(g).forEach(function(k){var sh=k.split('|')[0],p=sh.split('-'),stt=+p[0],en=+p[1];g[k].forEach(function(id,i){var b1=stt+1.5+i*0.5,b2=stt+4.5+i*0.5;if(b2>en-0.5)b2=en-1-i*0.5;state.assign[id].b1=hhmm(b1);state.assign[id].b2=hhmm(b2);});});
-}
-function generate(mode){
-  state.assign={};var used={};
-  DATA.shifts.forEach(function(shift){
-    var cov=DATA.coverage[shift]||{};var qs=Object.keys(cov);
-    qs.sort(function(a,b){return (DATA.directQueues.indexOf(b)>=0)-(DATA.directQueues.indexOf(a)>=0);});
-    qs.forEach(function(q){
-      var need=cov[q];
-      var c=AGENTS.filter(function(a){return !used[a.id]&&isQ(a.squad)&&elig(a.squad).indexOf(q)>=0&&(!a.allowedShifts||!a.allowedShifts.length||a.allowedShifts.indexOf(shift)>=0);});
-      if(mode==='request')c.sort(function(a,b){var pa=prefShift(a)===shift?0:1,pb=prefShift(b)===shift?0:1;return pa-pb||b.rating-a.rating||a.id-b.id;});
-      else c.sort(function(a,b){return b.rating-a.rating||a.id-b.id;});
-      for(var i=0;i<need&&i<c.length;i++){used[c[i].id]=true;state.assign[c[i].id]={shift:shift,queue:q,b1:null,b2:null};}
-    });
-  });
-  assignBreaks();state.modal=null;
-  fire('Horario generado — '+(mode==='request'?'con request (preferencias)':'por puntuación (mérito)')+'. Ajustá y publicá.','ok');
-}
-function moveAgent(id,shift,q){
-  var a=A(id);if(!a)return;
-  if(q!=='off'){var wn=[];if(!isQ(a.squad)||elig(a.squad).indexOf(q)<0)wn.push('su squad no suele tomar «'+q+'»');if(a.allowedShifts&&a.allowedShifts.length&&a.allowedShifts.indexOf(shift)<0)wn.push('está restringido a '+a.allowedShifts.map(fmtShiftShort).join(', '));if(wn.length)fire('Excepción manual: '+a.name.split(' ')[0]+' '+wn.join(' y ')+'. Asignado igual.','warn');}
-  if(q==='off')delete state.assign[id];else state.assign[id]={shift:shift,queue:q,b1:null,b2:null};
-  assignBreaks();
-}
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            line-height: 1.5;
+        }
 
-/* ---------- UI ---------- */
-function stars(n,id){var h='<span style="display:inline-flex;gap:2px">';for(var i=1;i<=5;i++){var on=i<=n;h+='<span '+(id?'data-star="'+id+'" data-val="'+i+'" style="cursor:pointer"':'')+'>'+ic('star',{size:id?15:11,sw:1.5,fill:on?'var(--amber)':'transparent',color:on?'var(--amber)':'var(--line)'})+'</span>';}return h+'</span>';}
-function chip(id,selFrom){var a=A(id);if(!a)return'';var as=state.assign[id];var hue=(a.id*47)%360;var sel=state.sel&&state.sel.id===id;
- var br=as&&as.b1?'<div class="mono" style="font-size:9px;color:var(--faint);margin-top:1px">br '+as.b1+' / '+as.b2+'</div>':'';
- return '<div class="chip'+(sel?' selRing':'')+'" data-agent="'+id+'" style="display:flex;align-items:center;gap:8px;padding:4px 10px 4px 4px;border-radius:12px;border:1px solid var(--line);background:var(--panel2)">'
- +'<div class="display" style="width:28px;height:28px;border-radius:8px;flex-shrink:0;display:grid;place-items:center;font-size:10px;font-weight:700;color:#0B0C13;background:linear-gradient(135deg,hsl('+hue+' 70% 72%),hsl('+((hue+40)%360)+' 80% 62%))">'+ini(a.name)+'</div>'
- +'<div style="line-height:1.1"><div style="font-size:12px;font-weight:600;white-space:nowrap">'+a.name.split(' ')[0]+' '+(a.name.split(' ')[1]?a.name.split(' ')[1][0]+'.':'')+'</div>'
- +'<div style="font-size:10px;color:var(--iris2)">'+a.squad+'</div>'+br+'</div></div>';}
+        #app {
+            display: flex;
+            min-height: 100vh;
+        }
 
-function schedule(){
- var shift=state.selShift;var cov=DATA.coverage[shift]||{};
- var tabs=DATA.shifts.map(function(s){return '<button class="btn" data-shift="'+s+'" style="padding:8px 12px;border-radius:11px;font-size:12.5px;font-weight:600;background:'+(s===shift?'var(--iris)':'var(--panel2)')+';color:'+(s===shift?'#0B0C13':'var(--mist)')+';border:1px solid var(--line)">'+fmtShiftShort(s)+'</button>';}).join('');
- var selBar=state.sel?'<div class="toast" style="margin:0 0 12px;font-size:13px;color:var(--iris2);display:flex;gap:8px;align-items:center"><span>Moviendo a <b>'+A(state.sel.id).name+'</b> — tocá un queue de este shift.</span><button class="btn" data-act="cancel" style="background:var(--panel2);color:var(--mist);border:1px solid var(--line);border-radius:8px;padding:3px 8px;font-size:12px">Cancelar</button></div>':'';
- var qkeys=Object.keys(cov).sort(function(a,b){return (DATA.directQueues.indexOf(b)>=0)-(DATA.directQueues.indexOf(a)>=0);});
- var lanes=qkeys.map(function(q){
-   var target=cov[q];var ids=Object.keys(state.assign).filter(function(id){return state.assign[id].shift===shift&&state.assign[id].queue===q;}).map(Number);
-   var direct=DATA.directQueues.indexOf(q)>=0;var st=ids.length<target?{c:'var(--rose)',l:'Faltan '+(target-ids.length)}:(ids.length>target?{c:'var(--amber)',l:'+'+(ids.length-target)}:{c:'var(--mint)',l:'OK'});
-   var fill=Math.min(100,ids.length/target*100);
-   var chips=ids.length?ids.map(function(id){return chip(id);}).join(''):'<span style="font-size:12px;color:var(--faint);font-style:italic">Sin asignar</span>';
-   return '<div class="lane glass lift'+(ids.length<target?' pulse':'')+'" data-lane="'+q+'" style="padding:15px;cursor:'+(state.sel?'pointer':'default')+'">'
-   +'<div style="display:flex;justify-content:space-between;align-items:center"><div class="display" style="font-weight:600;font-size:14px">'+q+(direct?' <span style="font-size:9px;color:var(--iris2);border:1px solid var(--line);border-radius:6px;padding:1px 5px;vertical-align:middle">DIRECTO</span>':'')+'</div><div style="font-size:11px;font-weight:600;color:'+st.c+';background:var(--panel2);border:1px solid var(--line);padding:2px 8px;border-radius:999px">'+st.l+'</div></div>'
-   +'<div style="display:flex;align-items:baseline;gap:5px;margin:6px 0"><span class="mono display" style="font-size:22px;font-weight:700;color:'+st.c+'">'+ids.length+'</span><span class="mono" style="font-size:12px;color:var(--faint)">/ '+target+'</span></div>'
-   +'<div style="height:4px;border-radius:999px;background:var(--line);overflow:hidden;margin-bottom:11px"><div class="meter-fill" style="height:100%;width:'+fill+'%;background:'+st.c+'"></div></div>'
-   +'<div style="display:flex;flex-wrap:wrap;gap:7px;min-height:34px">'+chips+'</div></div>';
- }).join('');
- var benchIds=AGENTS.filter(function(a){return isQ(a.squad)&&!state.assign[a.id]&&elig(a.squad).some(function(q){return cov[q];});}).map(function(a){return a.id;});
- var bench='<div class="glass" data-lane="off" style="margin-top:14px;padding:15px"><div style="font-size:13px;font-weight:600;color:var(--mist);margin-bottom:10px">Disponibles para este shift ('+benchIds.length+')</div><div style="display:flex;flex-wrap:wrap;gap:7px">'+(benchIds.length?benchIds.map(function(id){return chip(id);}).join(''):'<span style="font-size:12px;color:var(--faint)">Ninguno libre.</span>')+'</div></div>';
- // non-queue panel
- var fs=(DATA.members['Floor Support']||[]).map(function(n){return n.split(' ')[0];}).join(', ');
- var su=(DATA.members['Supervisors']||[]).map(function(n){return n.split(' ')[0];}).join(', ');
- var ns=(DATA.members['Night Shift']||[]).length;
- var side='<div class="glass" style="margin-top:14px;padding:15px;font-size:12.5px;color:var(--mist)"><div class="display" style="font-weight:600;color:var(--chalk);margin-bottom:8px">Fuera del pool de queues</div>'
-  +'<div style="margin-bottom:6px"><b style="color:var(--chalk)">Floor Support:</b> CX Report / Leads (task cambia por día) — '+fs+'</div>'
-  +'<div style="margin-bottom:6px"><b style="color:var(--chalk)">Supervisors:</b> Leads / tareas propias — '+su+'</div>'
-  +'<div><b style="color:var(--chalk)">Night Shift ('+ns+'):</b> los asigna su supervisor por día (turno 22–06).</div></div>';
- return '<div class="view"><div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px">'+tabs+'</div>'+selBar+'<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px">'+lanes+'</div>'+bench+side+'</div>';
-}
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            background-color: var(--bg-card);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            padding: 1.5rem 1rem;
+        }
 
-function team(){
- var admin=state.role==='admin';
- var add=admin?'<div class="glass" style="padding:16px;margin-bottom:14px"><div class="display" style="font-weight:600;margin-bottom:12px">Agregar agente</div><div style="display:flex;gap:8px;flex-wrap:wrap"><input id="nn" placeholder="Nombre completo" style="flex:1;min-width:160px"/><select id="ns">'+DATA.squads.map(function(s){return '<option>'+s+'</option>';}).join('')+'</select><button class="btn" data-act="addagent" style="background:var(--iris);color:#0B0C13;font-weight:700;border-radius:10px;padding:8px 16px;font-size:13px;display:flex;align-items:center;gap:6px">'+ic('plus',{size:15,color:"#0B0C13"})+'Agregar</button></div></div>':'';
- var bySquad={};AGENTS.forEach(function(a){(bySquad[a.squad]=bySquad[a.squad]||[]).push(a);});
- var cards=DATA.squads.filter(function(s){return bySquad[s];}).map(function(s){
-   var rows=bySquad[s].map(function(a){
-     var rs=(a.allowedShifts&&a.allowedShifts.length)?a.allowedShifts.map(fmtShiftShort).join(', '):'Todos';var rc=(a.allowedShifts&&a.allowedShifts.length)?'var(--amber)':'var(--faint)';
-     return '<div style="padding:8px 0;border-bottom:1px solid var(--line)"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><span style="font-size:13px;flex:1">'+a.name+'</span>'+stars(a.rating,admin?a.id:0)+(admin?'<span class="btn" data-act="rmagent" data-id="'+a.id+'" style="cursor:pointer;color:var(--faint);padding-left:6px" title="Quitar">'+ic('trash',{size:15,color:"var(--faint)"})+'</span>':'')+'</div>'+(admin?'<div class="btn" data-act="restrict" data-id="'+a.id+'" style="margin-top:5px;font-size:10.5px;color:'+rc+';cursor:pointer;display:inline-flex;align-items:center;gap:5px">'+ic('cal',{size:12,color:rc})+'Turnos: '+rs+'</div>':'')+'</div>';
-   }).join('');
-   return '<div class="glass" style="padding:16px"><div style="display:flex;justify-content:space-between;margin-bottom:10px"><span class="display" style="font-weight:600">'+s+'</span><span class="mono" style="font-size:12px;color:var(--faint)">'+bySquad[s].length+'</span></div>'+rows+'</div>';
- }).join('');
- return '<div class="view">'+add+'<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px">'+cards+'</div></div>';
-}
+        .brand {
+            font-size: 1.25rem;
+            font-weight: bold;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #fff;
+        }
 
-function dashboard(){
- var totDir=0,covDir=0;
- DATA.shifts.forEach(function(sh){var cov=DATA.coverage[sh]||{};Object.keys(cov).forEach(function(q){if(DATA.directQueues.indexOf(q)>=0){totDir+=cov[q];covDir+=Math.min(cov[q],Object.keys(state.assign).filter(function(id){return state.assign[id].shift===sh&&state.assign[id].queue===q;}).length);}});});
- var pct=totDir?Math.round(covDir/totDir*100):0;
- function card(l,v,s,c){return '<div class="glass lift" style="padding:18px"><div style="font-size:12px;color:var(--mist);margin-bottom:8px">'+l+'</div><div class="display mono" style="font-size:28px;font-weight:700;color:'+(c||'var(--chalk)')+'">'+v+'</div>'+(s?'<div style="font-size:11px;color:var(--faint);margin-top:6px">'+s+'</div>':'')+'</div>';}
- return '<div class="view"><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px">'
- +card('Agentes',AGENTS.length,DATA.squads.length+' squads')
- +card('Cobertura directa',pct+'%','Chats + Phones', pct>=100?'var(--mint)':'var(--amber)')
- +card('Shifts',DATA.shifts.length,'6:00 – 23:00')
- +card('Asignados hoy',Object.keys(state.assign).length,'del pool de queues','var(--iris2)')
- +'</div><div class="glass" style="margin-top:14px;padding:18px;font-size:13px;color:var(--mist)">La cobertura prioriza los tasks de comunicación directa (<b style="color:var(--chalk)">Chats y Phones</b>). Usá «Generar horario» y elegí el modo (mérito o con request), después ajustá en la pestaña Horario.</div></div>';
-}
+        .nav-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
 
-function agentView(){var me=AGENTS[0];var as=state.assign[me.id];
- return '<div class="view"><div class="glass" style="padding:18px;margin-bottom:14px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px"><div><div class="display" style="font-weight:600;font-size:18px">Hola, '+me.name.split(' ')[0]+'</div><div style="font-size:12px;color:var(--mist);margin-top:4px">'+me.squad+'</div></div><div style="text-align:right"><div style="font-size:11px;color:var(--mist)">Mi calificación</div><div style="margin-top:4px">'+stars(me.rating,0)+'</div></div></div>'
- +'<div class="glass" style="padding:18px;margin-bottom:14px"><div class="display" style="font-weight:600;margin-bottom:10px">Mi asignación de hoy</div>'+(as?'<div style="font-size:14px">Shift <b>'+fmtShift(as.shift)+'</b> · Queue <b style="color:var(--iris2)">'+as.queue+'</b> · Breaks '+as.b1+' / '+as.b2+'</div>':'<div style="font-size:13px;color:var(--faint)">Día libre / sin asignar.</div>')+'</div>'
- +'</div>';
-}
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: all 0.2s;
+        }
 
-function cellLabel(v){return (DATA.shifts.indexOf(v)>=0)?fmtShiftShort(v):v;}
-function cellStyle(v){
- if(v==='OFF')return{bg:'rgba(255,255,255,.03)',fg:'var(--faint)'};
- if(v==='VAC')return{bg:'rgba(255,255,255,.09)',fg:'var(--chalk)'};
- if(v==='INC'||v==='SUSP')return{bg:'rgba(255,107,129,.13)',fg:'var(--rose)'};
- var sh=(v==='10pm-6am')?22:(v.indexOf('-')>=0?parseInt(v.split('-')[0],10):12);
- if(sh<12)return{bg:'rgba(95,211,163,.13)',fg:'var(--mint)'};
- if(sh<16)return{bg:'rgba(244,184,96,.13)',fg:'var(--amber)'};
- return{bg:'rgba(139,146,255,.15)',fg:'var(--iris2)'};
-}
-function wfmShuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
-function coverageSlots(n){var S=DATA.shifts;if(n<=0)return [];var open=S[0],close=S[S.length-1],mids=S.slice(1,S.length-1);if(n===1)return [open];var out=[open,close];var i=0;while(out.length<n){out.push(mids[i%mids.length]);i++;}return out;}
-function canTakeSlot(a,s){if(s==='10pm-6am')return true;if(a.allowedShifts&&a.allowedShifts.length)return a.allowedShifts.indexOf(s)>=0;return true;}
-function genWeek(){
- state.weekPlan={};
- var bySquad={};AGENTS.forEach(function(a){(bySquad[a.squad]=bySquad[a.squad]||[]).push(a);});
- Object.keys(bySquad).forEach(function(sq){
-  var roster=bySquad[sq];
-  var offCount=[0,0,0,0,0,0,0];var offs={};roster.forEach(function(a){offs[a.id]=[];});
-  roster.forEach(function(a){for(var n=0;n<2;n++){var cand=[0,1,2,3,4,5,6].filter(function(d){return offs[a.id].indexOf(d)<0;}).sort(function(x,y){return offCount[x]-offCount[y];});var d=cand[0];offs[a.id].push(d);offCount[d]++;}});
-  var plan={};roster.forEach(function(a){plan[a.id]=[];});
-  for(var d=0;d<7;d++){
-   var active=roster.filter(function(a){return offs[a.id].indexOf(d)<0;});
-   var slots=(sq==='Night Shift')?active.map(function(){return '10pm-6am';}):coverageSlots(active.length);
-   var order=wfmShuffle(active.slice()).sort(function(a,b){var la=(a.allowedShifts&&a.allowedShifts.length)?a.allowedShifts.length:99;var lb=(b.allowedShifts&&b.allowedShifts.length)?b.allowedShifts.length:99;return la-lb;});
-   var rem=slots.slice();
-   order.forEach(function(a){var ci=-1;for(var i=0;i<rem.length;i++){if(canTakeSlot(a,rem[i])){ci=i;break;}}if(ci<0){plan[a.id][d]=(a.allowedShifts&&a.allowedShifts.length)?a.allowedShifts[0]:(rem[0]||DATA.shifts[0]);}else{plan[a.id][d]=rem[ci];rem.splice(ci,1);}});
-  }
-  roster.forEach(function(a){var arr=[];for(var d=0;d<7;d++){arr[d]=(offs[a.id].indexOf(d)>=0)?'OFF':plan[a.id][d];}state.weekPlan[a.id]=arr;});
- });
- var pmSet=['13-21','14-22','15-23'],amOpen=['06-14','07-15'];
- var bySq2={};AGENTS.forEach(function(a){(bySq2[a.squad]=bySq2[a.squad]||[]).push(a);});
- Object.keys(bySq2).forEach(function(sq){var roster=bySq2[sq];for(var d=0;d<6;d++){roster.forEach(function(a){var cur=state.weekPlan[a.id][d],nx=state.weekPlan[a.id][d+1];if(pmSet.indexOf(cur)>=0&&amOpen.indexOf(nx)>=0){var peer=roster.filter(function(p){return p.id!==a.id&&pmSet.indexOf(state.weekPlan[p.id][d+1])>=0&&canTakeSlot(a,state.weekPlan[p.id][d+1])&&canTakeSlot(p,nx);})[0];if(peer){var t=state.weekPlan[a.id][d+1];state.weekPlan[a.id][d+1]=state.weekPlan[peer.id][d+1];state.weekPlan[peer.id][d+1]=t;}}});}});
-}
-function weekDates(wk){var p=wk.r.split(' ')[0];var mm=parseInt(p.split('/')[0],10),dd=parseInt(p.split('/')[1],10);var base=new Date(2026,mm-1,dd);var M=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];var out=[];for(var i=0;i<7;i++){var d=new Date(base.getTime()+i*86400000);out.push(d.getDate()+' '+M[d.getMonth()]);}return out;}
-function weekGridView(){
- if(!Object.keys(state.weekPlan).length)genWeek();
- var wk=WEEKS.filter(function(w){return String(w.n)===String(state.gridWeek);})[0]||WEEKS[0];
- var dts=weekDates(wk);var dn=['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'];
- var lg=function(c,t){return '<span><span style="display:inline-block;width:9px;height:9px;border-radius:3px;background:'+c+';margin-right:4px"></span>'+t+'</span>';};
- var wsel='<div style="display:flex;align-items:center;gap:14px;margin-bottom:16px;flex-wrap:wrap"><select id="gridweek" style="min-width:240px">'+WEEKS.map(function(w){return '<option value="'+w.n+'"'+(String(state.gridWeek)===String(w.n)?' selected':'')+'>Semana '+w.n+' · '+w.r+'</option>';}).join('')+'</select><div style="display:flex;gap:12px;font-size:10.5px;color:var(--mist)">'+lg('rgba(95,211,163,.6)','Mañana')+lg('rgba(244,184,96,.6)','Tarde')+lg('rgba(139,146,255,.6)','Noche')+lg('rgba(255,255,255,.18)','OFF/VAC')+'</div></div>';
- var th='<tr><th style="text-align:left;padding:7px 10px;border:1px solid var(--line);font-size:11px;color:var(--mist);background:var(--panel2)">Agente</th>'+dn.map(function(x,i){return '<th style="text-align:center;padding:6px;border:1px solid var(--line);font-size:11px;color:var(--chalk);background:var(--panel2)">'+x+'<div style="font-size:9px;color:var(--faint);font-weight:400">'+dts[i]+'</div></th>';}).join('')+'</tr>';
- var bySquad={};AGENTS.forEach(function(a){(bySquad[a.squad]=bySquad[a.squad]||[]).push(a);});
- var secs=DATA.squads.filter(function(s){return bySquad[s];}).map(function(s){
-  var rows=bySquad[s].map(function(a){var pl=state.weekPlan[a.id]||[];var cells=pl.map(function(v){var st=cellStyle(v);return '<td style="text-align:center;padding:6px 5px;border:1px solid var(--line);font-size:10px;font-weight:600;background:'+st.bg+';color:'+st.fg+';white-space:nowrap">'+cellLabel(v)+'</td>';}).join('');return '<tr><td style="padding:6px 10px;border:1px solid var(--line);font-size:11px;white-space:nowrap;background:var(--ink)">'+a.name+'</td>'+cells+'</tr>';}).join('');
-  return '<div style="margin-bottom:18px"><div class="display" style="font-weight:600;font-size:13.5px;margin-bottom:8px;color:var(--iris2)">'+s+'</div><div class="scroll" style="overflow-x:auto;border-radius:10px;border:1px solid var(--line)"><table style="border-collapse:collapse;width:100%;min-width:600px">'+th+rows+'</table></div></div>';
- }).join('');
- return '<div class="view">'+wsel+secs+'</div>';
-}
-var REQUESTS=[];var _rid=0;
-function addReq(o){o.id=++_rid;o.status='Pendiente';o.when=new Date().toLocaleDateString('es-CR');REQUESTS.unshift(o);}
-function statusColor(s){return s==='Aprobado'?'var(--mint)':s==='Rechazado'?'var(--rose)':'var(--amber)';}
-function reqTypeName(t){return {Special:'Special request',Vacaciones:'Vacations',Swap:'Swap',Educational:'Educational'}[t]||t;}
-function reqSummary(r){
- if(r.type==='Special')return (r.choice==='OFF'?'OFF':fmtShiftShort(r.choice))+' el '+r.day+(r.comment?' — “'+r.comment+'”':'');
- if(r.type==='Vacaciones')return 'Del '+r.from+' al '+r.to+(r.comment?' — “'+r.comment+'”':'');
- if(r.type==='Swap')return 'Swap del '+r.day+' con '+r.withName+(r.note?' — “'+r.note+'”':'');
- if(r.type==='Educational')return (r.files&&r.files.length?r.files.join(', '):'sin archivos')+(r.comment?' — “'+r.comment+'”':'');
- return '';
-}
-function optShifts(off){var o=off?'<option value="OFF">OFF — día libre</option>':'';DATA.shifts.forEach(function(s){o+='<option value="'+s+'">'+fmtShift(s)+'</option>';});return o;}
-function reqRow(r,admin){
- var badge='<span style="font-size:11px;font-weight:600;padding:3px 10px;border-radius:999px;color:'+statusColor(r.status)+';background:var(--panel2);border:1px solid var(--line)">'+r.status+'</span>';
- var actions='';
- if(admin&&r.status==='Pendiente'){actions='<div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap"><button class="btn" data-act="reqok" data-id="'+r.id+'" style="background:rgba(95,211,163,.15);color:var(--mint);border:1px solid var(--line);border-radius:9px;padding:6px 12px;font-size:12px;font-weight:600">Aprobar</button><button class="btn" data-act="reqno" data-id="'+r.id+'" style="background:rgba(255,107,129,.13);color:var(--rose);border:1px solid var(--line);border-radius:9px;padding:6px 12px;font-size:12px;font-weight:600">Rechazar</button>'+(r.type==='Educational'?'<button class="btn" data-act="restrict" data-id="'+r.agentId+'" style="background:var(--panel2);color:var(--iris2);border:1px solid var(--line);border-radius:9px;padding:6px 12px;font-size:12px;font-weight:600">Agregar restricción</button>':'')+'</div>';}
- return '<div style="padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--panel);margin-bottom:10px"><div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap"><div><span style="font-size:10px;color:var(--iris2);font-weight:600;text-transform:uppercase;letter-spacing:.08em">'+reqTypeName(r.type)+'</span>'+(admin?' · <b style="font-size:13px">'+r.agentName+'</b>':'')+'<div style="font-size:12.5px;color:var(--mist);margin-top:3px">'+reqSummary(r)+'</div><div style="font-size:10px;color:var(--faint);margin-top:3px">'+r.when+'</div></div>'+badge+'</div>'+actions+'</div>';
-}
-function reqFormBox(title,inner,act,btn){return '<div class="glass" style="padding:20px;max-width:560px"><div class="display" style="font-weight:600;margin-bottom:12px">'+title+'</div>'+inner+'<button class="btn" data-act="'+act+'" style="margin-top:14px;background:var(--iris);color:#0B0C13;font-weight:700;border-radius:11px;padding:10px 18px;font-size:13px;display:flex;align-items:center;gap:8px">'+ic('send',{size:15,color:"#0B0C13"})+btn+'</button></div>';}
-function lbl(t){return '<div style="font-size:12px;color:var(--mist);margin:0 0 6px">'+t+'</div>';}
-function requestsView(){
- var me=AGENTS[0];
- var types=[['special','Special request'],['vacations','Vacations'],['swaps','Swaps'],['educational','Educational special requests'],['myreq','My requests']];
- var sel='<select id="reqtypesel" style="width:100%;max-width:440px;margin-bottom:18px">'+types.map(function(t){return '<option value="'+t[0]+'"'+(state.reqType===t[0]?' selected':'')+'>'+t[1]+'</option>';}).join('')+'</select>';
- var form='';
- if(state.reqType==='special'){form=reqFormBox('Special request',lbl('Día que necesitás')+'<input type="date" id="sp_day" style="width:100%;margin-bottom:12px"/>'+lbl('Qué necesitás ese día')+'<select id="sp_choice" style="width:100%;margin-bottom:12px">'+optShifts(true)+'</select>'+lbl('Motivo')+'<textarea id="sp_comment" rows="3" style="width:100%;resize:vertical"></textarea>','sendspecial','Enviar al Admin');}
- else if(state.reqType==='vacations'){form=reqFormBox('Vacations','<div style="display:flex;gap:12px;flex-wrap:wrap"><div style="flex:1;min-width:150px">'+lbl('Desde')+'<input type="date" id="vc_from" style="width:100%"/></div><div style="flex:1;min-width:150px">'+lbl('Hasta')+'<input type="date" id="vc_to" style="width:100%"/></div></div><div style="margin-top:12px">'+lbl('Comentario (opcional)')+'<textarea id="vc_comment" rows="2" style="width:100%;resize:vertical"></textarea></div>','sendvac','Enviar al Admin');}
- else if(state.reqType==='swaps'){var others=AGENTS.filter(function(a){return a.id!==me.id;}).map(function(a){return '<option value="'+a.id+'">'+a.name+' · '+a.squad+'</option>';}).join('');form=reqFormBox('Swap de horario',lbl('Día a intercambiar')+'<input type="date" id="sw_day" style="width:100%;margin-bottom:12px"/>'+lbl('Con quién querés swapear')+'<select id="sw_with" style="width:100%;margin-bottom:12px">'+others+'</select>'+lbl('Nota (opcional)')+'<textarea id="sw_note" rows="2" style="width:100%;resize:vertical"></textarea>','sendswap','Solicitar swap');}
- else if(state.reqType==='educational'){form=reqFormBox('Educational special request','<p style="font-size:12px;color:var(--mist);margin:0 0 14px">Subí el comprobante de matrícula y tus horarios (PDF, Word o imagen). El Admin los revisa y agrega tus restricciones de turno.</p>'+lbl('Archivos')+'<input type="file" id="ed_files" multiple accept=".pdf,.doc,.docx,image/*" style="width:100%;margin-bottom:12px"/>'+lbl('Comentario')+'<textarea id="ed_comment" rows="2" style="width:100%;resize:vertical"></textarea>','sendedu','Enviar al Admin');}
- else{var mine=REQUESTS.filter(function(r){return r.agentId===me.id;});form='<div class="glass" style="padding:20px;max-width:640px"><div class="display" style="font-weight:600;margin-bottom:12px">My requests</div>'+(mine.length?mine.map(function(r){return reqRow(r,false);}).join(''):'<div style="font-size:13px;color:var(--faint)">Todavía no enviaste solicitudes.</div>')+'</div>';}
- return '<div class="view">'+sel+form+'</div>';
-}
-function adminRequestsView(){
- var pend=REQUESTS.filter(function(r){return r.status==='Pendiente';}).length;
- return '<div class="view"><div class="glass" style="padding:20px;max-width:720px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px"><div class="display" style="font-weight:600">Solicitudes de agentes</div><span class="mono" style="font-size:12px;color:var(--amber)">'+pend+' pendientes</span></div>'+(REQUESTS.length?REQUESTS.map(function(r){return reqRow(r,true);}).join(''):'<div style="font-size:13px;color:var(--faint)">No hay solicitudes por ahora.</div>')+'</div></div>';
-}
-function navList(){return state.role==='agent'?[{id:'mi',i:'user',l:'Mi horario',s:'Horario'},{id:'solicitar',i:'cal',l:'Solicitar horario',s:'Solicitar'},{id:'requests',i:'inbox',l:'Requests',s:'Requests'}]:[{id:'dashboard',i:'dash',l:'Dashboard',s:'Panel'},{id:'horario',i:'cal',l:'Horario',s:'Horario'},{id:'equipo',i:'users',l:'Equipo',s:'Equipo'}].concat(state.role==='admin'?[{id:'requests',i:'inbox',l:'Requests',s:'Requests'},{id:'settings',i:'settings',l:'Ajustes',s:'Ajustes'}]:[]);}
-function bottomNav(){return '<nav class="botnav">'+navList().map(function(n){var on=state.view===n.id;return '<div class="bn'+(on?' on':'')+'" data-nav="'+n.id+'">'+ic(n.i,{size:20,color:on?'var(--iris2)':'var(--mist)'})+'<span>'+n.s+'</span></div>';}).join('')+'</nav>';}
-function mobileRoleBar(){var rs=[{r:'admin',l:'Admin'},{r:'supervisor',l:'Supervisor'},{r:'agent',l:'Agente'}];return '<div class="mrole">'+rs.map(function(x){var on=state.role===x.r;return '<button class="btn" data-role="'+x.r+'" style="flex:1;padding:7px;border-radius:9px;font-size:12px;font-weight:600;background:'+(on?'var(--iris)':'transparent')+';color:'+(on?'#0B0C13':'var(--mist)')+'">'+x.l+'</button>';}).join('')+'</div>';}
-function rail(){
- var nav=navList();
- var items=nav.map(function(n){var on=state.view===n.id;return '<div class="navitem" data-nav="'+n.id+'" style="display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:11px;background:'+(on?'var(--irisSoft)':'transparent')+';color:'+(on?'var(--chalk)':'var(--mist)')+'">'+ic(n.i,{size:18,color:on?'var(--iris2)':'var(--mist)'})+'<span class="rail-label" style="font-size:13.5px;font-weight:'+(on?600:500)+'">'+n.l+'</span></div>';}).join('');
- var roles=[{r:'admin',i:'shield',l:'Admin'},{r:'supervisor',i:'users',l:'Supervisor'},{r:'agent',i:'user',l:'Agente'}].map(function(x){var on=state.role===x.r;return '<div class="navitem" data-role="'+x.r+'" style="display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:10px;background:'+(on?'var(--panel2)':'transparent')+';color:'+(on?'var(--chalk)':'var(--faint)')+'">'+ic(x.i,{size:15})+'<span class="rail-label" style="font-size:12.5px">'+x.l+'</span></div>';}).join('');
- return '<aside class="rail" style="width:206px;flex-shrink:0;border-right:1px solid var(--line);padding:20px 12px;position:sticky;top:0;height:100vh;display:flex;flex-direction:column;gap:4px;background:rgba(11,12,19,.5);backdrop-filter:blur(10px)"><div style="display:flex;align-items:center;gap:10px;padding:4px 8px 18px"><div style="width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,var(--iris),var(--amber));display:grid;place-items:center">'+ic('sparkles',{size:16,color:"#0B0C13"})+'</div><span class="display rail-label" style="font-weight:700;font-size:13px;white-space:nowrap">BA CS Scheduler</span></div>'+items+'<div style="margin-top:auto"><div class="rail-label" style="font-size:10px;color:var(--faint);padding:0 8px 8px;text-transform:uppercase;letter-spacing:.08em">Ver como</div><div style="display:flex;flex-direction:column;gap:4px">'+roles+'</div></div></aside>';
-}
-function header(){
- var t={dashboard:'Resumen operativo',horario:'Horario semanal',equipo:'Equipo',settings:'Ajustes',mi:'Mi espacio',solicitar:'Solicitar horario',requests:'Requests'}[state.view];
- var sub=state.view==='horario'?(state.horarioMode==='week'?'Vista semanal por squad — formato del horario publicado.':'Tocá un agente y luego un queue para moverlo. Cobertura por shift × queue; Chats/Phones marcados como directos.'):'Customer Service';
- var act='';
- if(state.view==='horario'&&(state.role==='admin'||state.role==='supervisor')){
-  var wkm=state.horarioMode==='week';
-  var toggle='<div style="display:flex;gap:2px;background:var(--panel2);border:1px solid var(--line);border-radius:11px;padding:3px"><button class="btn" data-act="modeboard" style="padding:7px 13px;border-radius:9px;font-size:12.5px;font-weight:600;background:'+(!wkm?'var(--iris)':'transparent')+';color:'+(!wkm?'#0B0C13':'var(--mist)')+'">Tablero</button><button class="btn" data-act="modeweek" style="padding:7px 13px;border-radius:9px;font-size:12.5px;font-weight:600;background:'+(wkm?'var(--iris)':'transparent')+';color:'+(wkm?'#0B0C13':'var(--mist)')+'">Semana</button></div>';
-  var abtn='';
-  if(state.role==='admin'){ if(wkm){abtn='<button class="btn" data-act="genweek" style="display:flex;align-items:center;gap:8px;padding:10px 16px;border-radius:12px;background:var(--iris);color:#0B0C13;font-size:13px;font-weight:700">'+ic('sparkles',{size:16,color:"#0B0C13"})+'<span class="lbl">Generar semana</span></button>';}else{abtn='<button class="btn" data-act="genopen" style="display:flex;align-items:center;gap:8px;padding:10px 16px;border-radius:12px;background:var(--panel2);color:var(--chalk);border:1px solid var(--line);font-size:13px;font-weight:600">'+ic('sparkles',{size:16,color:"var(--iris2)"})+'<span class="lbl">Generar horario</span></button><button class="btn" data-act="publish" style="display:flex;align-items:center;gap:8px;padding:10px 18px;border-radius:12px;background:var(--iris);color:#0B0C13;font-size:13px;font-weight:700">'+ic('send',{size:16,color:"#0B0C13"})+'<span class="lbl">Publicar</span></button>';} }
-  act='<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">'+toggle+abtn+'</div>';
- }
- return '<header style="display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:22px;flex-wrap:wrap"><div><h1 class="display" style="font-size:clamp(20px,3vw,26px);font-weight:700;margin:0">'+t+'</h1><div style="font-size:12.5px;color:var(--mist);margin-top:4px">'+sub+'</div></div>'+act+'</header>';
-}
-function genModal(){if(state.modal!=='gen')return'';
- function opt(act,title,desc){return '<button class="btn" data-act="'+act+'" style="text-align:left;display:block;width:100%;padding:16px;border-radius:14px;background:var(--panel2);border:1px solid var(--line);color:var(--chalk);margin-bottom:10px"><div class="display" style="font-weight:600;font-size:15px;margin-bottom:4px">'+title+'</div><div style="font-size:12.5px;color:var(--mist)">'+desc+'</div></button>';}
- return '<div data-backdrop="1" style="position:fixed;inset:0;background:rgba(5,6,12,.6);backdrop-filter:blur(4px);display:grid;place-items:center;padding:20px;z-index:60"><div data-body="1" class="glass" style="max-width:440px;width:100%;padding:22px;background:rgba(16,18,32,.98)"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px"><span class="display" style="font-weight:600;font-size:16px">Generar horario</span><span data-act="closemodal" style="cursor:pointer">'+ic('x',{size:18,color:"var(--mist)"})+'</span></div>'+opt('gen-merit','Por puntuación (mérito)','Asigna según calificación de mayor a menor, sin considerar requests.')+opt('gen-request','Con request','Respeta las preferencias de cada agente donde se pueda; la calificación desempata.')+'</div></div>';}
-function whyModal(){if(state.modal!=='why')return'';return '<div data-backdrop="1" style="position:fixed;inset:0;background:rgba(5,6,12,.6);backdrop-filter:blur(4px);display:grid;place-items:center;padding:20px;z-index:60"><div data-body="1" class="glass" style="max-width:470px;padding:24px;background:rgba(16,18,32,.98)"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px"><span class="display" style="font-weight:600">Explicación</span><span data-act="closemodal" style="cursor:pointer">'+ic('x',{size:18,color:"var(--mist)"})+'</span></div><p style="font-size:13.5px;line-height:1.6;color:var(--mist);margin:0 0 10px">No recibiste tu shift preferido porque:</p><ul style="margin:0;padding-left:18px;font-size:13.5px;line-height:1.7;color:var(--mist)"><li>Había agentes de tu squad con <b style="color:var(--chalk)">mayor calificación</b> pidiendo el mismo shift.</li><li>El sistema priorizó cubrir <b style="color:var(--chalk)">Chats y Phones</b> (comunicación directa).</li><li>La <b style="color:var(--chalk)">equidad</b> pesó a favor de quien no recibió su preferido las últimas semanas.</li></ul></div></div>';}
-function restrictModal(){if(state.modal!=='restrict')return'';var a=A(state.restrictId);if(!a)return'';var cur=a.allowedShifts||[];
- var chips=DATA.shifts.map(function(s){var on=cur.indexOf(s)>=0;return '<span class="btn" data-act="togshift" data-shift="'+s+'" style="padding:8px 12px;border-radius:10px;font-size:12px;font-weight:600;border:1px solid var(--line);background:'+(on?'var(--iris)':'var(--panel2)')+';color:'+(on?'#0B0C13':'var(--mist)')+'">'+fmtShift(s)+'</span>';}).join('');
- return '<div data-backdrop="1" style="position:fixed;inset:0;background:rgba(5,6,12,.6);backdrop-filter:blur(4px);display:grid;place-items:center;padding:20px;z-index:60"><div data-body="1" class="glass" style="max-width:470px;width:100%;padding:22px;background:rgba(16,18,32,.98)"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><span class="display" style="font-weight:600;font-size:15px">Turnos permitidos</span><span data-act="closemodal" style="cursor:pointer">'+ic('x',{size:18,color:"var(--mist)"})+'</span></div><div style="font-size:12px;color:var(--iris2);margin-bottom:4px">'+a.name+' · '+a.squad+'</div><p style="font-size:12px;color:var(--mist);margin-bottom:14px">Tocá los turnos a los que se puede asignar este agente. Sin selección = puede tomar cualquier turno.</p><div style="display:flex;flex-wrap:wrap;gap:8px">'+chips+'</div><button class="btn" data-act="closemodal" style="margin-top:18px;background:var(--iris);color:#0B0C13;font-weight:700;border-radius:11px;padding:9px 18px;font-size:13px">Listo</button></div></div>';
-}
-function toastEl(){if(!state.toast)return'';var t=state.toast;return '<div class="toast" style="position:fixed;bottom:24px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:10px;padding:12px 18px;border-radius:14px;background:rgba(16,18,32,.96);border:1px solid '+(t.t==='gap'?'var(--rose)':t.t==='warn'?'var(--amber)':'var(--mint)')+';color:var(--chalk);font-size:13px;box-shadow:0 12px 40px rgba(0,0,0,.5);max-width:90vw;z-index:50">'+(t.t==='gap'?ic('alert',{size:16,color:"var(--rose)"}):t.t==='warn'?ic('alert',{size:16,color:"var(--amber)"}):ic('check',{size:16,color:"var(--mint)"}))+t.m+'</div>';}
+        .nav-item:hover, .nav-item.active {
+            background-color: var(--border-color);
+            color: #fff;
+        }
 
-function solicitarView(){
- var days=['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'];
- var opts=function(sel){var o='<option value="OPEN"'+(sel==='OPEN'?' selected':'')+'>OPEN — disponible a cualquier hora</option><option value="OFF"'+(sel==='OFF'?' selected':'')+'>OFF — día libre</option>';DATA.shifts.forEach(function(s){o+='<option value="'+s+'"'+(sel===s?' selected':'')+'>'+fmtShift(s)+'</option>';});return o;};
- var rows=days.map(function(d,i){return '<div style="display:flex;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid var(--line)"><div style="width:92px;font-size:13px;font-weight:600">'+d+'</div><select id="req'+i+'" style="flex:1">'+opts(state.request[d]||'OPEN')+'</select></div>';}).join('');
- return '<div class="view"><div class="glass" style="padding:20px;max-width:660px">'
- +'<p style="font-size:12.5px;color:var(--mist);margin-bottom:16px">Elegí para cada día el shift que preferís, o marcá <b style=\'color:var(--chalk)\'>OFF</b> (día libre) u <b style=\'color:var(--chalk)\'>OPEN</b> (disponible a cualquier hora). El equipo de Workforce verá tu solicitud al generar el horario.</p>'
-  +'<div style="display:flex;align-items:center;gap:12px;margin-bottom:16px"><div style="width:92px;font-size:13px;font-weight:600">Semana</div><select id="reqweek" style="flex:1">'+WEEKS.map(function(w){return '<option value="'+w.n+'"'+(String(state.reqWeek)===String(w.n)?' selected':'')+'>Semana '+w.n+' · '+w.r+'</option>';}).join('')+'</select></div>'
- +rows
- +'<div style="margin-top:16px"><div style="font-size:12px;color:var(--mist);margin-bottom:6px">Nota especial (opcional)</div>'
- +'<textarea id="reqnote" rows="3" style="width:100%;resize:vertical">'+(state.reqNote||'')+'</textarea></div>'
- +'<button class="btn" data-act="sendreq" style="margin-top:16px;background:var(--iris);color:#0B0C13;font-weight:700;border-radius:11px;padding:10px 18px;font-size:13px;display:flex;align-items:center;gap:8px">'+ic('send',{size:16,color:"#0B0C13"})+'Enviar solicitud</button>'
- +'</div></div>';
-}
-function body(){var v=state.view;if(v==='dashboard')return dashboard();if(v==='horario')return state.horarioMode==='week'?weekGridView():schedule();if(v==='equipo')return team();if(v==='mi')return agentView();if(v==='solicitar')return solicitarView();if(v==='requests')return state.role==='admin'?adminRequestsView():requestsView();if(v==='settings')return '<div class="view glass" style="padding:20px;color:var(--mist);font-size:13.5px">Squads, queues por squad, shifts, cobertura por shift×queue y reglas legales — configurables aquí (se conecta al backend en la siguiente fase). Datos actuales: '+DATA.squads.length+' squads, '+DATA.shifts.length+' shifts.</div>';return'';}
-function render(){document.getElementById('app').innerHTML='<div style="display:flex;min-height:100vh">'+rail()+'<main class="mainwrap" style="flex:1;min-width:0;padding:22px clamp(16px,3vw,32px) 60px">'+mobileRoleBar()+header()+body()+'</main></div>'+bottomNav()+toastEl()+genModal()+whyModal()+restrictModal();}
+        .nav-item.active {
+            border-left: 4px solid var(--accent);
+            background-color: var(--accent-bg);
+        }
 
-var root=document.getElementById('app');
-root.addEventListener('click',function(e){var el;
- if((el=e.target.closest('[data-act]'))){var act=el.getAttribute('data-act');
-  if(act==='genopen'){state.modal='gen';render();return;}
-  if(act==='modeboard'){state.horarioMode='board';state.sel=null;render();return;}
-  if(act==='modeweek'){state.horarioMode='week';state.sel=null;if(!Object.keys(state.weekPlan).length)genWeek();render();return;}
-  if(act==='genweek'){genWeek();fire('Semana generada.','ok');return;}
-  if(act==='sendspecial'){var d=document.getElementById('sp_day').value,c=document.getElementById('sp_choice').value,cm=document.getElementById('sp_comment').value;if(!d){fire('Elegí un día.','gap');return;}addReq({type:'Special',agentId:AGENTS[0].id,agentName:AGENTS[0].name,day:d,choice:c,comment:cm});fire('Special request enviado al Admin ✓','ok');return;}
-  if(act==='sendvac'){var f=document.getElementById('vc_from').value,t=document.getElementById('vc_to').value,cm=document.getElementById('vc_comment').value;if(!f||!t){fire('Elegí las fechas.','gap');return;}addReq({type:'Vacaciones',agentId:AGENTS[0].id,agentName:AGENTS[0].name,from:f,to:t,comment:cm});fire('Solicitud de vacaciones enviada al Admin ✓','ok');return;}
-  if(act==='sendswap'){var d=document.getElementById('sw_day').value,w=+document.getElementById('sw_with').value,nt=document.getElementById('sw_note').value;if(!d){fire('Elegí el día.','gap');return;}var wa=A(w);addReq({type:'Swap',agentId:AGENTS[0].id,agentName:AGENTS[0].name,day:d,withId:w,withName:wa?wa.name:'',note:nt});fire('Swap solicitado ✓ Se notificó a '+(wa?wa.name.split(' ')[0]:'')+'. El Admin lo revisará.','ok');return;}
-  if(act==='sendedu'){var fi=document.getElementById('ed_files'),cm=document.getElementById('ed_comment').value;var names=[];if(fi&&fi.files){for(var i=0;i<fi.files.length;i++)names.push(fi.files[i].name);}addReq({type:'Educational',agentId:AGENTS[0].id,agentName:AGENTS[0].name,files:names,comment:cm});fire('Enviado al Admin ✓ Revisará tus documentos y agregará tus restricciones.','ok');return;}
-  if(act==='reqok'){var rr=REQUESTS.filter(function(x){return x.id==(+el.getAttribute('data-id'));})[0];if(rr)rr.status='Aprobado';fire('Solicitud aprobada.','ok');return;}
-  if(act==='reqno'){var rr=REQUESTS.filter(function(x){return x.id==(+el.getAttribute('data-id'));})[0];if(rr)rr.status='Rechazado';fire('Solicitud rechazada.','warn');return;}
-  if(act==='gen-merit'){generate('merit');return;}
-  if(act==='gen-request'){generate('request');return;}
-  if(act==='closemodal'){state.modal=null;render();return;}
-  if(act==='why'){state.modal='why';render();return;}
-  if(act==='sendreq'){var dd=['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'];state.request={};dd.forEach(function(d,i){var s=document.getElementById('req'+i);if(s)state.request[d]=s.value;});var wk=document.getElementById('reqweek');if(wk)state.reqWeek=wk.value;var n=document.getElementById('reqnote');state.reqNote=n?n.value:'';fire('Solicitud enviada para la Semana '+state.reqWeek+' ✓ El equipo de Workforce la verá al generar el horario.','ok');return;}
-  if(act==='restrict'){state.restrictId=+el.getAttribute('data-id');state.modal='restrict';render();return;}
-  if(act==='togshift'){var ra=A(state.restrictId);if(ra){ra.allowedShifts=ra.allowedShifts||[];var sh=el.getAttribute('data-shift');var ix=ra.allowedShifts.indexOf(sh);if(ix>=0)ra.allowedShifts.splice(ix,1);else ra.allowedShifts.push(sh);render();}return;}
-  if(act==='cancel'){state.sel=null;render();return;}
-  if(act==='publish'){var miss=[];DATA.shifts.forEach(function(sh){var cov=DATA.coverage[sh]||{};Object.keys(cov).forEach(function(q){if(DATA.directQueues.indexOf(q)<0)return;var have=Object.keys(state.assign).filter(function(id){return state.assign[id].shift===sh&&state.assign[id].queue===q;}).length;if(have<cov[q])miss.push(sh+' '+q);});});if(miss.length)fire('Bloqueado: faltan directos en '+miss.slice(0,3).join(', ')+(miss.length>3?'…':'')+'.','gap');else fire('Horario publicado. Se notificó a los agentes ✓','ok');return;}
-  if(act==='addagent'){var nn=document.getElementById('nn'),ns=document.getElementById('ns');var nm=(nn&&nn.value||'').trim();if(!nm){fire('Escribí un nombre.','gap');return;}var sq=ns?ns.value:DATA.squads[0];AGENTS.push({id:++_id,name:nm,squad:sq,rating:3,allowedShifts:[]});if(DATA.members[sq])DATA.members[sq].push(nm);fire(nm+' agregado a '+sq+'.','ok');return;}
-  if(act==='rmagent'){var id=+el.getAttribute('data-id');AGENTS=AGENTS.filter(function(a){return a.id!==id;});delete state.assign[id];render();return;}
- }
- if((el=e.target.closest('[data-backdrop]'))&&!e.target.closest('[data-body]')){state.modal=null;render();return;}
- if((el=e.target.closest('[data-star]'))){var id=+el.getAttribute('data-star'),val=+el.getAttribute('data-val');var a=A(id);if(a&&state.role==='admin'){a.rating=val;render();}return;}
- if((el=e.target.closest('[data-nav]'))){state.view=el.getAttribute('data-nav');state.sel=null;render();return;}
- if((el=e.target.closest('[data-role]'))){state.role=el.getAttribute('data-role');if(state.role==='agent'){if(state.view!=='mi'&&state.view!=='solicitar')state.view='mi';}else if(state.view==='mi'||state.view==='solicitar')state.view='horario';state.sel=null;render();return;}
- if((el=e.target.closest('[data-shift]'))){state.selShift=el.getAttribute('data-shift');state.sel=null;render();return;}
- if((el=e.target.closest('[data-agent]'))){var id=+el.getAttribute('data-agent');state.sel=(state.sel&&state.sel.id===id)?null:{id:id};render();return;}
- if((el=e.target.closest('[data-lane]'))){if(state.sel){moveAgent(state.sel.id,state.selShift,el.getAttribute('data-lane'));state.sel=null;render();}return;}
-});
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+        }
 
-root.addEventListener('change',function(e){if(!e.target)return;if(e.target.id==='gridweek'){state.gridWeek=e.target.value;render();}if(e.target.id==='reqtypesel'){state.reqType=e.target.value;render();}});
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1rem;
+        }
 
-generate('merit');
-</script></body></html>
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        /* Grid de Métricas */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .metric-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+        }
+
+        .metric-title {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-value {
+            font-size: 1.75rem;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        /* Contenedores de contenido */
+        .content-section {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+        }
+
+        .section-title {
+            margin-bottom: 1.5rem;
+            color: #fff;
+        }
+
+        /* Tablas */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        .data-table th, .data-table td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .data-table th {
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        /* Formularios básicos */
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-muted);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.6rem 0.75rem;
+            background-color: var(--bg-main);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: #fff;
+        }
+
+        .btn {
+            background-color: var(--accent);
+            color: #fff;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="app"></div>
+
+    <script>
+        // ==========================================
+        // SOLUCIÓN: Función ic() para procesar íconos
+        // ==========================================
+        function ic(name, props) {
+            var size = props && props.size ? props.size : 16;
+            var color = props && props.color ? props.color : 'currentColor';
+            
+            // Diccionario visual de símbolos unicode rápidos
+            var glyphs = {
+                star: '★',
+                plus: '＋',
+                trash: '🗑',
+                cal: '📅',
+                dash: '📊',
+                users: '👥',
+                user: '👤',
+                inbox: '📥',
+                settings: '⚙',
+                sparkles: '✨',
+                send: '➔',
+                x: '✕',
+                alert: '⚠',
+                check: '✓'
+            };
+
+            var symbol = glyphs[name] || '•';
+            return '<span style="display:inline-block; font-size:' + size + 'px; color:' + color + '; line-height:1; vertical-align:middle;">' + symbol + '</span>';
+        }
+
+        // ==========================================
+        // Configuración de Estado Base de la App
+        // ==========================================
+        var state = {
+            currentView: 'merit',
+            agents: [
+                { id: 1, name: 'Carlos Mendoza', tier: 'Tier 3', shift: '06:00 - 15:00', merits: 12, performance: 94 },
+                { id: 2, name: 'Ana Rodríguez', tier: 'Tier 2', shift: '08:00 - 17:00', merits: 8, performance: 88 },
+                { id: 3, name: 'Bryan Jiménez', tier: 'Tier 1', shift: '14:00 - 23:00', merits: 15, performance: 97 }
+            ],
+            meritLogs: [
+                { id: 101, agent: 'Carlos Mendoza', type: 'Productividad', points: 2, date: '2026-07-15' },
+                { id: 102, agent: 'Ana Rodríguez', type: 'Asistencia Perfecta', points: 3, date: '2026-07-14' },
+                { id: 103, agent: 'Bryan Jiménez', type: 'Soporte Extra', points: 1, date: '2026-07-16' }
+            ]
+        };
+
+        // ==========================================
+        // Motores de Renderizado (Vistas)
+        // ==========================================
+        function renderSidebar() {
+            var menuItems = [
+                { id: 'merit', label: 'Dashboard de Méritos', icon: 'dash' },
+                { id: 'agents', label: 'Gestión de Agentes', icon: 'users' },
+                { id: 'schedule', label: 'Horarios CS', icon: 'cal' },
+                { id: 'settings', label: 'Configuración', icon: 'settings' }
+            ];
+
+            var html = '<div class="sidebar">';
+            html += '<div class="brand">' + ic('sparkles', { size: 20, color: 'var(--accent)' }) + ' BA CS Scheduler</div>';
+            html += '<ul class="nav-list">';
+            
+            menuItems.forEach(function(item) {
+                var activeClass = state.currentView === item.id ? 'active' : '';
+                html += '<li>';
+                html += '<a class="nav-item ' + activeClass + '" href="#" onclick="switchView(\'' + item.id + '\')">';
+                html += ic(item.icon) + ' ' + item.label;
+                html += '</a>';
+                html += '</li>';
+            });
+
+            html += '</ul></div>';
+            return html;
+        }
+
+        function renderHeader(title) {
+            var html = '<div class="header">';
+            html += '<h2>' + title + '</h2>';
+            html += '<div class="user-profile">' + ic('user', { size: 18 }) + ' <span>Supervisor</span></div>';
+            html += '</div>';
+            return html;
+        }
+
+        function renderMeritView() {
+            var html = '<div class="main-content">';
+            html += renderHeader('Sistema Balanceado de Méritos');
+
+            // Tarjetas de Métricas Rápidas
+            html += '<div class="metrics-grid">';
+            html += '<div class="metric-card"><div class="metric-title">Total Agentes</div><div class="metric-value">' + state.agents.length + '</div></div>';
+            html += '<div class="metric-card"><div class="metric-title">Méritos Otorgados (Mes)</div><div class="metric-value">35</div></div>';
+            html += '<div class="metric-card"><div class="metric-title">Eficiencia General</div><div class="metric-value">93%</div></div>';
+            html += '</div>';
+
+            // Tabla de Historial
+            html += '<div class="content-section">';
+            html += '<h3 class="section-title">' + ic('star', { color: 'gold' }) + ' Últimos Méritos Asignados</h3>';
+            html += '<table class="data-table"><thead><tr><th>Agente</th><th>Razón / Tipo</th><th>Puntos</th><th>Fecha</th></tr></thead><tbody>';
+            
+            state.meritLogs.forEach(function(log) {
+                html += '<tr><td>' + log.agent + '</td><td>' + log.type + '</td><td>+' + log.points + '</td><td>' + log.date + '</td></tr>';
+            });
+
+            html += '</tbody></table></div></div>';
+            return html;
+        }
+
+        function renderAgentsView() {
+            var html = '<div class="main-content">';
+            html += renderHeader('Lista de Agentes del Equipo');
+
+            html += '<div class="content-section">';
+            html += '<h3 class="section-title">Agentes Activos</h3>';
+            html += '<table class="data-table"><thead><tr><th>Nombre</th><th>Tier</th><th>Horario Actual</th><th>Méritos acumulados</th><th>Performance</th></tr></thead><tbody>';
+            
+            state.agents.forEach(function(agent) {
+                html += '<tr><td>' + agent.name + '</td><td>' + agent.tier + '</td><td>' + agent.shift + '</td><td>' + agent.merits + ' pts</td><td>' + agent.performance + '%</td></tr>';
+            });
+
+            html += '</tbody></table></div></div>';
+            return html;
+        }
+
+        function renderScheduleView() {
+            var html = '<div class="main-content">';
+            html += renderHeader('Asignación de Horarios');
+            html += '<div class="content-section"><h3>Calendario Semanal</h3><p style="color:var(--text-muted); margin-top:1rem;">Módulo de arrastrar y soltar turnos en desarrollo...</p></div>';
+            html += '</div>';
+            return html;
+        }
+
+        function renderSettingsView() {
+            var html = '<div class="main-content">';
+            html += renderHeader('Configuración del Sistema');
+            html += '<div class="content-section"><h3 class="section-title">Parámetros</h3><div class="form-group"><label>Límite crítico de alertas de Performance</label><input type="number" class="form-control" value="85"></div><button class="btn">Guardar Cambios</button></div>';
+            html += '</div>';
+            return html;
+        }
+
+        // ==========================================
+        // Orquestador de la Aplicación (Core)
+        // ==========================================
+        function generate(view) {
+            state.currentView = view;
+            var container = document.getElementById('app');
+            var htmlStructure = renderSidebar();
+
+            if (view === 'merit') htmlStructure += renderMeritView();
+            else if (view === 'agents') htmlStructure += renderAgentsView();
+            else if (view === 'schedule') htmlStructure += renderScheduleView();
+            else if (view === 'settings') htmlStructure += renderSettingsView();
+
+            container.innerHTML = htmlStructure;
+        }
+
+        function switchView(viewId) {
+            generate(viewId);
+        }
+
+        // Inicializar la aplicación mostrando el Dashboard por defecto
+        generate('merit');
+    </script>
+</body>
+</html>

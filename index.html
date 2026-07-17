@@ -350,38 +350,3 @@ root.addEventListener('click',function(e){var el;
  if((el=e.target.closest('[data-agent]'))){var id=+el.getAttribute('data-agent');state.sel=(state.sel&&state.sel.id===id)?null:{id:id};render();return;}
  if((el=e.target.closest('[data-lane]'))){if(state.sel){moveAgent(state.sel.id,state.selShift,el.getAttribute('data-lane'));state.sel=null;render();}return;}
 });
-
-root.addEventListener('change',function(e){if(!e.target)return;if(e.target.id==='gridweek'){state.gridWeek=e.target.value;render();}if(e.target.id==='reqtypesel'){state.reqType=e.target.value;render();}});
-<script type="module">
-  // 1. Importación directa desde Google
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-  import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
-
-  // 2. Configuración (Asegúrate de que no falten comas o comillas)
-  const firebaseConfig = {
-    apiKey: "TU_API_KEY_AQUI",
-    authDomain: "schedule-maker-189f5.firebaseapp.com",
-    projectId: "schedule-maker-189f5",
-    storageBucket: "schedule-maker-189f5.appspot.com"
-  };
-
-  // 3. Inicialización
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
-
-  // 4. Lógica del botón
-  const btn = document.getElementById("btnGuardar");
-  if (btn) {
-    btn.addEventListener("click", async () => {
-      try {
-        const docRef = await addDoc(collection(db, "horarios"), {
-          horaInicio: "10:00",
-          horaFin: "18:00"
-        });
-        alert("¡Datos guardados con éxito!");
-      } catch (e) {
-        console.error("Error al guardar: ", e);
-      }
-    });
-  }
-</script>

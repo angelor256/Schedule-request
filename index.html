@@ -36,27 +36,22 @@ input,select,textarea{font-family:inherit;background:var(--panel2);border:1px so
   }
 </style></head><body><div id="app"></div>
   <script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-analytics.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
-
-  // Your web app's Firebase configuration
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-  const firebaseConfig = {
-    apiKey: "AIzaSyBaS5DdMKJdDsXqErGjoQ0fuyRVwiVO0p0",
-    authDomain: "schedule-maker-189f5.firebaseapp.com",
-    projectId: "schedule-maker-189f5",
-    storageBucket: "schedule-maker-189f5.firebasestorage.app",
-    messagingSenderId: "620449002456",
-    appId: "1:620449002456:web:6302c81931ab17a4ad78ad",
-    measurementId: "G-VV6BEXYHNG"
-  };
-
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-analytics.js";
+    
+    const firebaseConfig = {
+      apiKey: "AIzaSyBaS5DdMKJdDsXqErGjoQ0fuyRVwiVO0p0",
+      authDomain: "schedule-maker-189f5.firebaseapp.com",
+      projectId: "schedule-maker-189f5",
+      storageBucket: "schedule-maker-189f5.firebasestorage.app",
+      messagingSenderId: "620449002456",
+      appId: "1:620449002456:web:6302c81931ab17a4ad78ad",
+      measurementId: "G-VV6BEXYHNG"
+    };
+    
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    window.firebaseApp = app;
 </script>
 <script>
 var DATA = {"squads": ["VIP", "Payouts", "Tier 1", "Tier 2", "Tier 3", "Senior", "3rd Party", "Deposits", "Processing", "Training", "New Hire", "Workforce", "Floor Support", "Supervisors", "Night Shift"], "members": {"Supervisors": ["Alfredo Villalobos", "Nicole Valverde", "Mario Acon"], "Floor Support": ["Adriana Vasquez", "Carlos Barrantes", "Doris Peña", "Isabelle Morales"], "VIP": ["Emerson Hernandez", "Stephannie Cunningham", "Thimy Gonzalez", "Yasser Quiros", "Elena Rojas", "Elliot Navarro", "Julian Mena", "Sebastian Puerta"], "3rd Party": ["Mariana Varela", "Nicole Román", "Tamara Donaire", "Naigell Wilchard", "Isaac Porras", "Eckart Lutz"], "Senior": ["Andrey Castillo", "Rory Bulgarelli", "Naomy Sanchez"], "Tier 3": ["Adrian Navarro", "Eddison Prendas", "Phillip Desanti", "Maria Jose Quiros Quiros"], "Tier 2": ["Carlos Ortiz", "Carlos Alejandro Amador Luna", "Carolina Castro", "Daniel Leandro Rojas", "David Vogler", "Isaac Barrantes Alvarado", "Pablo Guzman"], "Tier 1": ["Anilu Guzman", "Charlene Rose", "Edson Stewart Retana", "Jose Maria Cartin Peralta", "Keisha Cross Brown", "Luis Fernando Ruiz", "Marlon Wright", "Valerie Alfaro"], "Deposits": ["Michelle Saborio", "Mariana Bejarano", "Diego Matamoros", "Sebastian Rivera", "Silvana Suarez"], "Payouts": ["Ignacio Blanco", "Graciela Bravo", "Fer Blanco", "Kevin Zamora", "Samuel Carballo", "Sheydron Clark", "Carlos Amador", "Vanessa Umaña"], "Workforce": ["Angelo Ramírez", "Cristopher Sandoval"], "Night Shift": ["Mauricio Alvarado", "Jose Pablo Robles", "Jose David Shedden", "David Cruz", "Daniel Gonzalez", "Kemar Clare Clare"], "Training": ["Pablo Retana", "Victor Ramírez", "María José Fallas", "Kendra Temple", "Natalia Sibaja"], "Processing": ["Luis Carvajal", "Kendall Montoya", "Josué Vargas", "Kevin Salazar", "Israel Aburto"], "New Hire": ["Javier Emilio Martinez Suarez", "Keylor Andres Solis Garro", "Luis Castro Solis", "Nyssa Kittel"]}, "queueSquads": {"3rd Party": ["Casino", "Chats", "Phones"], "Tier 2": ["Chats", "Phones", "Tickets", "Emails"], "VIP": ["Phones", "Chats", "Emails", "Phones Over", "Chats Over", "Tickets"], "Training": ["Coaching", "Chats Over", "Phones Over"], "New Hire": ["Chats"], "Tier 1": ["Chats", "Phones"], "Deposits": ["Phones Over", "Chats Over"], "Payouts": ["Chats Over", "Phones Over"], "Processing": ["Phones Over", "Processing", "Chats Over"], "Senior": ["Emails", "Tickets", "Phones"], "Tier 3": ["Chats", "Emails", "Phones", "Tickets"], "Workforce": ["Chats Over", "Phones Over"]}, "shifts": ["06-14", "07-15", "08-16", "09-17", "10-18", "13-21", "14-22", "15-23"], "coverage": {"15-23": {"Casino": 1, "Phones": 2, "Emails": 1, "Chats Over": 3, "Phones Over": 2, "Chats": 1, "Tickets": 1}, "06-14": {"Casino": 1, "Phones": 1, "Chats": 2, "Phones Over": 3, "Chats Over": 3, "Tickets": 1, "Emails": 1}, "14-22": {"Chats": 2, "Phones": 1, "Tickets": 1, "Phones Over": 1, "Emails": 1, "Chats Over": 2, "Casino": 1}, "07-15": {"Chats": 1, "Emails": 1, "Tickets": 1, "Phones Over": 2, "Chats Over": 2, "Phones": 1, "Casino": 1}, "09-17": {"Chats": 3, "Coaching": 1, "Phones": 1, "Phones Over": 1, "Emails": 1, "Chats Over": 1}, "10-18": {"Phones": 1, "Chats": 1, "Phones Over": 1, "Coaching": 1}, "13-21": {"Phones": 1, "Chats": 2, "Coaching": 1, "Phones Over": 1, "Tickets": 1}, "08-16": {"Processing": 1, "Phones Over": 1}}, "directQueues": ["Chats", "Phones", "Chats Over", "Phones Over"], "nonQueue": {"Floor Support": ["CX Report", "Leads"], "Supervisors": ["Leads"]}, "night": "Night Shift"};

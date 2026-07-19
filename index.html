@@ -36,32 +36,7 @@ input,select,textarea{font-family:inherit;background:var(--panel2);border:1px so
   }
 </style></head><body><div id="app"></div>
 <script>
-/*
-  --- DATOS DE CONFIGURACIÓN ---
-  Se ha actualizado la lógica de cobertura en el objeto DATA.
-  El análisis del heatmap (image.png) determinó la necesidad de activar el turno 08-16
-  para cubrir la rampa de la mañana y reforzar el turno 14-22 para el pico de la tarde/noche (4-9 pm).
-  Se han redistribuido recursos existentes, manteniendo el total de horas.
-*/
-var DATA = {"squads": ["VIP", "Payouts", "Tier 1", "Tier 2", "Tier 3", "Senior", "3rd Party", "Deposits", "Processing", "Training", "New Hire", "Workforce", "Floor Support", "Supervisors", "Night Shift"], "members": {"Supervisors": ["Alfredo Villalobos", "Nicole Valverde", "Mario Acon"], "Floor Support": ["Adriana Vasquez", "Carlos Barrantes", "Doris Peña", "Isabelle Morales"], "VIP": ["Emerson Hernandez", "Stephannie Cunningham", "Thimy Gonzalez", "Yasser Quiros", "Elena Rojas", "Elliot Navarro", "Julian Mena", "Sebastian Puerta"], "3rd Party": ["Mariana Varela", "Nicole Román", "Tamara Donaire", "Naigell Wilchard", "Isaac Porras", "Eckart Lutz"], "Senior": ["Andrey Castillo", "Rory Bulgarelli", "Naomy Sanchez"], "Tier 3": ["Adrian Navarro", "Eddison Prendas", "Phillip Desanti", "Maria Jose Quiros Quiros"], "Tier 2": ["Carlos Ortiz", "Carlos Alejandro Amador Luna", "Carolina Castro", "Daniel Leandro Rojas", "David Vogler", "Isaac Barrantes Alvarado", "Pablo Guzman"], "Tier 1": ["Anilu Guzman", "Charlene Rose", "Edson Stewart Retana", "Jose Maria Cartin Peralta", "Keisha Cross Brown", "Luis Fernando Ruiz", "Marlon Wright", "Valerie Alfaro"], "Deposits": ["Michelle Saborio", "Mariana Bejarano", "Diego Matamoros", "Sebastian Rivera", "Silvana Suarez"], "Payouts": ["Ignacio Blanco", "Graciela Bravo", "Fer Blanco", "Kevin Zamora", "Samuel Carballo", "Sheydron Clark", "Carlos Amador", "Vanessa Umaña"], "Workforce": ["Angelo Ramírez", "Cristopher Sandoval"], "Night Shift": ["Mauricio Alvarado", "Jose Pablo Robles", "Jose David Shedden", "David Cruz", "Daniel Gonzalez", "Kemar Clare Clare"], "Training": ["Pablo Retana", "Victor Ramírez", "María José Fallas", "Kendra Temple", "Natalia Sibaja"], "Processing": ["Luis Carvajal", "Kendall Montoya", "Josué Vargas", "Kevin Salazar", "Israel Aburto"], "New Hire": ["Javier Emilio Martinez Suarez", "Keylor Andres Solis Garro", "Luis Castro Solis", "Nyssa Kittel"]}, "queueSquads": {"3rd Party": ["Casino", "Chats", "Phones"], "Tier 2": ["Chats", "Phones", "Tickets", "Emails"], "VIP": ["Phones", "Chats", "Emails", "Phones Over", "Chats Over", "Tickets"], "Training": ["Coaching", "Chats Over", "Phones Over"], "New Hire": ["Chats"], "Tier 1": ["Chats", "Phones"], "Deposits": ["Phones Over", "Chats Over"], "Payouts": ["Chats Over", "Phones Over"], "Processing": ["Phones Over", "Processing", "Chats Over"], "Senior": ["Emails", "Tickets", "Phones"], "Tier 3": ["Chats", "Emails", "Phones", "Tickets"], "Workforce": ["Chats Over", "Phones Over"]}, "shifts": ["06-14", "07-15", "08-16", "09-17", "10-18", "13-21", "14-22", "15-23"],
-/* --- COBERTURA OPTIMIZADA BASADA EN EL HEATMAP (image.png) ---
-   Cambios principales:
-   1. Se activó el turno 08-16 con 1 Chat y 1 Phone para cubrir la rampa de volumen de 8am.
-   2. Se redujo 1 Chat del turno 09-17 (mañana).
-   3. Se aumentó 1 Chat en el turno 14-22 (tarde/noche) para reforzar el pico de 4pm-9pm.
-*/
-"coverage": {
-  "15-23": {"Casino": 1, "Phones": 2, "Emails": 1, "Chats Over": 3, "Phones Over": 2, "Chats": 1, "Tickets": 1},
-  "06-14": {"Casino": 1, "Phones": 1, "Chats": 2, "Phones Over": 2 /* -1 (movido a 08-16) */, "Chats Over": 3, "Tickets": 1, "Emails": 1},
-  "14-22": {"Chats": 3 /* +1 (reforzado pico tarde) */, "Phones": 1, "Tickets": 1, "Phones Over": 1, "Emails": 1, "Chats Over": 2, "Casino": 1},
-  "07-15": {"Chats": 1, "Emails": 1, "Tickets": 1, "Phones Over": 2, "Chats Over": 2, "Phones": 1, "Casino": 1},
-  "09-17": {"Chats": 2 /* -1 (movido a 14-22) */, "Phones": 1, "Phones Over": 1, "Emails": 1, "Chats Over": 1 /* -1 Coaching (movido a 08-16) */},
-  "10-18": {"Phones": 1, "Chats": 1, "Phones Over": 1, "Coaching": 1},
-  "13-21": {"Phones": 1, "Chats": 2, "Coaching": 1, "Phones Over": 1, "Tickets": 1},
-  // --- Turno Activado ---
-  "08-16": {"Processing": 1, "Chats": 1 /* +1 Chat */, "Phones": 1 /* +1 Phone */}
-}, "directQueues": ["Chats", "Phones", "Chats Over", "Phones Over"], "nonQueue": {"Floor Support": ["CX Report", "Leads"], "Supervisors": ["Leads"]}, "night": "Night Shift"};
-
+var DATA = {"squads": ["VIP", "Payouts", "Tier 1", "Tier 2", "Tier 3", "Senior", "3rd Party", "Deposits", "Processing", "Training", "New Hire", "Workforce", "Floor Support", "Supervisors", "Night Shift"], "members": {"Supervisors": ["Alfredo Villalobos", "Nicole Valverde", "Mario Acon"], "Floor Support": ["Adriana Vasquez", "Carlos Barrantes", "Doris Peña", "Isabelle Morales"], "VIP": ["Emerson Hernandez", "Stephannie Cunningham", "Thimy Gonzalez", "Yasser Quiros", "Elena Rojas", "Elliot Navarro", "Julian Mena", "Sebastian Puerta"], "3rd Party": ["Mariana Varela", "Nicole Román", "Tamara Donaire", "Naigell Wilchard", "Isaac Porras", "Eckart Lutz"], "Senior": ["Andrey Castillo", "Rory Bulgarelli", "Naomy Sanchez"], "Tier 3": ["Adrian Navarro", "Eddison Prendas", "Phillip Desanti", "Maria Jose Quiros Quiros"], "Tier 2": ["Carlos Ortiz", "Carlos Alejandro Amador Luna", "Carolina Castro", "Daniel Leandro Rojas", "David Vogler", "Isaac Barrantes Alvarado", "Pablo Guzman"], "Tier 1": ["Anilu Guzman", "Charlene Rose", "Edson Stewart Retana", "Jose Maria Cartin Peralta", "Keisha Cross Brown", "Luis Fernando Ruiz", "Marlon Wright", "Valerie Alfaro"], "Deposits": ["Michelle Saborio", "Mariana Bejarano", "Diego Matamoros", "Sebastian Rivera", "Silvana Suarez"], "Payouts": ["Ignacio Blanco", "Graciela Bravo", "Fer Blanco", "Kevin Zamora", "Samuel Carballo", "Sheydron Clark", "Carlos Amador", "Vanessa Umaña"], "Workforce": ["Angelo Ramírez", "Cristopher Sandoval"], "Night Shift": ["Mauricio Alvarado", "Jose Pablo Robles", "Jose David Shedden", "David Cruz", "Daniel Gonzalez", "Kemar Clare Clare"], "Training": ["Pablo Retana", "Victor Ramírez", "María José Fallas", "Kendra Temple", "Natalia Sibaja"], "Processing": ["Luis Carvajal", "Kendall Montoya", "Josué Vargas", "Kevin Salazar", "Israel Aburto"], "New Hire": ["Javier Emilio Martinez Suarez", "Keylor Andres Solis Garro", "Luis Castro Solis", "Nyssa Kittel"]}, "queueSquads": {"3rd Party": ["Casino", "Chats", "Phones"], "Tier 2": ["Chats", "Phones", "Tickets", "Emails"], "VIP": ["Phones", "Chats", "Emails", "Phones Over", "Chats Over", "Tickets"], "Training": ["Coaching", "Chats Over", "Phones Over"], "New Hire": ["Chats"], "Tier 1": ["Chats", "Phones"], "Deposits": ["Phones Over", "Chats Over"], "Payouts": ["Chats Over", "Phones Over"], "Processing": ["Phones Over", "Processing", "Chats Over"], "Senior": ["Emails", "Tickets", "Phones"], "Tier 3": ["Chats", "Emails", "Phones", "Tickets"], "Workforce": ["Chats Over", "Phones Over"]}, "shifts": ["06-14", "07-15", "08-16", "09-17", "10-18", "13-21", "14-22", "15-23"], "coverage": {"15-23": {"Casino": 1, "Phones": 2, "Emails": 1, "Chats Over": 3, "Phones Over": 2, "Chats": 1, "Tickets": 1}, "06-14": {"Casino": 1, "Phones": 1, "Chats": 2, "Phones Over": 3, "Chats Over": 3, "Tickets": 1, "Emails": 1}, "14-22": {"Chats": 2, "Phones": 1, "Tickets": 1, "Phones Over": 1, "Emails": 1, "Chats Over": 2, "Casino": 1}, "07-15": {"Chats": 1, "Emails": 1, "Tickets": 1, "Phones Over": 2, "Chats Over": 2, "Phones": 1, "Casino": 1}, "09-17": {"Chats": 3, "Coaching": 1, "Phones": 1, "Phones Over": 1, "Emails": 1, "Chats Over": 1}, "10-18": {"Phones": 1, "Chats": 1, "Phones Over": 1, "Coaching": 1}, "13-21": {"Phones": 1, "Chats": 2, "Coaching": 1, "Phones Over": 1, "Tickets": 1}, "08-16": {"Processing": 1, "Phones Over": 1}}, "directQueues": ["Chats", "Phones", "Chats Over", "Phones Over"], "nonQueue": {"Floor Support": ["CX Report", "Leads"], "Supervisors": ["Leads"]}, "night": "Night Shift"};
 var IC={sparkles:'<path d="M9.9 15.5A2 2 0 0 0 8.5 14L2.4 12.5a.5.5 0 0 1 0-1L8.5 10A2 2 0 0 0 9.9 8.5l1.6-6.1a.5.5 0 0 1 1 0L14 8.5A2 2 0 0 0 15.5 10l6.1 1.6a.5.5 0 0 1 0 1L15.5 14a2 2 0 0 0-1.4 1.4l-1.6 6.1a.5.5 0 0 1-1 0z"/>',dash:'<rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/>',cal:'<path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/>',users:'<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',settings:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>',send:'<path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/>',star:'<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>',alert:'<path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/>',check:'<path d="M20 6 9 17l-5-5"/>',help:'<circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/>',shield:'<path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/>',user:'<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',x:'<path d="M18 6 6 18"/><path d="m6 6 12 12"/>',trash:'<path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>',plus:'<path d="M5 12h14"/><path d="M12 5v14"/>',inbox:'<polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/>',upload:'<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/>'};
 function ic(n,o){o=o||{};var sz=o.size||24,c=o.color||'currentColor',f=o.fill||'none',w=o.sw||2,st=o.style||'';return '<svg width="'+sz+'" height="'+sz+'" viewBox="0 0 24 24" fill="'+f+'" stroke="'+c+'" stroke-width="'+w+'" stroke-linecap="round" stroke-linejoin="round" style="'+st+'">'+IC[n]+'</svg>';}
 
@@ -81,7 +56,7 @@ function fmtShift(s){var p=s.split('-');return h12(+p[0])+' - '+h12(+p[1]);}
 function h12s(x){var ap=x>=12?'pm':'am';var hh=x%12;if(hh===0)hh=12;return hh+ap;}
 function fmtShiftShort(s){var p=s.split('-');return h12s(+p[0])+'–'+h12s(+p[1]);}
 
-var state={view:'horario',role:'admin',selShift:DATA.shifts[0],sel:null,toast:null,modal:null,assign:{},request:{},reqNote:'',reqWeek:'31',restrictId:null,horarioMode:'board',weekPlan:{},gridWeek:'31',reqType:'special'};
+var state={view:'horario',role:'admin',selShift:DATA.shifts[0],sel:null,toast:null,modal:null,assign:{},request:{},reqNote:'',reqWeek:'31',restrictId:null,horarioMode:'board',weekPlan:{},gridWeek:'31',reqType:'special',taskDay:0,dayTasks:{}};
 var tt=null;
 function fire(m,t){state.toast={m:m,t:t||'ok'};render();if(tt)clearTimeout(tt);tt=setTimeout(function(){state.toast=null;render();},3400);}
 
@@ -146,7 +121,7 @@ function schedule(){
  var ns=(DATA.members['Night Shift']||[]).length;
  var side='<div class="glass" style="margin-top:14px;padding:15px;font-size:12.5px;color:var(--mist)"><div class="display" style="font-weight:600;color:var(--chalk);margin-bottom:8px">Fuera del pool de queues</div>'
   +'<div style="margin-bottom:6px"><b style="color:var(--chalk)">Floor Support:</b> CX Report / Leads (task cambia por día) — '+fs+'</div>'
-  +'<div style="margin-bottom:66x"><b style="color:var(--chalk)">Supervisors:</b> Leads / tareas propias — '+su+'</div>'
+  +'<div style="margin-bottom:6px"><b style="color:var(--chalk)">Supervisors:</b> Leads / tareas propias — '+su+'</div>'
   +'<div><b style="color:var(--chalk)">Night Shift ('+ns+'):</b> los asigna su supervisor por día (turno 22–06).</div></div>';
  return '<div class="view"><div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px">'+tabs+'</div>'+selBar+'<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px">'+lanes+'</div>'+bench+side+'</div>';
 }
@@ -165,6 +140,21 @@ function team(){
  return '<div class="view">'+add+'<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px">'+cards+'</div></div>';
 }
 
+function hourCoverage(){
+ if(!Object.keys(state.weekPlan).length)genWeek();
+ var HOURS=[];for(var hh=0;hh<24;hh++)HOURS.push(hh);
+ var dn=["Lun","Mar","Mié","Jue","Vie","Sáb","Dom"];
+ function covers(sh,h){if(!sh||sh==="OFF"||sh==="VAC")return false;if(sh==="10pm-6am")return (h>=22||h<6);var p=sh.split("-");if(p.length<2)return false;var s=parseInt(p[0],10),e=parseInt(p[1],10);return h>=s&&h<e;}
+ var bySquad={};AGENTS.forEach(function(a){(bySquad[a.squad]=bySquad[a.squad]||[]).push(a);});
+ var hdr='<tr><th style="padding:4px 8px;border:1px solid var(--line);font-size:9px;color:var(--faint);background:var(--panel2);text-align:left">Día</th>'+HOURS.map(function(h){return '<th style="padding:4px 5px;border:1px solid var(--line);font-size:9px;color:var(--faint);background:var(--panel2);font-weight:600">'+h+'</th>';}).join('')+'</tr>';
+ var tables=DATA.squads.filter(function(s){return bySquad[s];}).map(function(sq){
+  var mat=[],mx=1;
+  for(var d=0;d<7;d++){var row=[];for(var h=0;h<24;h++){var c=bySquad[sq].filter(function(a){var sh=state.weekPlan[a.id]?state.weekPlan[a.id][d]:null;return covers(sh,h);}).length;row.push(c);if(c>mx)mx=c;}mat.push(row);}
+  var rows=dn.map(function(dl,d){var cells=mat[d].map(function(c){var al=c>0?(0.14+0.64*(c/mx)):0;var tc=al>0.4?"#eaf0ff":(c>0?"var(--chalk)":"var(--faint)");return '<td style="padding:4px 5px;border:1px solid var(--line);text-align:center;font-size:9.5px;font-weight:600;background:rgba(90,130,255,'+al.toFixed(2)+');color:'+tc+'">'+(c||"")+'</td>';}).join('');return '<tr><td style="padding:4px 8px;border:1px solid var(--line);font-size:10px;color:var(--mist);background:var(--ink);white-space:nowrap">'+dl+'</td>'+cells+'</tr>';}).join('');
+  return '<div style="margin-bottom:16px"><div class="display" style="font-weight:600;font-size:12.5px;margin-bottom:6px;color:var(--iris2)">'+sq+' <span style="color:var(--faint);font-weight:400;font-size:10px">· '+bySquad[sq].length+' agentes</span></div><div class="scroll" style="overflow-x:auto;border:1px solid var(--line);border-radius:8px"><table style="border-collapse:collapse;min-width:840px">'+hdr+rows+'</table></div></div>';
+ }).join('');
+ return '<div class="glass" style="margin-top:14px;padding:18px"><div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:6px"><div class="display" style="font-weight:600;font-size:15px">Cobertura por hora — semanal por squad</div><span style="font-size:10.5px;color:var(--faint)">personas en turno por hora (0–23)</span></div><p style="font-size:11.5px;color:var(--mist);margin-bottom:14px">Cuántas personas de cada squad están cubriendo en cada hora, según el plan semanal generado. (No descuenta breaks.)</p>'+tables+'</div>';
+}
 function dashboard(){
  var totDir=0,covDir=0;
  DATA.shifts.forEach(function(sh){var cov=DATA.coverage[sh]||{};Object.keys(cov).forEach(function(q){if(DATA.directQueues.indexOf(q)>=0){totDir+=cov[q];covDir+=Math.min(cov[q],Object.keys(state.assign).filter(function(id){return state.assign[id].shift===sh&&state.assign[id].queue===q;}).length);}});});
@@ -175,7 +165,7 @@ function dashboard(){
  +card('Cobertura directa',pct+'%','Chats + Phones', pct>=100?'var(--mint)':'var(--amber)')
  +card('Shifts',DATA.shifts.length,'6:00 – 23:00')
  +card('Asignados hoy',Object.keys(state.assign).length,'del pool de queues','var(--iris2)')
- +'</div><div class="glass" style="margin-top:14px;padding:18px;font-size:13px;color:var(--mist)">La cobertura prioriza los tasks de comunicación directa (<b style="color:var(--chalk)">Chats y Phones</b>). Usá «Generar horario» y elegí el modo (mérito o con request), después ajustá en la pestaña Horario.</div></div>';
+ +'</div><div class="glass" style="margin-top:14px;padding:18px;font-size:13px;color:var(--mist)">La cobertura prioriza los tasks de comunicación directa (<b style="color:var(--chalk)">Chats y Phones</b>). Usá «Generar horario» y elegí el modo (mérito o con request), después ajustá en la pestaña Horario.</div>'+hourCoverage()+'</div>';
 }
 
 function agentView(){var me=AGENTS[0];var as=state.assign[me.id];
@@ -271,7 +261,71 @@ function adminRequestsView(){
 }
 function navList(){return state.role==='agent'?[{id:'mi',i:'user',l:'Mi horario',s:'Horario'},{id:'solicitar',i:'cal',l:'Solicitar horario',s:'Solicitar'},{id:'requests',i:'inbox',l:'Requests',s:'Requests'}]:[{id:'dashboard',i:'dash',l:'Dashboard',s:'Panel'},{id:'horario',i:'cal',l:'Horario',s:'Horario'},{id:'equipo',i:'users',l:'Equipo',s:'Equipo'}].concat(state.role==='admin'?[{id:'requests',i:'inbox',l:'Requests',s:'Requests'},{id:'settings',i:'settings',l:'Ajustes',s:'Ajustes'}]:[]);}
 function bottomNav(){return '<nav class="botnav">'+navList().map(function(n){var on=state.view===n.id;return '<div class="bn'+(on?' on':'')+'" data-nav="'+n.id+'">'+ic(n.i,{size:20,color:on?'var(--iris2)':'var(--mist)'})+'<span>'+n.s+'</span></div>';}).join('')+'</nav>';}
-function mobileRoleBar(){var rs=[{r:'admin',l:'Admin'},{r:'supervisor',l:'Supervisor'},{r:'agent',l:'Agente'}];return '<div class="mrole">'+rs.map(function(x){var on=state.role===x.r;return '<button class="btn" data-role="'+x.r+'" style="flex:1;padding:7px;border-radius:999px;font-size:12px;font-weight:600;background:'+(on?'var(--iris)':'transparent')+';color:'+(on?'#0B0C13':'var(--mist)')+'">'+x.l+'</button>';}).join('')+'</div>';}
+function mobileRoleBar(){var rs=[{r:'admin',l:'Admin'},{r:'supervisor',l:'Supervisor'},{r:'agent',l:'Agente'}];return '<div class="mrole">'+rs.map(function(x){var on=state.role===x.r;return '<button class="btn" data-role="'+x.r+'" style="flex:1;padding:7px;border-radius:9px;font-size:12px;font-weight:600;background:'+(on?'var(--iris)':'transparent')+';color:'+(on?'#0B0C13':'var(--mist)')+'">'+x.l+'</button>';}).join('')+'</div>';}
+var PHONERS=["NAIGELL BECKFORD","NICOLE ROMAN","NICOLE ROMÁN","EMERSON HERNANDEZ","STEPHANNIE CUNNINGHAM","THIMY GONZALEZ","YASSER QUIROS","RORY BULGARELLI","CARLOS ORTIZ","CARLOS ALEJANDRO AMADOR LUNA","CARLOS AMADOR","DAVID VOGLER","LUIS FERNANDO RUIZ","PHILLIP DESANTI","ANDREY CASTILLO","VALERIE ALFARO","EDDISON PRENDAS","JOSE MARIA CARTIN PERALTA","ECKART LUTZ","EKCART LUTZ","SAMUEL CARBALLO"];
+function isPhonerName(n){return PHONERS.indexOf((n||"").trim().toUpperCase())>=0;}
+function groupOf(sq){return {"3rd Party":"A","VIP":"B","Senior":"C","Tier 2":"D","Tier 3":"D","Tier 1":"E","New Hire":"E","Payouts":"F","Deposits":"F","Processing":"F"}[sq]||"";}
+function baseQ(n){return isPhonerName(n)?"Phones":"Chats";}
+function setF(r,m,s){r.main=m;r.sec=s;}
+function assignDayTasks(day){
+ if(!Object.keys(state.weekPlan).length)genWeek();
+ var roster=[];
+ AGENTS.forEach(function(a){var g=groupOf(a.squad);if(!g)return;var sh=state.weekPlan[a.id]?state.weekPlan[a.id][day]:null;if(!sh||sh==="OFF"||sh==="VAC"||sh==="10pm-6am")return;roster.push({id:a.id,name:a.name,squad:a.squad,group:g,shift:sh,startHr:parseInt(sh.split("-")[0],10),main:"",sec:""});});
+ function half(r){return r.startHr<11?"M":"A";}
+ // 1) Casino (A)
+ ["M","A"].forEach(function(hf){var c=0;roster.filter(function(r){return r.group==="A"&&half(r)===hf;}).forEach(function(r){c++;if(c===1)r.main="Casino";else{r.main=baseQ(r.name);r.sec="2nd Casino";}});});
+ // 2) VIP & Escalation (B,C,D)
+ ["M","A"].forEach(function(hf){
+  var valid=wfmShuffle(roster.filter(function(r){return (r.group==="B"||r.group==="C"||r.group==="D")&&half(r)===hf;}).slice());
+  var pP=[],cP=[],rem=[];
+  valid.forEach(function(r){if(r.group==="C"||r.group==="D"){if(isPhonerName(r.name))pP.push(r);else cP.push(r);}else rem.push(r);});
+  function extract(){if(pP.length===0&&cP.length===0)return null;if(cP.length>=pP.length&&cP.length>0)return cP.shift();if(pP.length>0)return pP.shift();if(cP.length>0)return cP.shift();return null;}
+  for(var t=0;t<3;t++){var tk=extract();if(tk){tk.main="Tickets";tk.sec="";}}
+  pP.forEach(function(r){rem.push(r);});cP.forEach(function(r){rem.push(r);});rem=wfmShuffle(rem);
+  var v1=false,v2=false;
+  rem.forEach(function(r){if(r.group==="B"){if(!v1){r.main=baseQ(r.name);r.sec="VIP Emails";v1=true;}else if(!v2){r.main=baseQ(r.name);r.sec="2nd VIP Emails";v2=true;}}});
+  var em=false,em2=false;
+  ["C","D","B"].forEach(function(tg){if(em&&em2)return;rem.forEach(function(r){if(em&&em2)return;if(r.group===tg&&isPhonerName(r.name)&&r.sec===""){if(!em){r.main="Phones";r.sec="Emails";em=true;}else if(!em2){r.main="Phones";r.sec="2nd Emails";em2=true;}}});});
+ });
+ // 3) Tier 1 (E)
+ roster.forEach(function(r){if(r.group==="E")r.main=baseQ(r.name);});
+ // 4) Deposits & Payouts (F)
+ ["M","A"].forEach(function(hf){
+  var fs=wfmShuffle(roster.filter(function(r){return r.group==="F"&&half(r)===hf;}).slice());var n=fs.length;if(!n)return;
+  if(hf==="M"){
+   if(n===1)setF(fs[0],"2nd CS Support | Emails | Processors | Velocity | Scrubbers | Pending","2nd CS Support | Emails | Processors | Velocity | Scrubbers | Pending");
+   else if(n===2){setF(fs[0],"2nd CS Support | Emails | Processors | Velocity | Scrubbers | Pending","2nd CS Support | Emails | Processors | Velocity | Scrubbers | Pending");setF(fs[1],"CS Support | 2nd Emails | PO Review | Checks | Wires","CS Support | 2nd Emails | PO Reviews | Pre - Reviews");}
+   else if(n===3){setF(fs[0],"Processors | Velocity | Scrubbers | PO Review","Processors | Velocity | Scrubbers | PO Review");setF(fs[1],"CS Support | Checks | Wires | 2nd Emails","CS Support | Pre - Reviews | 2nd Emails");setF(fs[2],"Pending | 2nd CS Support | Emails | 2nd Processors","Pending | 2nd CS Support | Emails | 2nd Processors");}
+   else fs.forEach(function(r,i){if((i+1)%2!==0)setF(r,"2nd CS Support | Emails | Processors | Velocity | Scrubbers | Pending","2nd CS Support | Emails | Processors | Velocity | Scrubbers | Pending");else setF(r,"CS Support | 2nd Emails | PO Review | Checks | Wires","CS Support | 2nd Emails | PO Reviews | Pre - Reviews");});
+  }else{
+   if(n===1)setF(fs[0],"2nd CS Support | 2nd Emails | Processors | Velocity | Scrubbers | PO review","2nd Processors | Emails | CS Support | Pending");
+   else if(n===2){setF(fs[0],"2nd CS Support | 2nd Emails | Processors | Velocity | Scrubbers | PO review","2nd CS Support | 2nd Emails | Processors | Velocity | Scrubbers | PO review");setF(fs[1],"2nd Processors | Emails | CS Support | Pending","2nd Processors | Emails | CS Support | Pending");}
+   else if(n===3){setF(fs[0],"CS Support | Emails | 2nd Processors | Pending","CS Support | Emails | 2nd Processors | Pending");setF(fs[1],"Processors | 2nd Emails | 2nd CS Support","Processors | 2nd Emails | 2nd CS Support");setF(fs[2],"PO Review | Velocity | Scrubbers","PO Review | Velocity | Scrubbers");}
+   else fs.forEach(function(r,i){if((i+1)%2!==0)setF(r,"2nd CS Support | 2nd Emails | Processors | Velocity | Scrubbers | PO review","2nd CS Support | 2nd Emails | Processors | Velocity | Scrubbers | PO review");else setF(r,"2nd Processors | Emails | CS Support | Pending","2nd Processors | Emails | CS Support | Pending");});
+  }
+ });
+ // 5) colas base
+ roster.forEach(function(r){if(r.main==="")r.main=baseQ(r.name);});
+ // 6) Blasts & Zelle (topes por medio día)
+ ["M","A"].forEach(function(hf){var b=0,b2=0,z=0;roster.filter(function(r){return half(r)===hf;}).forEach(function(r){if(r.main==="Tickets"||r.main==="Casino")return;if(["A","B","C","D"].indexOf(r.group)<0)return;if(r.sec!=="")return;if(!b){r.sec="Bonus Blast";b=1;}else if(!b2){r.sec="2nd Bonus Blast";b2=1;}else if(!z){r.sec="2nd Zelle";z=1;}});});
+ return roster;
+}
+function tasksView(){
+ var day=state.taskDay||0;
+ if(!state.dayTasks[day])state.dayTasks[day]=assignDayTasks(day);
+ var roster=state.dayTasks[day];
+ var dn=["Lunes","Martes","Miércoles","Jueves","Viernes","Sábado","Domingo"];
+ var daysel='<select id="taskday" style="min-width:170px">'+dn.map(function(d,i){return '<option value="'+i+'"'+(day===i?" selected":"")+'>'+d+'</option>';}).join('')+'</select>';
+ var gcol={A:"var(--rose)",B:"var(--iris2)",C:"var(--amber)",D:"var(--amber)",E:"var(--mint)",F:"#7FC8FF"};
+ var shifts=DATA.shifts.filter(function(s){return roster.some(function(r){return r.shift===s;});});
+ var secs=shifts.map(function(sh){
+  var group=roster.filter(function(r){return r.shift===sh;}).sort(function(a,b){return a.group<b.group?-1:(a.group>b.group?1:0);});
+  var rows=group.map(function(r){return '<tr><td style="padding:6px 10px;border:1px solid var(--line);font-size:11.5px;white-space:nowrap">'+r.name+'</td><td style="padding:6px 8px;border:1px solid var(--line);text-align:center"><span style="font-size:10px;font-weight:700;color:'+(gcol[r.group]||"var(--mist)")+'">'+r.group+'</span></td><td style="padding:6px 10px;border:1px solid var(--line);font-size:11px;font-weight:600;color:var(--chalk)">'+r.main+'</td><td style="padding:6px 10px;border:1px solid var(--line);font-size:11px;color:var(--mist)">'+(r.sec||"—")+'</td></tr>';}).join('');
+  return '<div style="margin-bottom:16px"><div class="display" style="font-weight:600;font-size:13px;margin-bottom:8px;color:var(--iris2)">'+fmtShift(sh)+' <span style="color:var(--faint);font-weight:400;font-size:11px">· '+group.length+' agentes</span></div><div class="scroll" style="overflow-x:auto;border:1px solid var(--line);border-radius:10px"><table style="border-collapse:collapse;width:100%;min-width:540px"><tr><th style="text-align:left;padding:7px 10px;border:1px solid var(--line);font-size:11px;color:var(--mist);background:var(--panel2)">Agente</th><th style="padding:7px 8px;border:1px solid var(--line);font-size:11px;color:var(--mist);background:var(--panel2)">Grupo</th><th style="text-align:left;padding:7px 10px;border:1px solid var(--line);font-size:11px;color:var(--mist);background:var(--panel2)">Main Task</th><th style="text-align:left;padding:7px 10px;border:1px solid var(--line);font-size:11px;color:var(--mist);background:var(--panel2)">Secondary Task</th></tr>'+rows+'</table></div></div>';
+ }).join('');
+ var legend='<div style="font-size:10.5px;color:var(--mist);margin:4px 0 16px;line-height:1.7">Grupos: <b style="color:var(--rose)">A</b> Casino · <b style="color:var(--iris2)">B</b> VIP · <b style="color:var(--amber)">C/D</b> Escalación · <b style="color:var(--mint)">E</b> Tier 1 · <b style="color:#7FC8FF">F</b> Deposits/Payouts</div>';
+ return '<div class="view"><div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;flex-wrap:wrap"><span style="font-size:12px;color:var(--mist)">Día:</span>'+daysel+'</div>'+legend+(secs||'<div style="font-size:13px;color:var(--faint)">No hay agentes con tareas ese día.</div>')+'</div>';
+}
 function rail(){
  var nav=navList();
  var items=nav.map(function(n){var on=state.view===n.id;return '<div class="navitem" data-nav="'+n.id+'" style="display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:11px;background:'+(on?'var(--irisSoft)':'transparent')+';color:'+(on?'var(--chalk)':'var(--mist)')+'">'+ic(n.i,{size:18,color:on?'var(--iris2)':'var(--mist)'})+'<span class="rail-label" style="font-size:13.5px;font-weight:'+(on?600:500)+'">'+n.l+'</span></div>';}).join('');
@@ -280,13 +334,18 @@ function rail(){
 }
 function header(){
  var t={dashboard:'Resumen operativo',horario:'Horario semanal',equipo:'Equipo',settings:'Ajustes',mi:'Mi espacio',solicitar:'Solicitar horario',requests:'Requests'}[state.view];
- var sub=state.view==='horario'?(state.horarioMode==='week'?'Vista semanal por squad — formato del horario publicado.':'Tocá un agente y luego un queue para moverlo. Cobertura por shift × queue; Chats/Phones marcados como directos.'):'Customer Service';
+ var sub=state.view==='horario'?(state.horarioMode==='week'?'Vista semanal por squad — formato del horario publicado.':state.horarioMode==='tasks'?'Asignación de Main + Secondary por agente (lógica de Angelo).':'Tocá un agente y luego un queue para moverlo. Cobertura por shift × queue; Chats/Phones marcados como directos.'):'Customer Service';
  var act='';
  if(state.view==='horario'&&(state.role==='admin'||state.role==='supervisor')){
-  var wkm=state.horarioMode==='week';
-  var toggle='<div style="display:flex;gap:2px;background:var(--panel2);border:1px solid var(--line);border-radius:11px;padding:3px"><button class="btn" data-act="modeboard" style="padding:7px 13px;border-radius:999px;font-size:12.5px;font-weight:600;background:'+(!wkm?'var(--iris)':'transparent')+';color:'+(!wkm?'#0B0C13':'var(--mist)')+'">Tablero</button><button class="btn" data-act="modeweek" style="padding:7px 13px;border-radius:999px;font-size:12.5px;font-weight:600;background:'+(wkm?'var(--iris)':'transparent')+';color:'+(wkm?'#0B0C13':'var(--mist)')+'">Semana</button></div>';
+  var hm=state.horarioMode;
+  var seg=function(id,lbl,on){return '<button class="btn" data-act="'+id+'" style="padding:7px 13px;border-radius:9px;font-size:12.5px;font-weight:600;background:'+(on?'var(--iris)':'transparent')+';color:'+(on?'#0B0C13':'var(--mist)')+'">'+lbl+'</button>';};
+  var toggle='<div style="display:flex;gap:2px;background:var(--panel2);border:1px solid var(--line);border-radius:11px;padding:3px">'+seg('modeboard','Tablero',hm!=='week'&&hm!=='tasks')+seg('modeweek','Semana',hm==='week')+seg('modetasks','Tasks',hm==='tasks')+'</div>';
   var abtn='';
-  if(state.role==='admin'){ if(wkm){abtn='<button class="btn" data-act="genweek" style="display:flex;align-items:center;gap:8px;padding:10px 16px;border-radius:12px;background:var(--iris);color:#0B0C13;font-size:13px;font-weight:700">'+ic('sparkles',{size:16,color:"#0B0C13"})+'<span class="lbl">Generar semana</span></button>';}else{abtn='<button class="btn" data-act="genopen" style="display:flex;align-items:center;gap:8px;padding:10px 16px;border-radius:12px;background:var(--panel2);color:var(--chalk);border:1px solid var(--line);font-size:13px;font-weight:600">'+ic('sparkles',{size:16,color:"var(--iris2)"})+'<span class="lbl">Generar horario</span></button><button class="btn" data-act="publish" style="display:flex;align-items:center;gap:8px;padding:10px 18px;border-radius:12px;background:var(--iris);color:#0B0C13;font-size:13px;font-weight:700">'+ic('send',{size:16,color:"#0B0C13"})+'<span class="lbl">Publicar</span></button>';} }
+  if(state.role==='admin'){
+   if(hm==='week')abtn='<button class="btn" data-act="genweek" style="display:flex;align-items:center;gap:8px;padding:10px 16px;border-radius:12px;background:var(--iris);color:#0B0C13;font-size:13px;font-weight:700">'+ic('sparkles',{size:16,color:"#0B0C13"})+'<span class="lbl">Generar semana</span></button>';
+   else if(hm==='tasks')abtn='<button class="btn" data-act="gentasks" style="display:flex;align-items:center;gap:8px;padding:10px 16px;border-radius:12px;background:var(--iris);color:#0B0C13;font-size:13px;font-weight:700">'+ic('sparkles',{size:16,color:"#0B0C13"})+'<span class="lbl">Generar tasks</span></button>';
+   else abtn='<button class="btn" data-act="genopen" style="display:flex;align-items:center;gap:8px;padding:10px 16px;border-radius:12px;background:var(--panel2);color:var(--chalk);border:1px solid var(--line);font-size:13px;font-weight:600">'+ic('sparkles',{size:16,color:"var(--iris2)"})+'<span class="lbl">Generar horario</span></button><button class="btn" data-act="publish" style="display:flex;align-items:center;gap:8px;padding:10px 18px;border-radius:12px;background:var(--iris);color:#0B0C13;font-size:13px;font-weight:700">'+ic('send',{size:16,color:"#0B0C13"})+'<span class="lbl">Publicar</span></button>';
+  }
   act='<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">'+toggle+abtn+'</div>';
  }
  return '<header style="display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:22px;flex-wrap:wrap"><div><h1 class="display" style="font-size:clamp(20px,3vw,26px);font-weight:700;margin:0">'+t+'</h1><div style="font-size:12.5px;color:var(--mist);margin-top:4px">'+sub+'</div></div>'+act+'</header>';
@@ -314,7 +373,7 @@ function solicitarView(){
  +'<button class="btn" data-act="sendreq" style="margin-top:16px;background:var(--iris);color:#0B0C13;font-weight:700;border-radius:11px;padding:10px 18px;font-size:13px;display:flex;align-items:center;gap:8px">'+ic('send',{size:16,color:"#0B0C13"})+'Enviar solicitud</button>'
  +'</div></div>';
 }
-function body(){var v=state.view;if(v==='dashboard')return dashboard();if(v==='horario')return state.horarioMode==='week'?weekGridView():schedule();if(v==='equipo')return team();if(v==='mi')return agentView();if(v==='solicitar')return solicitarView();if(v==='requests')return state.role==='admin'?adminRequestsView():requestsView();if(v==='settings')return '<div class="view glass" style="padding:20px;color:var(--mist);font-size:13.5px">Squads, queues por squad, shifts, cobertura por shift×queue y reglas legales — configurables aquí (se conecta al backend en la siguiente fase). Datos actuales: '+DATA.squads.length+' squads, '+DATA.shifts.length+' shifts.</div>';return'';}
+function body(){var v=state.view;if(v==='dashboard')return dashboard();if(v==='horario')return state.horarioMode==='week'?weekGridView():state.horarioMode==='tasks'?tasksView():schedule();if(v==='equipo')return team();if(v==='mi')return agentView();if(v==='solicitar')return solicitarView();if(v==='requests')return state.role==='admin'?adminRequestsView():requestsView();if(v==='settings')return '<div class="view glass" style="padding:20px;color:var(--mist);font-size:13.5px">Squads, queues por squad, shifts, cobertura por shift×queue y reglas legales — configurables aquí (se conecta al backend en la siguiente fase). Datos actuales: '+DATA.squads.length+' squads, '+DATA.shifts.length+' shifts.</div>';return'';}
 function render(){document.getElementById('app').innerHTML='<div style="display:flex;min-height:100vh">'+rail()+'<main class="mainwrap" style="flex:1;min-width:0;padding:22px clamp(16px,3vw,32px) 60px">'+mobileRoleBar()+header()+body()+'</main></div>'+bottomNav()+toastEl()+genModal()+whyModal()+restrictModal();}
 
 var root=document.getElementById('app');
@@ -323,7 +382,9 @@ root.addEventListener('click',function(e){var el;
   if(act==='genopen'){state.modal='gen';render();return;}
   if(act==='modeboard'){state.horarioMode='board';state.sel=null;render();return;}
   if(act==='modeweek'){state.horarioMode='week';state.sel=null;if(!Object.keys(state.weekPlan).length)genWeek();render();return;}
-  if(act==='genweek'){genWeek();fire('Semana generada.','ok');return;}
+  if(act==='genweek'){genWeek();state.dayTasks={};fire('Semana generada.','ok');return;}
+  if(act==='modetasks'){state.horarioMode='tasks';state.sel=null;render();return;}
+  if(act==='gentasks'){var dd=state.taskDay||0;delete state.dayTasks[dd];state.dayTasks[dd]=assignDayTasks(dd);fire('Tasks generadas (lógica de Angelo).','ok');return;}
   if(act==='sendspecial'){var d=document.getElementById('sp_day').value,c=document.getElementById('sp_choice').value,cm=document.getElementById('sp_comment').value;if(!d){fire('Elegí un día.','gap');return;}addReq({type:'Special',agentId:AGENTS[0].id,agentName:AGENTS[0].name,day:d,choice:c,comment:cm});fire('Special request enviado al Admin ✓','ok');return;}
   if(act==='sendvac'){var f=document.getElementById('vc_from').value,t=document.getElementById('vc_to').value,cm=document.getElementById('vc_comment').value;if(!f||!t){fire('Elegí las fechas.','gap');return;}addReq({type:'Vacaciones',agentId:AGENTS[0].id,agentName:AGENTS[0].name,from:f,to:t,comment:cm});fire('Solicitud de vacaciones enviada al Admin ✓','ok');return;}
   if(act==='sendswap'){var d=document.getElementById('sw_day').value,w=+document.getElementById('sw_with').value,nt=document.getElementById('sw_note').value;if(!d){fire('Elegí el día.','gap');return;}var wa=A(w);addReq({type:'Swap',agentId:AGENTS[0].id,agentName:AGENTS[0].name,day:d,withId:w,withName:wa?wa.name:'',note:nt});fire('Swap solicitado ✓ Se notificó a '+(wa?wa.name.split(' ')[0]:'')+'. El Admin lo revisará.','ok');return;}
@@ -350,3 +411,8 @@ root.addEventListener('click',function(e){var el;
  if((el=e.target.closest('[data-agent]'))){var id=+el.getAttribute('data-agent');state.sel=(state.sel&&state.sel.id===id)?null:{id:id};render();return;}
  if((el=e.target.closest('[data-lane]'))){if(state.sel){moveAgent(state.sel.id,state.selShift,el.getAttribute('data-lane'));state.sel=null;render();}return;}
 });
+
+root.addEventListener('change',function(e){if(!e.target)return;if(e.target.id==='gridweek'){state.gridWeek=e.target.value;render();}if(e.target.id==='reqtypesel'){state.reqType=e.target.value;render();}if(e.target.id==='taskday'){state.taskDay=+e.target.value;render();}});
+
+generate('merit');
+</script></body></html>
